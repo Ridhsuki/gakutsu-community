@@ -18,7 +18,7 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::resource('users', UserController::class)->except(['show']);
+        Route::resource('users', UserController::class)->except(['show','create','edit']);
     });
 
 require __DIR__.'/settings.php';
