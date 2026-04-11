@@ -13,11 +13,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory()->create([
+            'name' => 'アドミニストレータ',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('password'),
+            'role' => \App\Enums\UserRole::Admin,
+        ]);
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Mentor User',
+            'email' => 'mentor@gmail.com',
+            'password' => bcrypt('password'),
+            'role' => \App\Enums\UserRole::Mentor,
+        ]);
+
+        User::factory()->create([
+            'name' => 'Member User',
+            'email' => 'member@gmail.com',
+            'password' => bcrypt('password'),
+            'role' => \App\Enums\UserRole::Member,
         ]);
     }
 }
