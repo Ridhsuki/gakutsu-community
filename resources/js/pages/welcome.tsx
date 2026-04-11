@@ -238,7 +238,7 @@ function HeroSection({ canRegister, isLoggedIn }: { canRegister: boolean; isLogg
                             {/* Header mock */}
                             <div className="mb-6 flex items-center gap-3">
                                 <div className="flex size-12 items-center justify-center rounded-xl bg-[#106b42] shadow-md">
-                                    <AppLogoIcon className="size-6 fill-white" />
+                                    <AppLogoIcon className="size-6 text-white" />
                                 </div>
                                 <div>
                                     <p className="text-sm font-bold text-gray-900">Yok Pelajarin</p>
@@ -464,7 +464,7 @@ function Navbar({ canRegister, isLoggedIn }: { canRegister: boolean; isLoggedIn:
                 {/* Logo */}
                 <a href="#" className="flex items-center gap-2.5">
                     <div className="flex size-9 items-center justify-center rounded-lg bg-[#106b42]">
-                        <AppLogoIcon className="size-5 fill-white" />
+                        <AppLogoIcon className="size-5 text-white" />
                     </div>
                     <span className="text-base font-bold text-gray-900">
                         Yok <span className="text-[#106b42]">Pelajarin</span>
@@ -566,7 +566,7 @@ function Footer() {
                 <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
                     <div className="flex items-center gap-2.5">
                         <div className="flex size-8 items-center justify-center rounded-lg bg-[#106b42]">
-                            <AppLogoIcon className="size-4 fill-white" />
+                            <AppLogoIcon className="size-4 text-white" />
                         </div>
                         <span className="text-sm font-bold text-gray-900">
                             Yok <span className="text-[#106b42]">Pelajarin</span>
