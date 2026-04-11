@@ -33,5 +33,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
             'role' => \App\Enums\UserRole::Member,
         ]);
+
+        // User::factory()->count(20)->create();
     }
 }

@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -34,9 +35,38 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Determine if the user has the admin role.
-     */
+    public static function indexColumns(): array
+    {
+        return ['id', 'name', 'email', 'role', 'created_at'];
+    }
+
+    #[Scope]
+    protected function search(Builder $query, ?string $search): void
+    {
+        if (blank($search)) {
+            return;
+        }
+
+        $query->where(function (Builder $q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
+        });
+    }
+
+    #[Scope]
+    protected function applySort(Builder $query, string $field, string $direction): void
+    {
+        $allowed = ['name', 'email', 'role', 'created_at'];
+
+        if (!in_array($field, $allowed, true)) {
+            $field = 'created_at';
+        }
+
+        $direction = $direction === 'asc' ? 'asc' : 'desc';
+
+        $query->orderBy($field, $direction);
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === UserRole::Admin;
