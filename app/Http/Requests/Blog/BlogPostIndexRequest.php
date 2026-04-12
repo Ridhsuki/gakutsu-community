@@ -16,7 +16,7 @@ class BlogPostIndexRequest extends FormRequest
     {
         return [
             'search' => ['nullable', 'string', 'max:100'],
-            'sort_field' => ['nullable', 'in:title,status,published_at,created_at'],
+            'sort_field' => ['nullable', 'in:title,status,published_at,created_at,author'],
             'sort_direction' => ['nullable', 'in:asc,desc'],
         ];
     }

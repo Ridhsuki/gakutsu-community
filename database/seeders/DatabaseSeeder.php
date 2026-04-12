@@ -38,14 +38,14 @@ class DatabaseSeeder extends Seeder
         // Generate User dummy
         // User::factory()->count(20)->create();
 
-        // Generate 6 Blog Posts for Admin
-        BlogPost::factory(6)->create([
+        // // Generate Blog Posts for Admin
+        BlogPost::factory()->count(1)->create([
             'author_id' => $admin->id,
         ]);
 
-        // Generate 6 Blog Posts for Mentor
-        BlogPost::factory(6)->create([
-            'author_id' => $mentor->id,
-        ]);
+        // // Generate 6 Blog Posts for Mentor
+        // BlogPost::factory()->count(6)->create([
+        //     'author_id' => $mentor->id,
+        // ]);
     }
 }

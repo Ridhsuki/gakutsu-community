@@ -11,8 +11,8 @@ import BlogPostDeleteDialog from '@/features/blogs/components/blog-post-delete-d
 import BlogPostEditDialog from '@/features/blogs/components/blog-post-edit-dialog';
 import BlogPostTable from '@/features/blogs/components/blog-post-table';
 import {
-    ADMIN_BLOGS_INDEX_URL,
     BLOG_ALLOWED_SORT_FIELDS,
+    MENTOR_BLOGS_INDEX_URL,
 } from '@/features/blogs/constants';
 import {
     getDefaultCreateBlogPostForm,
@@ -29,7 +29,7 @@ interface PageProps {
     filters: IndexFilters<BlogPostSortField>;
 }
 
-export default function AdminBlogIndex({ posts, filters }: PageProps) {
+export default function MentorBlogIndex({ posts, filters }: PageProps) {
     const {
         search,
         setSearch,
@@ -38,7 +38,7 @@ export default function AdminBlogIndex({ posts, filters }: PageProps) {
         isReloading,
         handleSort,
     } = useIndexFilters<BlogPostSortField>({
-        endpoint: ADMIN_BLOGS_INDEX_URL,
+        endpoint: MENTOR_BLOGS_INDEX_URL,
         initialFilters: filters,
         allowedSortFields: BLOG_ALLOWED_SORT_FIELDS,
         only: ['posts', 'filters'],
@@ -93,7 +93,7 @@ export default function AdminBlogIndex({ posts, filters }: PageProps) {
     const handleCreateSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        createForm.post(ADMIN_BLOGS_INDEX_URL, {
+        createForm.post(MENTOR_BLOGS_INDEX_URL, {
             preserveScroll: true,
             forceFormData: true,
             onSuccess: () => {
@@ -107,7 +107,7 @@ export default function AdminBlogIndex({ posts, filters }: PageProps) {
 
         if (!selectedPost) return;
 
-        editForm.put(`${ADMIN_BLOGS_INDEX_URL}/${selectedPost.id}`, {
+        editForm.put(`${MENTOR_BLOGS_INDEX_URL}/${selectedPost.id}`, {
             preserveScroll: true,
             forceFormData: true,
             onSuccess: () => {
@@ -121,7 +121,7 @@ export default function AdminBlogIndex({ posts, filters }: PageProps) {
 
         setIsDeleting(true);
 
-        router.delete(`${ADMIN_BLOGS_INDEX_URL}/${selectedPost.id}`, {
+        router.delete(`${MENTOR_BLOGS_INDEX_URL}/${selectedPost.id}`, {
             preserveScroll: true,
             onSuccess: () => {
                 closeDeleteModal();
@@ -179,12 +179,12 @@ export default function AdminBlogIndex({ posts, filters }: PageProps) {
 
     return (
         <>
-            <Head title="Blog Management" />
+            <Head title="My Blog Posts" />
 
             <div className="flex h-full w-full flex-col space-y-6 p-6">
                 <ResourceToolbar
-                    title="Blog Management"
-                    description="Manage blog posts published by admins and mentors."
+                    title="My Blog Posts"
+                    description="Manage your own draft and published blog posts."
                     actions={
                         <Button
                             type="button"
