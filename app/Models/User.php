@@ -71,4 +71,9 @@ class User extends Authenticatable
     {
         return $this->role === UserRole::Admin;
     }
+
+    public function isMentor(): bool
+    {
+        return $this->role === UserRole::Mentor;
+    }
 }
