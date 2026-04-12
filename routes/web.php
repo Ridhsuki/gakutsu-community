@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Blog\BlogEditorImageController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\Admin\UserController;
@@ -16,6 +17,11 @@ Route::inertia('/', 'welcome', [
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 });
+
+Route::middleware(['auth', 'verified'])->post(
+    'editor/blog-images',
+    [BlogEditorImageController::class, 'store']
+)->name('editor.blog-images.store');
 
 Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])
     ->prefix('admin')

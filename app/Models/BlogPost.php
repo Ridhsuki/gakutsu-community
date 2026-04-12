@@ -40,6 +40,7 @@ class BlogPost extends Model
             'slug',
             'status',
             'cover_image_path',
+            'content',
             'published_at',
             'created_at',
         ];
@@ -60,20 +61,33 @@ class BlogPost extends Model
 
         $query->where(function (Builder $q) use ($search) {
             $q->where('title', 'like', "%{$search}%")
-                ->orWhere('slug', 'like', "%{$search}%");
+                ->orWhere('slug', 'like', "%{$search}%")
+                ->orWhereHas('author', function (Builder $authorQuery) use ($search) {
+                    $authorQuery->where('name', 'like', "%{$search}%");
+                });
         });
     }
 
     #[Scope]
     protected function applySort(Builder $query, string $field, string $direction): void
     {
-        $allowed = ['title', 'status', 'published_at', 'created_at'];
+        $allowed = ['title', 'status', 'published_at', 'created_at', 'author'];
 
         if (!in_array($field, $allowed, true)) {
             $field = 'created_at';
         }
 
         $direction = $direction === 'asc' ? 'asc' : 'desc';
+
+        if ($field === 'author') {
+            $query->orderBy(
+                User::select('name')
+                    ->whereColumn('users.id', 'blog_posts.author_id'),
+                $direction
+            );
+
+            return;
+        }
 
         $query->orderBy($field, $direction);
     }

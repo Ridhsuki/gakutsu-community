@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Media\CleanupBlogContentImagesAction;
+use App\Actions\Media\ProcessImageUploadAction;
 use App\Enums\BlogPostStatus;
+use App\Enums\MediaImagePreset;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Blog\BlogPostIndexRequest;
 use App\Http\Requests\Blog\StoreBlogPostRequest;
@@ -51,10 +54,12 @@ class BlogPostController extends Controller
         $data['published_at'] = $data['status'] === BlogPostStatus::Published->value ? now() : null;
 
         if ($request->hasFile('cover_image')) {
-            $data['cover_image_path'] = $request->file('cover_image')->store(
-                'blog/covers/' . now()->format('Y/m'),
-                'public'
+            $result = app(ProcessImageUploadAction::class)->handle(
+                $request->file('cover_image'),
+                MediaImagePreset::BlogCover
             );
+
+            $data['cover_image_path'] = $result['path'];
         }
 
         unset($data['cover_image']);
@@ -69,16 +74,19 @@ class BlogPostController extends Controller
     public function update(UpdateBlogPostRequest $request, BlogPost $blog): RedirectResponse
     {
         $data = $request->validated();
+        $oldContent = $blog->content;
 
         if ($request->hasFile('cover_image')) {
             if ($blog->cover_image_path) {
                 Storage::disk('public')->delete($blog->cover_image_path);
             }
 
-            $data['cover_image_path'] = $request->file('cover_image')->store(
-                'blog/covers/' . now()->format('Y/m'),
-                'public'
+            $result = app(ProcessImageUploadAction::class)->handle(
+                $request->file('cover_image'),
+                MediaImagePreset::BlogCover
             );
+
+            $data['cover_image_path'] = $result['path'];
         }
 
         unset($data['cover_image']);
@@ -89,6 +97,12 @@ class BlogPostController extends Controller
 
         $blog->update($data);
 
+        app(CleanupBlogContentImagesAction::class)->cleanupRemovedFromContent(
+            $oldContent,
+            $blog->content,
+            $blog->id
+        );
+
         return redirect()
             ->route('admin.blogs.index')
             ->with('success', 'Blog post updated successfully.');
@@ -98,11 +112,17 @@ class BlogPostController extends Controller
     {
         $this->authorize('delete', $blog);
 
-        if ($blog->cover_image_path) {
-            Storage::disk('public')->delete($blog->cover_image_path);
-        }
+        $blogId = $blog->id;
+        $content = $blog->content;
+        $coverImagePath = $blog->cover_image_path;
 
         $blog->delete();
+
+        if ($coverImagePath) {
+            Storage::disk('public')->delete($coverImagePath);
+        }
+
+        app(CleanupBlogContentImagesAction::class)->cleanupAllFromContent($content, $blogId);
 
         return redirect()
             ->route('admin.blogs.index')
