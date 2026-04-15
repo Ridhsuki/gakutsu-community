@@ -35,6 +35,9 @@ export default function useBlogManagement({
         sortDirection,
         isReloading,
         handleSort,
+        setSortFieldAndReload,
+        setSortDirectionAndReload,
+        toggleSortDirection,
     } = useIndexFilters<BlogPostSortField>({
         endpoint,
         initialFilters,
@@ -164,6 +167,9 @@ export default function useBlogManagement({
         sortDirection,
         isReloading,
         handleSort,
+        setSortFieldAndReload,
+        setSortDirectionAndReload,
+        toggleSortDirection,
 
         isCreateOpen,
         isEditOpen,

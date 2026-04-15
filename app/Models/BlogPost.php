@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'author_id',
@@ -22,13 +24,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class BlogPost extends Model
 {
     use HasFactory;
-
+    protected $appends = ['cover_image_url'];
     protected function casts(): array
     {
         return [
             'status' => BlogPostStatus::class,
             'published_at' => 'datetime',
         ];
+    }
+    protected function coverImageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn(): ?string => $this->cover_image_path
+            ? Storage::disk('public')->url($this->cover_image_path)
+            : null,
+        );
     }
 
     public static function indexColumns(): array

@@ -7,6 +7,8 @@ export type BlogPostSortField =
     | 'created_at'
     | 'author';
 
+export type BlogManagementViewMode = 'table' | 'cards';
+
 export interface BlogPostAuthor {
     id: number;
     name: string;
@@ -19,6 +21,7 @@ export interface BlogPost {
     slug: string;
     status: BlogPostStatus;
     cover_image_path: string | null;
+    cover_image_url: string | null;
     content: string;
     published_at: string | null;
     created_at: string;
