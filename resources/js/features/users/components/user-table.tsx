@@ -4,7 +4,7 @@ import EmptyStateRow from '@/components/data-table/empty-state-row';
 import UserRoleBadge from '@/features/users/components/user-role-badge';
 import type { SortDirection } from '@/types/filters';
 import type { User, UserSortField } from '@/features/users/types';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2, Users } from 'lucide-react';
 
 interface UserTableProps {
     users: User[];
@@ -94,7 +94,12 @@ export default function UserTable({
                             </tr>
                         ))
                     ) : (
-                        <EmptyStateRow colSpan={4} message="No users found." />
+                        <EmptyStateRow
+                            colSpan={4}
+                            icon={Users}
+                            title="No users found"
+                            description="Try adjusting your search or add a new user to get started."
+                        />
                     )}
                 </tbody>
             </table>

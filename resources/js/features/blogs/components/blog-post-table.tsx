@@ -6,6 +6,7 @@ import BlogPostStatusBadge from '@/features/blogs/components/blog-post-status-ba
 import { formatBlogPostDate } from '@/features/blogs/lib/blog-post-formatters';
 import type { BlogPost, BlogPostSortField } from '@/features/blogs/types';
 import type { SortDirection } from '@/types/filters';
+import { FileText } from 'lucide-react';
 
 interface BlogPostTableProps {
     posts: BlogPost[];
@@ -125,7 +126,12 @@ export default function BlogPostTable({
                             </tr>
                         ))
                     ) : (
-                        <EmptyStateRow colSpan={6} message="No blog posts found." />
+                        <EmptyStateRow
+                            colSpan={6}
+                            icon={FileText}
+                            title="No blog posts found"
+                            description="Try adjusting your search or create a new blog post to get started."
+                        />
                     )}
                 </tbody>
             </table>

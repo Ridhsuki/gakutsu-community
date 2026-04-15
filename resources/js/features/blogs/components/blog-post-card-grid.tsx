@@ -1,4 +1,6 @@
 import { FileText } from 'lucide-react';
+
+import EmptyState from '@/components/ui/empty-state';
 import BlogPostCard from '@/features/blogs/components/blog-post-card';
 import type { BlogPost } from '@/features/blogs/types';
 
@@ -15,13 +17,12 @@ export default function BlogPostCardGrid({
 }: BlogPostCardGridProps) {
     if (posts.length === 0) {
         return (
-            <div className="flex min-h-[280px] flex-col items-center justify-center rounded-xl border border-dashed border-border bg-muted/20 p-8 text-center">
-                <FileText className="mb-3 h-8 w-8 text-muted-foreground" />
-                <h3 className="text-base font-semibold">No blog posts found</h3>
-                <p className="mt-1 max-w-md text-sm text-muted-foreground">
-                    Try changing your search keyword or create a new blog post.
-                </p>
-            </div>
+            <EmptyState
+                icon={FileText}
+                title="No blog posts found"
+                description="Try changing your search keyword or create a new blog post."
+                size="lg"
+            />
         );
     }
 

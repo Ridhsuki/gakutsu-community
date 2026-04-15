@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
         // User::factory()->count(20)->create();
 
         // // Generate Blog Posts for Admin
-        BlogPost::factory()->count(20)->create([
+        BlogPost::factory()->count(1)->create([
             'author_id' => $admin->id,
         ]);
 
