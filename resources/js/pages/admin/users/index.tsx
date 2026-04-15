@@ -18,7 +18,6 @@ import {
     getDefaultEditUserForm,
     mapUserToEditUserForm,
 } from '@/features/users/form-helpers';
-
 import type {
     User,
     UserSortField,
@@ -36,20 +35,14 @@ interface PageProps {
 }
 
 export default function UserIndex({ users, filters }: PageProps) {
-    const {
-        search,
-        setSearch,
-        sortField,
-        sortDirection,
-        isReloading,
-        handleSort,
-    } = useIndexFilters<UserSortField>({
-        endpoint: USERS_INDEX_URL,
-        initialFilters: filters,
-        allowedSortFields: USER_ALLOWED_SORT_FIELDS,
-        only: ['users', 'filters'],
-        debounceMs: 350,
-    });
+    const { search, setSearch, sortField, sortDirection, isReloading, handleSort } =
+        useIndexFilters<UserSortField>({
+            endpoint: USERS_INDEX_URL,
+            initialFilters: filters,
+            allowedSortFields: USER_ALLOWED_SORT_FIELDS,
+            only: ['users', 'filters'],
+            debounceMs: 350,
+        });
 
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
@@ -143,27 +136,27 @@ export default function UserIndex({ users, filters }: PageProps) {
             <div className="flex h-full w-full flex-col space-y-6 p-6">
                 <ResourceToolbar
                     title="User Management"
-                    description="Manage community members, mentors, and administrators."
+                    description="Manage administrator, mentor, and member accounts."
                     actions={
                         <Button
                             type="button"
                             onClick={openCreateModal}
-                            className="bg-[#106b42] text-white hover:bg-[#0c5132]"
+                            className="w-full bg-[#106b42] text-white hover:bg-[#0c5132] sm:w-auto"
                         >
                             <Plus className="mr-2 h-4 w-4" />
                             Add User
                         </Button>
+                    }
+                    meta={
+                        isReloading ? 'Refreshing data...' : `Total users: ${users.total}`
                     }
                 >
                     <SearchInput
                         value={search}
                         onChange={setSearch}
                         placeholder="Search by name or email..."
+                        containerClassName="w-full lg:max-w-md"
                     />
-
-                    <div className="text-sm text-muted-foreground">
-                        {isReloading ? 'Refreshing data...' : `Total users: ${users.total}`}
-                    </div>
                 </ResourceToolbar>
 
                 <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm">
@@ -175,6 +168,7 @@ export default function UserIndex({ users, filters }: PageProps) {
                         onEdit={openEditModal}
                         onDelete={openDeleteModal}
                     />
+
                     <PaginationBar
                         links={users.links}
                         from={users.from}

@@ -4,11 +4,14 @@ import PaginationBar from '@/components/data-table/pagination-bar';
 import ResourceToolbar from '@/components/data-table/resource-toolbar';
 import SearchInput from '@/components/data-table/search-input';
 import { Button } from '@/components/ui/button';
+import BlogPostCollectionView from '@/features/blogs/components/blog-post-collection-view';
 import BlogPostCreateDialog from '@/features/blogs/components/blog-post-create-dialog';
 import BlogPostDeleteDialog from '@/features/blogs/components/blog-post-delete-dialog';
 import BlogPostEditDialog from '@/features/blogs/components/blog-post-edit-dialog';
-import BlogPostTable from '@/features/blogs/components/blog-post-table';
+import BlogSortToolbarControl from '@/features/blogs/components/blog-sort-toolbar-control';
+import BlogViewToggle from '@/features/blogs/components/blog-view-toggle';
 import useBlogManagement from '@/features/blogs/hooks/use-blog-management';
+import useBlogViewMode from '@/features/blogs/hooks/use-blog-view-mode';
 import type { BlogPost, BlogPostSortField } from '@/features/blogs/types';
 import type { IndexFilters } from '@/types/filters';
 import type { PaginatedResponse } from '@/types/pagination';
@@ -42,6 +45,8 @@ export default function BlogManagementPage({
         sortDirection,
         isReloading,
         handleSort,
+        setSortFieldAndReload,
+        toggleSortDirection,
         isCreateOpen,
         isEditOpen,
         isDeleteOpen,
@@ -64,6 +69,8 @@ export default function BlogManagementPage({
         initialFilters: filters,
     });
 
+    const { viewMode, setViewMode } = useBlogViewMode();
+
     return (
         <>
             <Head title={headTitle} />
@@ -76,26 +83,45 @@ export default function BlogManagementPage({
                         <Button
                             type="button"
                             onClick={openCreateModal}
-                            className="bg-[#106b42] text-white hover:bg-[#0c5132]"
+                            className="w-full bg-[#106b42] text-white hover:bg-[#0c5132] sm:w-auto"
                         >
                             <Plus className="mr-2 h-4 w-4" />
                             Add Blog Post
                         </Button>
                     }
+                    meta={
+                        isReloading ? 'Refreshing data...' : `Total posts: ${posts.total}`
+                    }
                 >
-                    <SearchInput
-                        value={search}
-                        onChange={setSearch}
-                        placeholder={searchPlaceholder}
-                    />
+                    <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+                        <SearchInput
+                            value={search}
+                            onChange={setSearch}
+                            placeholder={searchPlaceholder}
+                            containerClassName="w-full lg:max-w-md"
+                        />
 
-                    <div className="text-sm text-muted-foreground">
-                        {isReloading ? 'Refreshing data...' : `Total posts: ${posts.total}`}
+                        <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap lg:w-auto lg:justify-end">
+                            <BlogViewToggle
+                                value={viewMode}
+                                onChange={setViewMode}
+                            />
+
+                            {viewMode === 'cards' ? (
+                                <BlogSortToolbarControl
+                                    sortField={sortField}
+                                    sortDirection={sortDirection}
+                                    onSortFieldChange={setSortFieldAndReload}
+                                    onSortDirectionToggle={toggleSortDirection}
+                                />
+                            ) : null}
+                        </div>
                     </div>
                 </ResourceToolbar>
 
                 <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm">
-                    <BlogPostTable
+                    <BlogPostCollectionView
+                        viewMode={viewMode}
                         posts={posts.data}
                         sortField={sortField}
                         sortDirection={sortDirection}

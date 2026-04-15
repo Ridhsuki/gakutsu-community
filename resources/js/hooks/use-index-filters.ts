@@ -74,6 +74,35 @@ export default function useIndexFilters<TSortField extends string>(
         return () => window.clearTimeout(timeoutId);
     }, [search]);
 
+    const applySort = (
+        nextSortField: TSortField,
+        nextSortDirection: SortDirection,
+    ) => {
+        if (!allowedSortFields.includes(nextSortField)) return;
+
+        setSortField(nextSortField);
+        setSortDirection(nextSortDirection);
+        reload(search, nextSortField, nextSortDirection);
+    };
+
+    const setSortFieldAndReload = (nextSortField: TSortField) => {
+        if (!allowedSortFields.includes(nextSortField)) return;
+
+        setSortField(nextSortField);
+        reload(search, nextSortField, sortDirection);
+    };
+
+    const setSortDirectionAndReload = (nextSortDirection: SortDirection) => {
+        setSortDirection(nextSortDirection);
+        reload(search, sortField, nextSortDirection);
+    };
+
+    const toggleSortDirection = () => {
+        const nextDirection: SortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        setSortDirection(nextDirection);
+        reload(search, sortField, nextDirection);
+    };
+
     const handleSort = (field: TSortField) => {
         if (!allowedSortFields.includes(field)) return;
 
@@ -82,7 +111,6 @@ export default function useIndexFilters<TSortField extends string>(
 
         setSortField(field);
         setSortDirection(nextDirection);
-
         reload(search, field, nextDirection);
     };
 
@@ -95,6 +123,10 @@ export default function useIndexFilters<TSortField extends string>(
         setSortDirection,
         isReloading,
         handleSort,
+        applySort,
+        setSortFieldAndReload,
+        setSortDirectionAndReload,
+        toggleSortDirection,
         reload,
     };
 }

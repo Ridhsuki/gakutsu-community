@@ -1,11 +1,15 @@
 import type { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 interface ResourceToolbarProps {
     title: string;
     description?: string;
     actions?: ReactNode;
     children?: ReactNode;
+    meta?: ReactNode;
     className?: string;
+    headerClassName?: string;
+    controlsClassName?: string;
 }
 
 export default function ResourceToolbar({
@@ -13,26 +17,52 @@ export default function ResourceToolbar({
     description,
     actions,
     children,
-    className = '',
+    meta,
+    className,
+    headerClassName,
+    controlsClassName,
 }: ResourceToolbarProps) {
     return (
-        <div className={`flex flex-col gap-4 ${className}`}>
-            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                <div>
-                    <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
+        <section className={cn('flex flex-col gap-4', className)}>
+            <div
+                className={cn(
+                    'flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between',
+                    headerClassName,
+                )}
+            >
+                <div className="min-w-0 space-y-1">
+                    <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+
                     {description ? (
-                        <p className="text-sm text-muted-foreground">{description}</p>
+                        <p className="max-w-3xl text-sm text-muted-foreground">
+                            {description}
+                        </p>
                     ) : null}
                 </div>
 
-                {actions ? <div className="shrink-0">{actions}</div> : null}
+                {actions ? (
+                    <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
+                        {actions}
+                    </div>
+                ) : null}
             </div>
 
-            {children ? (
-                <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-                    {children}
+            {children || meta ? (
+                <div
+                    className={cn(
+                        'grid gap-3 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-start',
+                        controlsClassName,
+                    )}
+                >
+                    <div className="min-w-0">{children}</div>
+
+                    {meta ? (
+                        <div className="flex min-h-9 items-center text-sm text-muted-foreground xl:justify-end">
+                            {meta}
+                        </div>
+                    ) : null}
                 </div>
             ) : null}
-        </div>
+        </section>
     );
 }
