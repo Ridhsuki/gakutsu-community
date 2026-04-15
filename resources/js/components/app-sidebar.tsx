@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Users, LayoutGrid, Home } from 'lucide-react';
+import { Users, LayoutGrid, Home, BookOpen, Cast } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -33,13 +33,17 @@ export function AppSidebar() {
             href: dashboard(),
             icon: LayoutGrid,
         },
-        ...(auth?.user?.role === 'admin' ? [
-            {
-                title: 'User Management',
-                href: '/admin/users',
-                icon: Users,
-            }
-        ] : []),
+        ...(auth?.user?.role === 'admin'
+            ? [
+                { title: 'Blogs', href: '/admin/blogs', icon: BookOpen },
+                { title: 'Webinar', href: '#', icon: Cast },
+                { title: 'Users', href: '/admin/users', icon: Users },
+            ]
+            : []),
+
+        ...(auth?.user?.role === 'mentor'
+            ? [{ title: 'Blogs', href: '/mentor/blogs', icon: BookOpen }]
+            : []),
     ];
     return (
         <Sidebar collapsible="icon" variant="inset">
