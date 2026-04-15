@@ -5,8 +5,7 @@ import { Button } from '@/components/ui/button';
 import type { PaginatedResponse } from '@/types/pagination';
 import type { IndexFilters } from '@/types/filters';
 import PaginationBar from '@/components/data-table/pagination-bar';
-import SearchInput from '@/components/data-table/search-input';
-import ResourceToolbar from '@/components/data-table/resource-toolbar';
+import IndexToolbar from '@/components/data-table/index-toolbar';
 import useIndexFilters from '@/hooks/use-index-filters';
 import { Plus } from 'lucide-react';
 import UserTable from '@/features/users/components/user-table';
@@ -134,9 +133,12 @@ export default function UserIndex({ users, filters }: PageProps) {
             <Head title="User Management" />
 
             <div className="flex h-full w-full flex-col space-y-6 p-6">
-                <ResourceToolbar
+                <IndexToolbar
                     title="User Management"
                     description="Manage administrator, mentor, and member accounts."
+                    searchValue={search}
+                    onSearchChange={setSearch}
+                    searchPlaceholder="Search by name or email..."
                     actions={
                         <Button
                             type="button"
@@ -150,14 +152,7 @@ export default function UserIndex({ users, filters }: PageProps) {
                     meta={
                         isReloading ? 'Refreshing data...' : `Total users: ${users.total}`
                     }
-                >
-                    <SearchInput
-                        value={search}
-                        onChange={setSearch}
-                        placeholder="Search by name or email..."
-                        containerClassName="w-full lg:max-w-md"
-                    />
-                </ResourceToolbar>
+                />
 
                 <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm">
                     <UserTable
