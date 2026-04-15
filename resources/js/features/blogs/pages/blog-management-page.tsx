@@ -1,8 +1,7 @@
 import { Head } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import PaginationBar from '@/components/data-table/pagination-bar';
-import ResourceToolbar from '@/components/data-table/resource-toolbar';
-import SearchInput from '@/components/data-table/search-input';
+import IndexToolbar from '@/components/data-table/index-toolbar';
 import { Button } from '@/components/ui/button';
 import BlogPostCollectionView from '@/features/blogs/components/blog-post-collection-view';
 import BlogPostCreateDialog from '@/features/blogs/components/blog-post-create-dialog';
@@ -76,9 +75,12 @@ export default function BlogManagementPage({
             <Head title={headTitle} />
 
             <div className="flex h-full w-full flex-col space-y-6 p-6">
-                <ResourceToolbar
+                <IndexToolbar
                     title={title}
                     description={description}
+                    searchValue={search}
+                    onSearchChange={setSearch}
+                    searchPlaceholder={searchPlaceholder}
                     actions={
                         <Button
                             type="button"
@@ -89,19 +91,8 @@ export default function BlogManagementPage({
                             Add Blog Post
                         </Button>
                     }
-                    meta={
-                        isReloading ? 'Refreshing data...' : `Total posts: ${posts.total}`
-                    }
-                >
-                    <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
-                        <SearchInput
-                            value={search}
-                            onChange={setSearch}
-                            placeholder={searchPlaceholder}
-                            containerClassName="w-full lg:max-w-md"
-                        />
-
-                        <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap lg:w-auto lg:justify-end">
+                    controls={
+                        <>
                             <BlogViewToggle
                                 value={viewMode}
                                 onChange={setViewMode}
@@ -115,9 +106,12 @@ export default function BlogManagementPage({
                                     onSortDirectionToggle={toggleSortDirection}
                                 />
                             ) : null}
-                        </div>
-                    </div>
-                </ResourceToolbar>
+                        </>
+                    }
+                    meta={
+                        isReloading ? 'Refreshing data...' : `Total posts: ${posts.total}`
+                    }
+                />
 
                 <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm">
                     <BlogPostCollectionView

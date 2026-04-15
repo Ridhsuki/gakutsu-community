@@ -9,7 +9,7 @@ interface ResourceToolbarProps {
     meta?: ReactNode;
     className?: string;
     headerClassName?: string;
-    controlsClassName?: string;
+    contentClassName?: string;
 }
 
 export default function ResourceToolbar({
@@ -20,7 +20,7 @@ export default function ResourceToolbar({
     meta,
     className,
     headerClassName,
-    controlsClassName,
+    contentClassName,
 }: ResourceToolbarProps) {
     return (
         <section className={cn('flex flex-col gap-4', className)}>
@@ -51,7 +51,7 @@ export default function ResourceToolbar({
                 <div
                     className={cn(
                         'grid gap-3 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-start',
-                        controlsClassName,
+                        contentClassName,
                     )}
                 >
                     <div className="min-w-0">{children}</div>
