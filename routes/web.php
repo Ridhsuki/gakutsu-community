@@ -63,6 +63,11 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])
             'events/{event}/registration-questions/{registrationQuestion}',
             [AdminEventRegistrationQuestionController::class, 'destroy']
         )->name('events.registration-questions.destroy');
+
+        Route::get(
+            'events/{event}/registrations/{registration}',
+            [AdminEventRegistrationController::class, 'show']
+        )->name('events.registrations.show');
     });
 
 Route::middleware(['auth', 'verified', EnsureUserIsMentor::class])
@@ -96,6 +101,11 @@ Route::middleware(['auth', 'verified', EnsureUserIsMentor::class])
             'events/{event}/registration-questions/{registrationQuestion}',
             [MentorEventRegistrationQuestionController::class, 'destroy']
         )->name('events.registration-questions.destroy');
+
+        Route::get(
+            'events/{event}/registrations/{registration}',
+            [AdminEventRegistrationController::class, 'show']
+        )->name('events.registrations.show');
     });
 
 Route::get('/events', [EventBrowseController::class, 'index'])->name('events.index');

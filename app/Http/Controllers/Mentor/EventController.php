@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Mentor;
 
 use App\Actions\Events\DeleteEventAction;
+use App\Actions\Events\GetEventDetailAction;
 use App\Actions\Events\GetEventIndexAction;
 use App\Actions\Events\StoreEventAction;
 use App\Actions\Events\UpdateEventAction;
@@ -19,7 +20,6 @@ use Inertia\Response;
 class EventController extends Controller
 {
     use AuthorizesRequests;
-
     public function index(
         EventIndexRequest $request,
         GetEventIndexAction $getEventIndexAction,
@@ -31,7 +31,7 @@ class EventController extends Controller
         $sortDirection = $validated['sort_direction'] ?? 'desc';
 
         return Inertia::render('mentor/events/index', [
-            'events' => fn() => $getEventIndexAction->handle(
+            'events' => fn () => $getEventIndexAction->handle(
                 search: $search,
                 sortField: $sortField,
                 sortDirection: $sortDirection,
@@ -61,19 +61,14 @@ class EventController extends Controller
             ->with('success', 'Event created successfully.');
     }
 
-    public function show(Event $event): Response
-    {
+    public function show(
+        Event $event,
+        GetEventDetailAction $getEventDetailAction,
+    ): Response {
         $this->authorize('view', $event);
 
         return Inertia::render('mentor/events/show', [
-            'event' => $event->load([
-                'mentor:id,name',
-                'registrationQuestions' => fn($query) => $query->ordered()->limit(5),
-                'registrations' => fn($query) => $query->latest('registered_at')->limit(5),
-            ])->loadCount([
-                        'registrations',
-                        'registrationQuestions',
-                    ]),
+            'event' => $getEventDetailAction->handle($event),
         ]);
     }
 
@@ -84,7 +79,7 @@ class EventController extends Controller
         return Inertia::render('mentor/events/edit', [
             'event' => $event->load([
                 'mentor:id,name',
-                'registrationQuestions' => fn($query) => $query->ordered(),
+                'registrationQuestions' => fn ($query) => $query->ordered(),
             ]),
         ]);
     }

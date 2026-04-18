@@ -12,6 +12,7 @@ export default function AdminEventShow({
             backHref="/admin/events"
             editHref={`/admin/events/${event.id}/edit`}
             registrationsHref={`/admin/events/${event.id}/registrations`}
+            registrationDetailBaseHref={`/admin/events/${event.id}/registrations`}
             questionsHref={`/admin/events/${event.id}/registration-questions`}
             title={`Event Detail - ${event.title}`}
         />

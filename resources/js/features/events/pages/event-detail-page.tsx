@@ -23,6 +23,7 @@ interface EventDetailPageProps {
     backHref: string;
     editHref: string;
     registrationsHref: string;
+    registrationDetailBaseHref: string;
     questionsHref: string;
     title?: string;
 }
@@ -32,6 +33,7 @@ export default function EventDetailPage({
     backHref,
     editHref,
     registrationsHref,
+    registrationDetailBaseHref,
     questionsHref,
     title,
 }: EventDetailPageProps) {
@@ -104,6 +106,11 @@ export default function EventDetailPage({
                                             <div className="text-xs text-muted-foreground">
                                                 {question.type} · {question.is_required ? 'Required' : 'Optional'}
                                             </div>
+                                            {question.help_text ? (
+                                                <div className="mt-1 text-xs text-muted-foreground">
+                                                    {question.help_text}
+                                                </div>
+                                            ) : null}
                                         </div>
                                     ))
                                 ) : (
@@ -113,9 +120,70 @@ export default function EventDetailPage({
                                 )}
                             </div>
                         </div>
+
+                        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+                            <div className="flex items-center justify-between gap-3">
+                                <h2 className="text-base font-semibold">Recent Registrants</h2>
+                                <Button type="button" variant="ghost" asChild>
+                                    <Link href={registrationsHref}>View all</Link>
+                                </Button>
+                            </div>
+
+                            <div className="mt-4 space-y-3">
+                                {event.registrations && event.registrations.length > 0 ? (
+                                    event.registrations.map((registration) => (
+                                        <div
+                                            key={registration.id}
+                                            className="flex items-center justify-between gap-3 rounded-lg border border-border p-3"
+                                        >
+                                            <div>
+                                                <div className="font-medium">{registration.name_snapshot}</div>
+                                                <div className="text-xs text-muted-foreground">
+                                                    {registration.email_snapshot}
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center gap-3">
+                                                <div className="text-xs text-muted-foreground">
+                                                    Answers: {registration.answers_count ?? 0}
+                                                </div>
+                                                <Button type="button" variant="outline" size="sm" asChild>
+                                                    <Link href={`${registrationDetailBaseHref}/${registration.id}`}>
+                                                        View
+                                                    </Link>
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-sm text-muted-foreground">
+                                        No registrants yet.
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
 
                     <div className="space-y-6">
+                        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+                            <h2 className="text-base font-semibold">Poster</h2>
+
+                            <div className="mt-4 rounded-lg border border-border bg-muted p-4">
+                                {event.poster_image_url ? (
+                                    <img
+                                        src={event.poster_image_url}
+                                        alt={event.title}
+                                        className="h-auto max-h-[420px] w-full object-contain"
+                                        loading="lazy"
+                                    />
+                                ) : (
+                                    <div className="flex min-h-[220px] items-center justify-center text-sm text-muted-foreground">
+                                        No poster uploaded.
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
                         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
                             <h2 className="text-base font-semibold">Summary</h2>
 

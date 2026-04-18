@@ -13,6 +13,7 @@ class GetEventRegistrationIndexAction
         return EventRegistration::query()
             ->where('event_id', $event->id)
             ->with('user:id,name,email')
+            ->withCount('answers')
             ->search($search)
             ->orderByDesc('registered_at')
             ->paginate(10)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\Events\DeleteEventAction;
+use App\Actions\Events\GetEventDetailAction;
 use App\Actions\Events\GetEventIndexAction;
 use App\Actions\Events\StoreEventAction;
 use App\Actions\Events\UpdateEventAction;
@@ -31,7 +32,7 @@ class EventController extends Controller
         $sortDirection = $validated['sort_direction'] ?? 'desc';
 
         return Inertia::render('admin/events/index', [
-            'events' => fn() => $getEventIndexAction->handle(
+            'events' => fn () => $getEventIndexAction->handle(
                 search: $search,
                 sortField: $sortField,
                 sortDirection: $sortDirection,
@@ -47,7 +48,7 @@ class EventController extends Controller
     public function create(): Response
     {
         return Inertia::render('admin/events/create', [
-            'mentors' => fn() => User::query()
+            'mentors' => fn () => User::query()
                 ->select(['id', 'name'])
                 ->where('role', 'mentor')
                 ->orderBy('name')
@@ -66,17 +67,12 @@ class EventController extends Controller
             ->with('success', 'Event created successfully.');
     }
 
-    public function show(Event $event): Response
-    {
+    public function show(
+        Event $event,
+        GetEventDetailAction $getEventDetailAction,
+    ): Response {
         return Inertia::render('admin/events/show', [
-            'event' => $event->load([
-                'mentor:id,name',
-                'registrationQuestions' => fn($query) => $query->ordered()->limit(5),
-                'registrations' => fn($query) => $query->latest('registered_at')->limit(5),
-            ])->loadCount([
-                        'registrations',
-                        'registrationQuestions',
-                    ]),
+            'event' => $getEventDetailAction->handle($event),
         ]);
     }
 
@@ -85,9 +81,9 @@ class EventController extends Controller
         return Inertia::render('admin/events/edit', [
             'event' => $event->load([
                 'mentor:id,name',
-                'registrationQuestions' => fn($query) => $query->ordered(),
+                'registrationQuestions' => fn ($query) => $query->ordered(),
             ]),
-            'mentors' => fn() => User::query()
+            'mentors' => fn () => User::query()
                 ->select(['id', 'name'])
                 ->where('role', 'mentor')
                 ->orderBy('name')
