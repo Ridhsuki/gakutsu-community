@@ -15,7 +15,11 @@ class EventRegistrationController extends Controller
         Event $event,
         StoreEventRegistrationAction $storeEventRegistrationAction,
     ): RedirectResponse {
-        $storeEventRegistrationAction->handle($event, $request->user());
+        $storeEventRegistrationAction->handle(
+            $event,
+            $request->user(),
+            $request->validated()['answers'] ?? [],
+        );
 
         return redirect()
             ->route('events.show', $event->slug)

@@ -13,7 +13,7 @@ class EventBrowseController extends Controller
     public function index(): Response
     {
         return Inertia::render('events/index', [
-            'events' => fn () => Event::query()
+            'events' => fn() => Event::query()
                 ->select(Event::indexColumns())
                 ->with('instructor:id,name')
                 ->published()
@@ -30,6 +30,10 @@ class EventBrowseController extends Controller
 
         return Inertia::render('events/show', [
             'event' => $event->load('instructor:id,name'),
+            'registrationQuestions' => $event->registrationQuestions()
+                ->active()
+                ->ordered()
+                ->get(),
             'alreadyRegistered' => auth()->check()
                 ? $event->registrations()->where('user_id', auth()->id())->exists()
                 : false,

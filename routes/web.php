@@ -14,6 +14,8 @@ use App\Http\Controllers\Event\EventBrowseController;
 use App\Http\Controllers\Event\EventRegistrationController;
 use App\Http\Controllers\Mentor\EventController as MentorEventController;
 use App\Http\Controllers\Mentor\EventRegistrationController as MentorEventRegistrationController;
+use App\Http\Controllers\Admin\EventRegistrationQuestionController as AdminEventRegistrationQuestionController;
+use App\Http\Controllers\Mentor\EventRegistrationQuestionController as MentorEventRegistrationQuestionController;
 
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
@@ -35,6 +37,32 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])
     ->group(function () {
         Route::resource('users', UserController::class)->except(['show', 'create', 'edit']);
         Route::resource('blogs', AdminBlogPostController::class)->except(['show', 'create', 'edit']);
+        Route::resource('events', AdminEventController::class)->except(['show', 'create', 'edit']);
+
+        Route::get(
+            'events/{event}/registrations',
+            [AdminEventRegistrationController::class, 'index']
+        )->name('events.registrations.index');
+
+        Route::get(
+            'events/{event}/registration-questions',
+            [AdminEventRegistrationQuestionController::class, 'index']
+        )->name('events.registration-questions.index');
+
+        Route::post(
+            'events/{event}/registration-questions',
+            [AdminEventRegistrationQuestionController::class, 'store']
+        )->name('events.registration-questions.store');
+
+        Route::put(
+            'events/{event}/registration-questions/{registrationQuestion}',
+            [AdminEventRegistrationQuestionController::class, 'update']
+        )->name('events.registration-questions.update');
+
+        Route::delete(
+            'events/{event}/registration-questions/{registrationQuestion}',
+            [AdminEventRegistrationQuestionController::class, 'destroy']
+        )->name('events.registration-questions.destroy');
     });
 
 Route::middleware(['auth', 'verified', EnsureUserIsMentor::class])
@@ -42,6 +70,32 @@ Route::middleware(['auth', 'verified', EnsureUserIsMentor::class])
     ->name('mentor.')
     ->group(function () {
         Route::resource('blogs', MentorBlogPostController::class)->except(['show', 'create', 'edit']);
+        Route::resource('events', MentorEventController::class)->except(['show', 'create', 'edit']);
+
+        Route::get(
+            'events/{event}/registrations',
+            [MentorEventRegistrationController::class, 'index']
+        )->name('events.registrations.index');
+
+        Route::get(
+            'events/{event}/registration-questions',
+            [MentorEventRegistrationQuestionController::class, 'index']
+        )->name('events.registration-questions.index');
+
+        Route::post(
+            'events/{event}/registration-questions',
+            [MentorEventRegistrationQuestionController::class, 'store']
+        )->name('events.registration-questions.store');
+
+        Route::put(
+            'events/{event}/registration-questions/{registrationQuestion}',
+            [MentorEventRegistrationQuestionController::class, 'update']
+        )->name('events.registration-questions.update');
+
+        Route::delete(
+            'events/{event}/registration-questions/{registrationQuestion}',
+            [MentorEventRegistrationQuestionController::class, 'destroy']
+        )->name('events.registration-questions.destroy');
     });
 
 Route::get('/events', [EventBrowseController::class, 'index'])->name('events.index');
@@ -52,28 +106,12 @@ Route::middleware(['auth', 'verified'])->post(
     [EventRegistrationController::class, 'store']
 )->name('events.registrations.store');
 
-Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-        Route::resource('events', AdminEventController::class)->except(['show', 'create', 'edit']);
-
-        Route::get(
-            'events/{event}/registrations',
-            [AdminEventRegistrationController::class, 'index']
-        )->name('events.registrations.index');
-    });
 
 Route::middleware(['auth', 'verified', EnsureUserIsMentor::class])
     ->prefix('mentor')
     ->name('mentor.')
     ->group(function () {
-        Route::resource('events', MentorEventController::class)->except(['show', 'create', 'edit']);
 
-        Route::get(
-            'events/{event}/registrations',
-            [MentorEventRegistrationController::class, 'index']
-        )->name('events.registrations.index');
     });
 
 require __DIR__ . '/settings.php';
