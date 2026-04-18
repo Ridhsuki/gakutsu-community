@@ -28,7 +28,7 @@ interface EventManagementPageProps extends EventManagementPageSharedProps {
     title: string;
     description: string;
     registrationsBaseUrl: string;
-    canAssignInstructor?: boolean;
+    canAssignMentor?: boolean;
 }
 
 export default function EventManagementPage({
@@ -40,7 +40,7 @@ export default function EventManagementPage({
     title,
     description,
     registrationsBaseUrl,
-    canAssignInstructor = false,
+    canAssignMentor = false,
 }: EventManagementPageProps) {
     const {
         search,
@@ -80,7 +80,7 @@ export default function EventManagementPage({
                     description={description}
                     searchValue={search}
                     onSearchChange={setSearch}
-                    searchPlaceholder="Search by title, category, slug, or instructor..."
+                    searchPlaceholder="Search by title, category, slug, or mentor..."
                     actions={
                         <Button
                             type="button"
@@ -125,7 +125,7 @@ export default function EventManagementPage({
                 form={createForm}
                 onSubmit={handleCreateSubmit}
                 mentors={mentors}
-                canAssignInstructor={canAssignInstructor}
+                canAssignMentor={canAssignMentor}
             />
 
             <EventEditDialog
@@ -135,7 +135,7 @@ export default function EventManagementPage({
                 currentEvent={selectedEvent}
                 onSubmit={handleEditSubmit}
                 mentors={mentors}
-                canAssignInstructor={canAssignInstructor}
+                canAssignMentor={canAssignMentor}
             />
 
             <EventDeleteDialog

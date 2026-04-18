@@ -9,7 +9,7 @@ export const EVENT_ALLOWED_SORT_FIELDS: readonly EventSortField[] = [
     'status',
     'starts_at',
     'created_at',
-    'instructor',
+    'mentor',
 ];
 
 export const EVENT_SORT_OPTIONS: ReadonlyArray<{
@@ -21,7 +21,7 @@ export const EVENT_SORT_OPTIONS: ReadonlyArray<{
     { value: 'title', label: 'Title' },
     { value: 'category', label: 'Category' },
     { value: 'status', label: 'Status' },
-    { value: 'instructor', label: 'Instructor' },
+    { value: 'mentor', label: 'Mentor' },
 ];
 
 export const EVENT_STATUS_OPTIONS = [

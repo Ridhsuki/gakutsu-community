@@ -35,7 +35,7 @@ class EventController extends Controller
                 search: $search,
                 sortField: $sortField,
                 sortDirection: $sortDirection,
-                instructorId: $request->user()->id,
+                mentorId: $request->user()->id,
             ),
             'filters' => [
                 'search' => $search,

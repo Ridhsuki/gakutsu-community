@@ -59,7 +59,7 @@ export default function EventsShow({
                     <h1 className="text-3xl font-semibold">{event.title}</h1>
                     <p className="text-sm text-muted-foreground">{event.category}</p>
                     <p className="text-sm text-muted-foreground">
-                        Instructor: {event.instructor?.name ?? '-'}
+                        Mentor: {event.mentor?.name ?? '-'}
                     </p>
                     <p className="text-sm text-muted-foreground">
                         Start: {formatDate(event.starts_at)}

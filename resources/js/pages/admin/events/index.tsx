@@ -12,7 +12,7 @@ export default function AdminEventIndex(props: EventManagementPageSharedProps) {
             title="Event Management"
             description="Manage webinar and community events."
             registrationsBaseUrl={ADMIN_EVENTS_INDEX_URL}
-            canAssignInstructor
+            canAssignMentor
         />
     );
 }

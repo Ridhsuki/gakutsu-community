@@ -28,7 +28,7 @@ class EventRegistrationQuestionController extends Controller
         $search = $request->validated()['search'] ?? null;
 
         return Inertia::render('admin/events/questions/index', [
-            'event' => $event->load('instructor:id,name'),
+            'event' => $event->load('mentor:id,name'),
             'questions' => fn () => $action->handle($event, $search),
             'filters' => [
                 'search' => $search,

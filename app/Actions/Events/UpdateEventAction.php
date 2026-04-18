@@ -21,8 +21,8 @@ class UpdateEventAction
         return DB::transaction(function () use ($request, $event) {
             $data = $request->validated();
 
-            $data['instructor_id'] = $request->user()->isAdmin()
-                ? (int) $data['instructor_id']
+            $data['mentor_id'] = $request->user()->isAdmin()
+                ? (int) $data['mentor_id']
                 : $request->user()->id;
 
             if ($request->hasFile('poster_image')) {

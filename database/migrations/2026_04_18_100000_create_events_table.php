@@ -18,7 +18,7 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
 
-            $table->foreignId('instructor_id')
+            $table->foreignId('mentor_id')
                 ->constrained('users')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
@@ -47,7 +47,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->index(['instructor_id', 'status']);
+            $table->index(['mentor_id', 'status']);
             $table->index(['is_published', 'status', 'starts_at']);
         });
     }

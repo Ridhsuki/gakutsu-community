@@ -23,7 +23,7 @@ class EventPolicy
 
     public function view(User $user, Event $event): bool
     {
-        return $user->isMentor() && $event->instructor_id === $user->id;
+        return $user->isMentor() && $event->mentor_id === $user->id;
     }
 
     public function create(User $user): bool
@@ -33,17 +33,17 @@ class EventPolicy
 
     public function update(User $user, Event $event): bool
     {
-        return $user->isMentor() && $event->instructor_id === $user->id;
+        return $user->isMentor() && $event->mentor_id === $user->id;
     }
 
     public function delete(User $user, Event $event): bool
     {
-        return $user->isMentor() && $event->instructor_id === $user->id;
+        return $user->isMentor() && $event->mentor_id === $user->id;
     }
 
     public function viewRegistrations(User $user, Event $event): bool
     {
-        return $user->isMentor() && $event->instructor_id === $user->id;
+        return $user->isMentor() && $event->mentor_id === $user->id;
     }
 
     public function register(User $user, Event $event): bool
@@ -53,6 +53,6 @@ class EventPolicy
 
     public function manageRegistrationQuestions(User $user, Event $event): bool
     {
-        return $user->isMentor() && $event->instructor_id === $user->id;
+        return $user->isMentor() && $event->mentor_id === $user->id;
     }
 }

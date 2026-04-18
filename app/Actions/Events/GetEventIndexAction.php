@@ -11,14 +11,14 @@ class GetEventIndexAction
         ?string $search = null,
         string $sortField = 'starts_at',
         string $sortDirection = 'desc',
-        ?int $instructorId = null,
+        ?int $mentorId = null,
     ): LengthAwarePaginator {
         $query = Event::query()
             ->select(Event::indexColumns())
-            ->with('instructor:id,name');
+            ->with('mentor:id,name');
 
-        if ($instructorId !== null) {
-            $query->ownedByInstructor($instructorId);
+        if ($mentorId !== null) {
+            $query->ownedByMentor($mentorId);
         }
 
         return $query

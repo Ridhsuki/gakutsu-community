@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'created_by',
-    'instructor_id',
+    'mentor_id',
     'title',
     'slug',
     'category',
@@ -62,7 +62,7 @@ class Event extends Model
         return [
             'id',
             'created_by',
-            'instructor_id',
+            'mentor_id',
             'title',
             'slug',
             'category',
@@ -85,9 +85,9 @@ class Event extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function instructor(): BelongsTo
+    public function mentor(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'instructor_id');
+        return $this->belongsTo(User::class, 'mentor_id');
     }
 
     public function registrations(): HasMany
@@ -113,8 +113,8 @@ class Event extends Model
             $q->where('title', 'like', "%{$search}%")
                 ->orWhere('slug', 'like', "%{$search}%")
                 ->orWhere('category', 'like', "%{$search}%")
-                ->orWhereHas('instructor', function (Builder $instructorQuery) use ($search) {
-                    $instructorQuery->where('name', 'like', "%{$search}%");
+                ->orWhereHas('mentor', function (Builder $mentorQuery) use ($search) {
+                    $mentorQuery->where('name', 'like', "%{$search}%");
                 });
         });
     }
@@ -122,7 +122,7 @@ class Event extends Model
     #[Scope]
     protected function applySort(Builder $query, string $field, string $direction): void
     {
-        $allowed = ['title', 'category', 'status', 'starts_at', 'created_at', 'instructor'];
+        $allowed = ['title', 'category', 'status', 'starts_at', 'created_at', 'mentor'];
 
         if (!in_array($field, $allowed, true)) {
             $field = 'starts_at';
@@ -130,9 +130,9 @@ class Event extends Model
 
         $direction = $direction === 'asc' ? 'asc' : 'desc';
 
-        if ($field === 'instructor') {
+        if ($field === 'mentor') {
             $query->orderBy(
-                User::select('name')->whereColumn('users.id', 'events.instructor_id'),
+                User::select('name')->whereColumn('users.id', 'events.mentor_id'),
                 $direction,
             );
 
@@ -143,9 +143,9 @@ class Event extends Model
     }
 
     #[Scope]
-    protected function ownedByInstructor(Builder $query, int $userId): void
+    protected function ownedByMentor(Builder $query, int $userId): void
     {
-        $query->where('instructor_id', $userId);
+        $query->where('mentor_id', $userId);
     }
 
     #[Scope]

@@ -16,7 +16,7 @@ interface EventCreateDialogProps {
     form: any;
     onSubmit: (event: SyntheticEvent<HTMLFormElement>) => void;
     mentors?: EventMentorOption[];
-    canAssignInstructor?: boolean;
+    canAssignMentor?: boolean;
 }
 
 export default function EventCreateDialog({
@@ -25,7 +25,7 @@ export default function EventCreateDialog({
     form,
     onSubmit,
     mentors = [],
-    canAssignInstructor = false,
+    canAssignMentor = false,
 }: EventCreateDialogProps) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -38,7 +38,7 @@ export default function EventCreateDialog({
                     <EventFormFields
                         form={form}
                         mentors={mentors}
-                        canAssignInstructor={canAssignInstructor}
+                        canAssignMentor={canAssignMentor}
                     />
 
                     <DialogFooter>

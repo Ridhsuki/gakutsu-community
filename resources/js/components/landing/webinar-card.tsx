@@ -7,8 +7,8 @@ export interface WebinarItem {
     category: string;
     date: string;
     time: string;
-    instructor: string;
-    instructorRole: string;
+    mentor: string;
+    mentorRole: string;
     isLive?: boolean;
     isFree?: boolean;
 }
@@ -61,14 +61,14 @@ export default function WebinarCard({ webinar }: WebinarCardProps) {
                 {/* Divider */}
                 <div className="border-t border-gray-100" />
 
-                {/* Instructor */}
+                {/* Mentor */}
                 <div className="flex items-center gap-3">
                     <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#106b42]/10 text-sm font-bold text-[#106b42]">
-                        {webinar.instructor.charAt(0)}
+                        {webinar.mentor.charAt(0)}
                     </div>
                     <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-gray-800">{webinar.instructor}</p>
-                        <p className="truncate text-xs text-gray-500">{webinar.instructorRole}</p>
+                        <p className="truncate text-sm font-semibold text-gray-800">{webinar.mentor}</p>
+                        <p className="truncate text-xs text-gray-500">{webinar.mentorRole}</p>
                     </div>
                     <User className="ml-auto size-4 shrink-0 text-gray-300" />
                 </div>

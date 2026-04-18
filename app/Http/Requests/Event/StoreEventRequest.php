@@ -33,7 +33,7 @@ class StoreEventRequest extends FormRequest
 
     public function rules(): array
     {
-        $instructorRules = $this->user()?->isAdmin()
+        $mentorRules = $this->user()?->isAdmin()
             ? [
                 'required',
                 'integer',
@@ -46,7 +46,7 @@ class StoreEventRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', 'alpha_dash', 'unique:events,slug'],
-            'instructor_id' => $instructorRules,
+            'mentor_id' => $mentorRules,
             'category' => ['required', 'string', 'max:100'],
             'description' => ['required', 'string'],
             'starts_at' => ['required', 'date'],

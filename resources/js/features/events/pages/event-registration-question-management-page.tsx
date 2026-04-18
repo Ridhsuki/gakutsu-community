@@ -57,7 +57,7 @@ export default function EventRegistrationQuestionManagementPage({
             <div className="flex h-full w-full flex-col space-y-6 p-6">
                 <IndexToolbar
                     title={`Registration Form - ${event.title}`}
-                    description={`Instructor: ${event.instructor?.name ?? '-'}`}
+                    description={`Mentor: ${event.mentor?.name ?? '-'}`}
                     searchValue={search}
                     onSearchChange={setSearch}
                     searchPlaceholder="Search registration question..."

@@ -24,7 +24,7 @@ export function getDefaultCreateEventForm(): CreateEventForm {
     return {
         title: '',
         slug: '',
-        instructor_id: '',
+        mentor_id: '',
         category: '',
         description: '',
         starts_at: '',
@@ -48,7 +48,7 @@ export function mapEventToEditEventForm(event: EventItem): EditEventForm {
     return {
         title: event.title,
         slug: event.slug,
-        instructor_id: event.instructor_id ? String(event.instructor_id) : '',
+        mentor_id: event.mentor_id ? String(event.mentor_id) : '',
         category: event.category,
         description: event.description,
         starts_at: toDatetimeLocalValue(event.starts_at),

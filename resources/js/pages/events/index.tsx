@@ -45,7 +45,7 @@ export default function EventsIndex({ events }: PageProps) {
                                     <h2 className="text-lg font-semibold">{event.title}</h2>
                                     <p className="text-sm text-muted-foreground">{event.category}</p>
                                     <p className="text-sm text-muted-foreground">
-                                        Instructor: {event.instructor?.name ?? '-'}
+                                        Mentor: {event.mentor?.name ?? '-'}
                                     </p>
                                     <p className="text-sm text-muted-foreground">
                                         Starts: {formatDate(event.starts_at)}

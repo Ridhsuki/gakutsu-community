@@ -18,7 +18,7 @@ interface EventFormLike {
     data: {
         title: string;
         slug: string;
-        instructor_id: string;
+        mentor_id: string;
         category: string;
         description: string;
         starts_at: string;
@@ -40,13 +40,13 @@ interface EventFormLike {
 interface EventFormFieldsProps {
     form: EventFormLike;
     mentors?: EventMentorOption[];
-    canAssignInstructor?: boolean;
+    canAssignMentor?: boolean;
 }
 
 export default function EventFormFields({
     form,
     mentors = [],
-    canAssignInstructor = false,
+    canAssignMentor = false,
 }: EventFormFieldsProps) {
     return (
         <div className="grid gap-4">
@@ -68,15 +68,15 @@ export default function EventFormFields({
                 {form.errors.slug ? <p className="text-sm text-red-600">{form.errors.slug}</p> : null}
             </div>
 
-            {canAssignInstructor ? (
+            {canAssignMentor ? (
                 <div className="grid gap-2">
-                    <label className="text-sm font-medium">Instructor</label>
+                    <label className="text-sm font-medium">Mentor</label>
                     <Select
-                        value={form.data.instructor_id}
-                        onValueChange={(value) => form.setData('instructor_id', value)}
+                        value={form.data.mentor_id}
+                        onValueChange={(value) => form.setData('mentor_id', value)}
                     >
                         <SelectTrigger>
-                            <SelectValue placeholder="Select instructor" />
+                            <SelectValue placeholder="Select mentor" />
                         </SelectTrigger>
                         <SelectContent>
                             {mentors.map((mentor) => (
@@ -86,7 +86,7 @@ export default function EventFormFields({
                             ))}
                         </SelectContent>
                     </Select>
-                    {form.errors.instructor_id ? <p className="text-sm text-red-600">{form.errors.instructor_id}</p> : null}
+                    {form.errors.mentor_id ? <p className="text-sm text-red-600">{form.errors.mentor_id}</p> : null}
                 </div>
             ) : null}
 

@@ -47,5 +47,9 @@ class DatabaseSeeder extends Seeder
         // BlogPost::factory()->count(6)->create([
         //     'author_id' => $mentor->id,
         // ]);
+
+        $this->call([
+            EventSeeder::class, // <-- Tambahkan baris ini
+        ]);
     }
 }

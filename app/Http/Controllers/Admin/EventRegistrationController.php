@@ -19,7 +19,7 @@ class EventRegistrationController extends Controller
         $search = $request->validated()['search'] ?? null;
 
         return Inertia::render('admin/events/registrations/index', [
-            'event' => $event->load('instructor:id,name'),
+            'event' => $event->load('mentor:id,name'),
             'registrations' => fn () => $getEventRegistrationIndexAction->handle($event, $search),
             'filters' => [
                 'search' => $search,

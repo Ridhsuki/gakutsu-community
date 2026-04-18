@@ -15,8 +15,8 @@ const WEBINARS: WebinarItem[] = [
         category: 'Data Science',
         date: 'Sabtu, 19 April 2026',
         time: '09.00 – 11.00',
-        instructor: 'Dr. Rina Kusuma',
-        instructorRole: 'Lead Data Scientist · Tokopedia',
+        mentor: 'Dr. Rina Kusuma',
+        mentorRole: 'Lead Data Scientist · Tokopedia',
         isFree: true,
     },
     {
@@ -25,8 +25,8 @@ const WEBINARS: WebinarItem[] = [
         category: 'Web Development',
         date: 'Minggu, 27 April 2026',
         time: '13.00 – 15.30',
-        instructor: 'Budi Santoso',
-        instructorRole: 'Senior Engineer · Gojek',
+        mentor: 'Budi Santoso',
+        mentorRole: 'Senior Engineer · Gojek',
         isLive: false,
     },
     {
@@ -35,8 +35,8 @@ const WEBINARS: WebinarItem[] = [
         category: 'UI/UX Design',
         date: 'Sabtu, 3 Mei 2026',
         time: '10.00 – 12.00',
-        instructor: 'Ayu Pratiwi',
-        instructorRole: 'Product Designer · Traveloka',
+        mentor: 'Ayu Pratiwi',
+        mentorRole: 'Product Designer · Traveloka',
         isFree: true,
     },
     {
@@ -45,8 +45,8 @@ const WEBINARS: WebinarItem[] = [
         category: 'Digital Marketing',
         date: 'Rabu, 7 Mei 2026',
         time: '19.00 – 21.00',
-        instructor: 'Hendra Wijaya',
-        instructorRole: 'Growth Hacker · Startup Founder',
+        mentor: 'Hendra Wijaya',
+        mentorRole: 'Growth Hacker · Startup Founder',
     },
 ];
 

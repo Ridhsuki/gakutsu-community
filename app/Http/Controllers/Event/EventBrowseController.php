@@ -15,7 +15,7 @@ class EventBrowseController extends Controller
         return Inertia::render('events/index', [
             'events' => fn() => Event::query()
                 ->select(Event::indexColumns())
-                ->with('instructor:id,name')
+                ->with('mentor:id,name')
                 ->published()
                 ->where('status', EventStatus::Upcoming)
                 ->orderBy('starts_at')
@@ -29,7 +29,7 @@ class EventBrowseController extends Controller
         abort_unless($event->is_published, 404);
 
         return Inertia::render('events/show', [
-            'event' => $event->load('instructor:id,name'),
+            'event' => $event->load('mentor:id,name'),
             'registrationQuestions' => $event->registrationQuestions()
                 ->active()
                 ->ordered()

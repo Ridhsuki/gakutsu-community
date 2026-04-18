@@ -7,9 +7,9 @@ export type EventSortField =
     | 'status'
     | 'starts_at'
     | 'created_at'
-    | 'instructor';
+    | 'mentor';
 
-export interface EventInstructor {
+export interface EventMentor {
     id: number;
     name: string;
 }
@@ -17,7 +17,7 @@ export interface EventInstructor {
 export interface EventItem {
     id: number;
     created_by: number;
-    instructor_id: number;
+    mentor_id: number;
     title: string;
     slug: string;
     category: string;
@@ -34,7 +34,7 @@ export interface EventItem {
     ends_at: string | null;
     description: string;
     created_at: string;
-    instructor?: EventInstructor | null;
+    mentor?: EventMentor | null;
 }
 
 export interface EventMentorOption {
@@ -45,7 +45,7 @@ export interface EventMentorOption {
 export interface CreateEventForm {
     title: string;
     slug: string;
-    instructor_id: string;
+    mentor_id: string;
     category: string;
     description: string;
     starts_at: string;

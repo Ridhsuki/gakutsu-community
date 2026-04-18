@@ -17,7 +17,7 @@ interface EventEditDialogProps {
     currentEvent: EventItem | null;
     onSubmit: (event: SyntheticEvent<HTMLFormElement>) => void;
     mentors?: EventMentorOption[];
-    canAssignInstructor?: boolean;
+    canAssignMentor?: boolean;
 }
 
 export default function EventEditDialog({
@@ -27,7 +27,7 @@ export default function EventEditDialog({
     currentEvent,
     onSubmit,
     mentors = [],
-    canAssignInstructor = false,
+    canAssignMentor = false,
 }: EventEditDialogProps) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -40,7 +40,7 @@ export default function EventEditDialog({
                     <EventFormFields
                         form={form}
                         mentors={mentors}
-                        canAssignInstructor={canAssignInstructor}
+                        canAssignMentor={canAssignMentor}
                     />
 
                     <DialogFooter>

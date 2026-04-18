@@ -21,8 +21,8 @@ class StoreEventAction
             $data = $request->validated();
 
             $data['created_by'] = $request->user()->id;
-            $data['instructor_id'] = $request->user()->isAdmin()
-                ? (int) $data['instructor_id']
+            $data['mentor_id'] = $request->user()->isAdmin()
+                ? (int) $data['mentor_id']
                 : $request->user()->id;
 
             if ($request->hasFile('poster_image')) {

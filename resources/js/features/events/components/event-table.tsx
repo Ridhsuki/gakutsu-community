@@ -62,8 +62,8 @@ export default function EventTable({
                             onSort={onSort}
                         />
                         <SortableHeader
-                            label="Instructor"
-                            field="instructor"
+                            label="Mentor"
+                            field="mentor"
                             currentField={sortField}
                             currentDirection={sortDirection}
                             onSort={onSort}
@@ -96,7 +96,7 @@ export default function EventTable({
                                     <div className="text-xs text-muted-foreground">/{event.slug}</div>
                                 </td>
                                 <td className="px-4 py-3 text-muted-foreground">{event.category}</td>
-                                <td className="px-4 py-3 text-muted-foreground">{event.instructor?.name ?? '-'}</td>
+                                <td className="px-4 py-3 text-muted-foreground">{event.mentor?.name ?? '-'}</td>
                                 <td className="px-4 py-3 text-muted-foreground">{formatDate(event.starts_at)}</td>
                                 <td className="px-4 py-3"><EventStatusBadge status={event.status} /></td>
                                 <td className="px-4 py-3 text-muted-foreground">{event.is_published ? 'Published' : 'Draft'}</td>

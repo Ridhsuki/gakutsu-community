@@ -36,7 +36,7 @@ export default function AdminEventRegistrationsIndex({
             <div className="flex h-full w-full flex-col space-y-6 p-6">
                 <IndexToolbar
                     title={`Registrations - ${event.title}`}
-                    description={`Instructor: ${event.instructor?.name ?? '-'}`}
+                    description={`Mentor: ${event.mentor?.name ?? '-'}`}
                     searchValue={search}
                     onSearchChange={setSearch}
                     searchPlaceholder="Search by name or email..."

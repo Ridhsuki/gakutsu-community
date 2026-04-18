@@ -16,7 +16,7 @@ class EventIndexRequest extends FormRequest
     {
         return [
             'search' => ['nullable', 'string', 'max:100'],
-            'sort_field' => ['nullable', 'in:title,category,status,starts_at,created_at,instructor'],
+            'sort_field' => ['nullable', 'in:title,category,status,starts_at,created_at,mentor'],
             'sort_direction' => ['nullable', 'in:asc,desc'],
         ];
     }
