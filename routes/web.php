@@ -8,6 +8,12 @@ use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\EnsureUserIsMentor;
 use App\Http\Controllers\Admin\BlogPostController as AdminBlogPostController;
 use App\Http\Controllers\Mentor\BlogPostController as MentorBlogPostController;
+use App\Http\Controllers\Admin\EventController as AdminEventController;
+use App\Http\Controllers\Admin\EventRegistrationController as AdminEventRegistrationController;
+use App\Http\Controllers\Event\EventBrowseController;
+use App\Http\Controllers\Event\EventRegistrationController;
+use App\Http\Controllers\Mentor\EventController as MentorEventController;
+use App\Http\Controllers\Mentor\EventRegistrationController as MentorEventRegistrationController;
 
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
@@ -36,6 +42,38 @@ Route::middleware(['auth', 'verified', EnsureUserIsMentor::class])
     ->name('mentor.')
     ->group(function () {
         Route::resource('blogs', MentorBlogPostController::class)->except(['show', 'create', 'edit']);
+    });
+
+Route::get('/events', [EventBrowseController::class, 'index'])->name('events.index');
+Route::get('/events/{event:slug}', [EventBrowseController::class, 'show'])->name('events.show');
+
+Route::middleware(['auth', 'verified'])->post(
+    '/events/{event}/registrations',
+    [EventRegistrationController::class, 'store']
+)->name('events.registrations.store');
+
+Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::resource('events', AdminEventController::class)->except(['show', 'create', 'edit']);
+
+        Route::get(
+            'events/{event}/registrations',
+            [AdminEventRegistrationController::class, 'index']
+        )->name('events.registrations.index');
+    });
+
+Route::middleware(['auth', 'verified', EnsureUserIsMentor::class])
+    ->prefix('mentor')
+    ->name('mentor.')
+    ->group(function () {
+        Route::resource('events', MentorEventController::class)->except(['show', 'create', 'edit']);
+
+        Route::get(
+            'events/{event}/registrations',
+            [MentorEventRegistrationController::class, 'index']
+        )->name('events.registrations.index');
     });
 
 require __DIR__ . '/settings.php';
