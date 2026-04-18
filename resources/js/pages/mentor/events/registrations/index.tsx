@@ -13,6 +13,7 @@ export default function MentorEventRegistrationsIndex(props: Props) {
         <EventRegistrationsPage
             {...props}
             endpoint={`/mentor/events/${props.event.id}/registrations`}
+            detailBaseUrl={`/mentor/events/${props.event.id}/registrations`}
             headTitle={`Registrations - ${props.event.title}`}
         />
     );

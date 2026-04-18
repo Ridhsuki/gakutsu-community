@@ -11,6 +11,7 @@ interface EventRegistrationsPageProps {
     registrations: PaginatedResponse<EventRegistrationItem>;
     filters: { search?: string | null };
     endpoint: string;
+    detailBaseUrl: string;
     headTitle?: string;
 }
 
@@ -19,6 +20,7 @@ export default function EventRegistrationsPage({
     registrations,
     filters,
     endpoint,
+    detailBaseUrl,
     headTitle,
 }: EventRegistrationsPageProps) {
     const { search, setSearch, isReloading } = useIndexFilters({
@@ -52,7 +54,10 @@ export default function EventRegistrationsPage({
                 />
 
                 <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm">
-                    <EventRegistrationTable registrations={registrations.data} />
+                    <EventRegistrationTable
+                        registrations={registrations.data}
+                        detailBaseUrl={detailBaseUrl}
+                    />
 
                     <PaginationBar
                         links={registrations.links}

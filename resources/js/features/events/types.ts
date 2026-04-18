@@ -13,6 +13,55 @@ export interface EventMentor {
     name: string;
 }
 
+export interface EventRegistrationQuestionItem {
+    id: number;
+    event_id: number;
+    label: string;
+    type: 'short_text' | 'long_text' | 'select';
+    options: string[] | null;
+    placeholder: string | null;
+    help_text: string | null;
+    is_required: boolean;
+    is_active: boolean;
+    sort_order: number;
+    created_at?: string;
+}
+
+export interface EventRegistrationAnswerItem {
+    id: number;
+    question_label_snapshot: string;
+    question_type_snapshot: string;
+    answer_value: string | null;
+    question?: {
+        id: number;
+        label: string;
+        type: string;
+    } | null;
+}
+
+export interface EventRegistrationItem {
+    id: number;
+    event_id: number;
+    user_id: number;
+    name_snapshot: string;
+    email_snapshot: string;
+    registered_at: string;
+    answers_count?: number;
+    answers?: EventRegistrationAnswerItem[];
+    user?: {
+        id: number;
+        name: string;
+        email: string;
+    } | null;
+    event?: {
+        id: number;
+        title: string;
+        slug: string;
+        mentor_id: number;
+        mentor?: EventMentor | null;
+    } | null;
+}
+
 export interface EventItem {
     id: number;
     created_by: number;
@@ -36,8 +85,9 @@ export interface EventItem {
     mentor?: EventMentor | null;
     registrations_count?: number;
     registration_questions_count?: number;
-    registration_questions?: EventRegistrationQuestionItem[];
+    registrationQuestions?: EventRegistrationQuestionItem[];
     registrations?: EventRegistrationItem[];
+    registration_questions?: EventRegistrationQuestionItem[];
 }
 
 export interface EventMentorOption {
@@ -64,34 +114,9 @@ export interface CreateEventForm {
 
 export interface EditEventForm extends CreateEventForm {}
 
-export interface EventRegistrationItem {
-    id: number;
-    event_id: number;
-    user_id: number;
-    name_snapshot: string;
-    email_snapshot: string;
-    registered_at: string;
-}
-
-export type EventRegistrationQuestionType = 'short_text' | 'long_text' | 'select';
-
-export interface EventRegistrationQuestionItem {
-    id: number;
-    event_id: number;
-    label: string;
-    type: EventRegistrationQuestionType;
-    options: string[] | null;
-    placeholder: string | null;
-    help_text: string | null;
-    is_required: boolean;
-    is_active: boolean;
-    sort_order: number;
-    created_at?: string;
-}
-
 export interface CreateEventRegistrationQuestionForm {
     label: string;
-    type: EventRegistrationQuestionType;
+    type: 'short_text' | 'long_text' | 'select';
     options_text: string;
     placeholder: string;
     help_text: string;

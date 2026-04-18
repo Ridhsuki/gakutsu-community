@@ -13,6 +13,7 @@ export default function AdminEventRegistrationsIndex(props: Props) {
         <EventRegistrationsPage
             {...props}
             endpoint={`/admin/events/${props.event.id}/registrations`}
+            detailBaseUrl={`/admin/events/${props.event.id}/registrations`}
             headTitle={`Registrations - ${props.event.title}`}
         />
     );

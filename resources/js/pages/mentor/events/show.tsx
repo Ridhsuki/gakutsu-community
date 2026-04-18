@@ -12,6 +12,7 @@ export default function MentorEventShow({
             backHref="/mentor/events"
             editHref={`/mentor/events/${event.id}/edit`}
             registrationsHref={`/mentor/events/${event.id}/registrations`}
+            registrationDetailBaseHref={`/mentor/events/${event.id}/registrations`}
             questionsHref={`/mentor/events/${event.id}/registration-questions`}
             title={`Event Detail - ${event.title}`}
         />
