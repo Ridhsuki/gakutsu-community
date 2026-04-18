@@ -7,6 +7,7 @@ interface PageProps {
     event: EventItem;
     registrationQuestions: EventRegistrationQuestionItem[];
     alreadyRegistered: boolean;
+    canViewMeetingLink: boolean;
 }
 
 function formatDate(value: string | null) {
@@ -27,6 +28,7 @@ export default function EventsShow({
     event,
     registrationQuestions,
     alreadyRegistered,
+    canViewMeetingLink,
 }: PageProps) {
     const initialAnswers = registrationQuestions.reduce<Record<string, string>>(
         (carry, question) => {
@@ -72,7 +74,7 @@ export default function EventsShow({
                     </div>
 
                     <div className="mt-8 space-y-6">
-                        {registrationQuestions.length > 0 ? (
+                        {registrationQuestions.length > 0 && !alreadyRegistered ? (
                             <div className="space-y-4">
                                 <h2 className="text-lg font-semibold">Registration Form</h2>
 
@@ -162,6 +164,17 @@ export default function EventsShow({
                                     {form.processing ? 'Registering...' : 'Register Event'}
                                 </Button>
                             )}
+
+                            {canViewMeetingLink && event.meeting_url ? (
+                                <a
+                                    href={event.meeting_url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="inline-flex h-9 items-center justify-center rounded-md border border-input px-4 text-sm font-medium"
+                                >
+                                    Join Meeting
+                                </a>
+                            ) : null}
                         </div>
                     </div>
                 </div>

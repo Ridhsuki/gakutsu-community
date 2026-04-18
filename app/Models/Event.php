@@ -4,8 +4,8 @@ namespace App\Models;
 
 use App\Enums\EventAccessType;
 use App\Enums\EventStatus;
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\Storage;
     'status',
     'access_type',
     'is_published',
-    'is_registration_open',
     'registration_closes_at',
     'meeting_provider',
     'meeting_url',
@@ -41,7 +40,6 @@ class Event extends Model
             'status' => EventStatus::class,
             'access_type' => EventAccessType::class,
             'is_published' => 'boolean',
-            'is_registration_open' => 'boolean',
             'registration_closes_at' => 'datetime',
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
@@ -69,13 +67,13 @@ class Event extends Model
             'status',
             'access_type',
             'is_published',
-            'is_registration_open',
             'registration_closes_at',
             'meeting_provider',
             'meeting_url',
             'poster_image_path',
             'starts_at',
             'ends_at',
+            'description',
             'created_at',
         ];
     }
@@ -164,14 +162,8 @@ class Event extends Model
             return false;
         }
 
-        if (!$this->is_registration_open) {
-            return false;
-        }
+        $registrationDeadline = $this->registration_closes_at ?? $this->starts_at;
 
-        if ($this->registration_closes_at && now()->greaterThan($this->registration_closes_at)) {
-            return false;
-        }
-
-        return true;
+        return now()->lessThanOrEqualTo($registrationDeadline);
     }
 }
