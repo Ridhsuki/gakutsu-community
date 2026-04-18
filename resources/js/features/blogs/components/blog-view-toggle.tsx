@@ -12,7 +12,7 @@ export default function BlogViewToggle({
     onChange,
 }: BlogViewToggleProps) {
     return (
-        <div className="grid w-full grid-cols-2 items-center rounded-lg border border-border bg-background sm:inline-grid sm:w-auto">
+        <div className="grid w-full grid-cols-2 items-center rounded-lg border border-border bg-background gap-1 p-1 sm:inline-grid sm:w-auto sm:gap-0 sm:p-0">
             <Button
                 type="button"
                 size="sm"
