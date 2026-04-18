@@ -7,14 +7,13 @@ use App\Enums\EventStatus;
 use App\Enums\UserRole;
 use App\Models\Event;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class UpdateEventRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        /** @var \App\Models\Event $event */
+        /** @var Event $event */
         $event = $this->route('event');
 
         return $this->user()?->can('update', $event) ?? false;
@@ -22,12 +21,6 @@ class UpdateEventRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if ($this->filled('slug')) {
-            $this->merge([
-                'slug' => Str::slug((string) $this->input('slug')),
-            ]);
-        }
-
         $this->merge([
             'is_published' => $this->boolean('is_published'),
             'is_registration_open' => $this->boolean('is_registration_open'),
@@ -36,22 +29,18 @@ class UpdateEventRequest extends FormRequest
 
     public function rules(): array
     {
-        /** @var \App\Models\Event $event */
-        $event = $this->route('event');
-
         $mentorRules = $this->user()?->isAdmin()
             ? [
                 'required',
                 'integer',
                 Rule::exists('users', 'id')->where(
-                    fn($query) => $query->where('role', UserRole::Mentor->value)
+                    fn ($query) => $query->where('role', UserRole::Mentor->value)
                 ),
             ]
             : ['nullable'];
 
         return [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', 'alpha_dash', Rule::unique('events', 'slug')->ignore($event->id)],
             'mentor_id' => $mentorRules,
             'category' => ['required', 'string', 'max:100'],
             'description' => ['required', 'string'],

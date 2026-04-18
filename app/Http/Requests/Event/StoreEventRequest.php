@@ -7,7 +7,6 @@ use App\Enums\EventStatus;
 use App\Enums\UserRole;
 use App\Models\Event;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class StoreEventRequest extends FormRequest
@@ -19,12 +18,6 @@ class StoreEventRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if ($this->filled('slug')) {
-            $this->merge([
-                'slug' => Str::slug((string) $this->input('slug')),
-            ]);
-        }
-
         $this->merge([
             'is_published' => $this->boolean('is_published'),
             'is_registration_open' => $this->boolean('is_registration_open'),
@@ -45,7 +38,6 @@ class StoreEventRequest extends FormRequest
 
         return [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', 'alpha_dash', 'unique:events,slug'],
             'mentor_id' => $mentorRules,
             'category' => ['required', 'string', 'max:100'],
             'description' => ['required', 'string'],

@@ -31,7 +31,7 @@ class EventController extends Controller
         $sortDirection = $validated['sort_direction'] ?? 'desc';
 
         return Inertia::render('mentor/events/index', [
-            'events' => fn () => $getEventIndexAction->handle(
+            'events' => fn() => $getEventIndexAction->handle(
                 search: $search,
                 sortField: $sortField,
                 sortDirection: $sortDirection,
@@ -45,15 +45,48 @@ class EventController extends Controller
         ]);
     }
 
+    public function create(): Response
+    {
+        return Inertia::render('mentor/events/create');
+    }
+
     public function store(
         StoreEventRequest $request,
         StoreEventAction $storeEventAction,
     ): RedirectResponse {
-        $storeEventAction->handle($request);
+        $event = $storeEventAction->handle($request);
 
         return redirect()
-            ->route('mentor.events.index')
+            ->route('mentor.events.edit', $event)
             ->with('success', 'Event created successfully.');
+    }
+
+    public function show(Event $event): Response
+    {
+        $this->authorize('view', $event);
+
+        return Inertia::render('mentor/events/show', [
+            'event' => $event->load([
+                'mentor:id,name',
+                'registrationQuestions' => fn($query) => $query->ordered()->limit(5),
+                'registrations' => fn($query) => $query->latest('registered_at')->limit(5),
+            ])->loadCount([
+                        'registrations',
+                        'registrationQuestions',
+                    ]),
+        ]);
+    }
+
+    public function edit(Event $event): Response
+    {
+        $this->authorize('update', $event);
+
+        return Inertia::render('mentor/events/edit', [
+            'event' => $event->load([
+                'mentor:id,name',
+                'registrationQuestions' => fn($query) => $query->ordered(),
+            ]),
+        ]);
     }
 
     public function update(
@@ -61,10 +94,10 @@ class EventController extends Controller
         Event $event,
         UpdateEventAction $updateEventAction,
     ): RedirectResponse {
-        $updateEventAction->handle($request, $event);
+        $event = $updateEventAction->handle($request, $event);
 
         return redirect()
-            ->route('mentor.events.index')
+            ->route('mentor.events.edit', $event)
             ->with('success', 'Event updated successfully.');
     }
 
