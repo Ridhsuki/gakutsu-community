@@ -15,7 +15,11 @@ class GetEventIndexAction
     ): LengthAwarePaginator {
         $query = Event::query()
             ->select(Event::indexColumns())
-            ->with('mentor:id,name');
+            ->with('mentor:id,name')
+            ->withCount([
+                'registrations',
+                'registrationQuestions',
+            ]);
 
         if ($mentorId !== null) {
             $query->ownedByMentor($mentorId);

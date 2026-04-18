@@ -13,11 +13,23 @@ class EventBrowseController extends Controller
     public function index(): Response
     {
         return Inertia::render('events/index', [
-            'events' => fn() => Event::query()
+            'events' => fn () => Event::query()
                 ->select(Event::indexColumns())
                 ->with('mentor:id,name')
                 ->published()
-                ->where('status', EventStatus::Upcoming)
+                ->whereIn('status', [
+                    EventStatus::Upcoming,
+                    EventStatus::Completed,
+                    EventStatus::Cancelled,
+                ])
+                ->orderByRaw("
+                    CASE
+                        WHEN status = 'upcoming' THEN 1
+                        WHEN status = 'completed' THEN 2
+                        WHEN status = 'cancelled' THEN 3
+                        ELSE 4
+                    END
+                ")
                 ->orderBy('starts_at')
                 ->paginate(12)
                 ->withQueryString(),
@@ -28,15 +40,27 @@ class EventBrowseController extends Controller
     {
         abort_unless($event->is_published, 404);
 
+        $alreadyRegistered = auth()->check()
+            ? $event->registrations()->where('user_id', auth()->id())->exists()
+            : false;
+
+        $canViewMeetingLink = auth()->check() && (
+            $alreadyRegistered ||
+            auth()->user()->isAdmin() ||
+            (
+                auth()->user()->isMentor() &&
+                $event->mentor_id === auth()->id()
+            )
+        );
+
         return Inertia::render('events/show', [
             'event' => $event->load('mentor:id,name'),
             'registrationQuestions' => $event->registrationQuestions()
                 ->active()
                 ->ordered()
                 ->get(),
-            'alreadyRegistered' => auth()->check()
-                ? $event->registrations()->where('user_id', auth()->id())->exists()
-                : false,
+            'alreadyRegistered' => $alreadyRegistered,
+            'canViewMeetingLink' => $canViewMeetingLink,
         ]);
     }
 }

@@ -84,6 +84,8 @@ export default function EventTable({
                         />
                         <th className="px-4 py-3 font-medium">Publish</th>
                         <th className="px-4 py-3 font-medium">Access</th>
+                        <th className="px-4 py-3 font-medium">Registrants</th>
+                        <th className="px-4 py-3 font-medium">Questions</th>
                         <th className="px-4 py-3 text-right font-medium">Actions</th>
                     </tr>
                 </thead>
@@ -101,6 +103,8 @@ export default function EventTable({
                                 <td className="px-4 py-3"><EventStatusBadge status={event.status} /></td>
                                 <td className="px-4 py-3 text-muted-foreground">{event.is_published ? 'Published' : 'Draft'}</td>
                                 <td className="px-4 py-3 text-muted-foreground">{event.access_type === 'free' ? 'Free' : 'Paid'}</td>
+                                <td className="px-4 py-3 text-muted-foreground">{event.registrations_count ?? 0}</td>
+                                <td className="px-4 py-3 text-muted-foreground">{event.registration_questions_count ?? 0}</td>
                                 <td className="px-4 py-3">
                                     <div className="flex items-center justify-end gap-2">
                                         <Button type="button" variant="ghost" size="icon" asChild>

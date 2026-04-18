@@ -35,6 +35,8 @@ export interface EventItem {
     description: string;
     created_at: string;
     mentor?: EventMentor | null;
+    registrations_count?: number;
+    registration_questions_count?: number;
 }
 
 export interface EventMentorOption {
