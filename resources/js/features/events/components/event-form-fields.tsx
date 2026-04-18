@@ -17,7 +17,6 @@ import type { EventMentorOption } from '@/features/events/types';
 interface EventFormLike {
     data: {
         title: string;
-        slug: string;
         mentor_id: string;
         category: string;
         description: string;
@@ -56,16 +55,10 @@ export default function EventFormFields({
                     value={form.data.title}
                     onChange={(e) => form.setData('title', e.currentTarget.value)}
                 />
+                <p className="text-xs text-muted-foreground">
+                    Slug will be generated automatically from the title.
+                </p>
                 {form.errors.title ? <p className="text-sm text-red-600">{form.errors.title}</p> : null}
-            </div>
-
-            <div className="grid gap-2">
-                <label className="text-sm font-medium">Slug</label>
-                <Input
-                    value={form.data.slug}
-                    onChange={(e) => form.setData('slug', e.currentTarget.value)}
-                />
-                {form.errors.slug ? <p className="text-sm text-red-600">{form.errors.slug}</p> : null}
             </div>
 
             {canAssignMentor ? (

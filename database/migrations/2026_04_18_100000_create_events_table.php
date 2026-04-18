@@ -31,7 +31,6 @@ return new class extends Migration
             $table->string('access_type', 10)->default(EventAccessType::Free->value)->index();
 
             $table->boolean('is_published')->default(false)->index();
-            $table->boolean('is_registration_open')->default(true);
 
             $table->dateTime('registration_closes_at')->nullable()->index();
 

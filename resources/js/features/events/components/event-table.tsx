@@ -1,4 +1,4 @@
-import { ClipboardList, CalendarDays, Edit, Trash2, Users } from 'lucide-react';
+import { ClipboardList, CalendarDays, Edit, Eye, Trash2, Users } from 'lucide-react';
 import { Link } from '@inertiajs/react';
 import EmptyStateRow from '@/components/data-table/empty-state-row';
 import SortableHeader from '@/components/data-table/sortable-header';
@@ -12,8 +12,9 @@ interface EventTableProps {
     sortField: EventSortField;
     sortDirection: SortDirection;
     onSort: (field: EventSortField) => void;
-    onEdit: (event: EventItem) => void;
     onDelete: (event: EventItem) => void;
+    showBaseUrl: string;
+    editBaseUrl: string;
     registrationsBaseUrl: string;
     questionsBaseUrl: string;
 }
@@ -37,14 +38,15 @@ export default function EventTable({
     sortField,
     sortDirection,
     onSort,
-    onEdit,
     onDelete,
+    showBaseUrl,
+    editBaseUrl,
     registrationsBaseUrl,
-    questionsBaseUrl
+    questionsBaseUrl,
 }: EventTableProps) {
     return (
         <div className="overflow-x-auto rounded-lg border border-border bg-card">
-            <table className="w-full min-w-[1100px] text-left text-sm">
+            <table className="w-full min-w-[1280px] text-left text-sm">
                 <thead className="bg-muted/50">
                     <tr className="border-b">
                         <SortableHeader
@@ -100,13 +102,29 @@ export default function EventTable({
                                 <td className="px-4 py-3 text-muted-foreground">{event.category}</td>
                                 <td className="px-4 py-3 text-muted-foreground">{event.mentor?.name ?? '-'}</td>
                                 <td className="px-4 py-3 text-muted-foreground">{formatDate(event.starts_at)}</td>
-                                <td className="px-4 py-3"><EventStatusBadge status={event.status} /></td>
-                                <td className="px-4 py-3 text-muted-foreground">{event.is_published ? 'Published' : 'Draft'}</td>
-                                <td className="px-4 py-3 text-muted-foreground">{event.access_type === 'free' ? 'Free' : 'Paid'}</td>
-                                <td className="px-4 py-3 text-muted-foreground">{event.registrations_count ?? 0}</td>
-                                <td className="px-4 py-3 text-muted-foreground">{event.registration_questions_count ?? 0}</td>
+                                <td className="px-4 py-3">
+                                    <EventStatusBadge status={event.status} />
+                                </td>
+                                <td className="px-4 py-3 text-muted-foreground">
+                                    {event.is_published ? 'Published' : 'Draft'}
+                                </td>
+                                <td className="px-4 py-3 text-muted-foreground">
+                                    {event.access_type === 'free' ? 'Free' : 'Paid'}
+                                </td>
+                                <td className="px-4 py-3 text-muted-foreground">
+                                    {event.registrations_count ?? 0}
+                                </td>
+                                <td className="px-4 py-3 text-muted-foreground">
+                                    {event.registration_questions_count ?? 0}
+                                </td>
                                 <td className="px-4 py-3">
                                     <div className="flex items-center justify-end gap-2">
+                                        <Button type="button" variant="ghost" size="icon" asChild>
+                                            <Link href={`${showBaseUrl}/${event.id}`} aria-label={`View ${event.title}`}>
+                                                <Eye className="h-4 w-4 text-slate-600" />
+                                            </Link>
+                                        </Button>
+
                                         <Button type="button" variant="ghost" size="icon" asChild>
                                             <Link
                                                 href={`${questionsBaseUrl}/${event.id}/registration-questions`}
@@ -117,19 +135,18 @@ export default function EventTable({
                                         </Button>
 
                                         <Button type="button" variant="ghost" size="icon" asChild>
-                                            <Link href={`${registrationsBaseUrl}/${event.id}/registrations`} aria-label={`View registrations for ${event.title}`}>
+                                            <Link
+                                                href={`${registrationsBaseUrl}/${event.id}/registrations`}
+                                                aria-label={`View registrations for ${event.title}`}
+                                            >
                                                 <Users className="h-4 w-4 text-amber-600" />
                                             </Link>
                                         </Button>
 
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => onEdit(event)}
-                                            aria-label={`Edit ${event.title}`}
-                                        >
-                                            <Edit className="h-4 w-4 text-blue-500" />
+                                        <Button type="button" variant="ghost" size="icon" asChild>
+                                            <Link href={`${editBaseUrl}/${event.id}/edit`} aria-label={`Edit ${event.title}`}>
+                                                <Edit className="h-4 w-4 text-blue-500" />
+                                            </Link>
                                         </Button>
 
                                         <Button
@@ -147,7 +164,7 @@ export default function EventTable({
                         ))
                     ) : (
                         <EmptyStateRow
-                            colSpan={8}
+                            colSpan={10}
                             icon={CalendarDays}
                             title="No events found"
                             description="Try adjusting your search or create a new event."

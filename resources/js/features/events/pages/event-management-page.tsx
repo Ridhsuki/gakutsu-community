@@ -1,74 +1,75 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
+import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import IndexToolbar from '@/components/data-table/index-toolbar';
 import PaginationBar from '@/components/data-table/pagination-bar';
 import { Button } from '@/components/ui/button';
-import EventCreateDialog from '@/features/events/components/event-create-dialog';
 import EventDeleteDialog from '@/features/events/components/event-delete-dialog';
-import EventEditDialog from '@/features/events/components/event-edit-dialog';
 import EventTable from '@/features/events/components/event-table';
-import useEventManagement from '@/features/events/hooks/use-event-management';
-import type {
-    EventItem,
-    EventMentorOption,
-    EventSortField,
-} from '@/features/events/types';
+import useIndexFilters from '@/hooks/use-index-filters';
+import type { EventItem, EventSortField } from '@/features/events/types';
 import type { IndexFilters } from '@/types/filters';
 import type { PaginatedResponse } from '@/types/pagination';
 
 export interface EventManagementPageSharedProps {
     events: PaginatedResponse<EventItem>;
     filters: IndexFilters<EventSortField>;
-    mentors?: EventMentorOption[];
-}
-
-interface EventManagementPageProps extends EventManagementPageSharedProps {
-    endpoint: string;
-    headTitle: string;
+    createHref: string;
+    showBaseUrl: string;
+    editBaseUrl: string;
+    registrationsBaseUrl: string;
+    questionsBaseUrl: string;
     title: string;
     description: string;
-    registrationsBaseUrl: string;
-    canAssignMentor?: boolean;
+    headTitle: string;
+    deleteBaseUrl: string;
 }
 
 export default function EventManagementPage({
     events,
     filters,
-    mentors = [],
-    endpoint,
-    headTitle,
+    createHref,
+    showBaseUrl,
+    editBaseUrl,
+    registrationsBaseUrl,
+    questionsBaseUrl,
     title,
     description,
-    registrationsBaseUrl,
-    canAssignMentor = false,
-}: EventManagementPageProps) {
-    const {
-        search,
-        setSearch,
-        sortField,
-        sortDirection,
-        isReloading,
-        handleSort,
-        isCreateOpen,
-        isEditOpen,
-        isDeleteOpen,
-        isDeleting,
-        selectedEvent,
-        createForm,
-        editForm,
-        openCreateModal,
-        openEditModal,
-        openDeleteModal,
-        handleCreateSubmit,
-        handleEditSubmit,
-        handleDelete,
-        handleCreateOpenChange,
-        handleEditOpenChange,
-        handleDeleteOpenChange,
-    } = useEventManagement({
-        endpoint,
-        initialFilters: filters,
-    });
+    headTitle,
+    deleteBaseUrl,
+}: EventManagementPageSharedProps) {
+    const { search, setSearch, sortField, sortDirection, isReloading, handleSort } =
+        useIndexFilters<EventSortField>({
+            endpoint: deleteBaseUrl,
+            initialFilters: filters,
+            allowedSortFields: ['title', 'category', 'status', 'starts_at', 'created_at', 'mentor'],
+            only: ['events', 'filters'],
+            debounceMs: 350,
+        });
+
+    const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const openDeleteModal = (event: EventItem) => {
+        setSelectedEvent(event);
+        setIsDeleteOpen(true);
+    };
+
+    const handleDelete = () => {
+        if (!selectedEvent) return;
+
+        setIsDeleting(true);
+
+        router.delete(`${deleteBaseUrl}/${selectedEvent.id}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setIsDeleteOpen(false);
+                setSelectedEvent(null);
+            },
+            onFinish: () => setIsDeleting(false),
+        });
+    };
 
     return (
         <>
@@ -84,11 +85,13 @@ export default function EventManagementPage({
                     actions={
                         <Button
                             type="button"
-                            onClick={openCreateModal}
+                            asChild
                             className="w-full bg-[#106b42] text-white hover:bg-[#0c5132] sm:w-auto"
                         >
-                            <Plus className="mr-2 h-4 w-4" />
-                            Add Event
+                            <Link href={createHref}>
+                                <Plus className="mr-2 h-4 w-4" />
+                                Add Event
+                            </Link>
                         </Button>
                     }
                     meta={
@@ -102,10 +105,11 @@ export default function EventManagementPage({
                         sortField={sortField}
                         sortDirection={sortDirection}
                         onSort={handleSort}
-                        onEdit={openEditModal}
                         onDelete={openDeleteModal}
+                        showBaseUrl={showBaseUrl}
+                        editBaseUrl={editBaseUrl}
                         registrationsBaseUrl={registrationsBaseUrl}
-                        questionsBaseUrl={endpoint}
+                        questionsBaseUrl={questionsBaseUrl}
                     />
 
                     <PaginationBar
@@ -119,28 +123,9 @@ export default function EventManagementPage({
                 </div>
             </div>
 
-            <EventCreateDialog
-                open={isCreateOpen}
-                onOpenChange={handleCreateOpenChange}
-                form={createForm}
-                onSubmit={handleCreateSubmit}
-                mentors={mentors}
-                canAssignMentor={canAssignMentor}
-            />
-
-            <EventEditDialog
-                open={isEditOpen}
-                onOpenChange={handleEditOpenChange}
-                form={editForm}
-                currentEvent={selectedEvent}
-                onSubmit={handleEditSubmit}
-                mentors={mentors}
-                canAssignMentor={canAssignMentor}
-            />
-
             <EventDeleteDialog
                 open={isDeleteOpen}
-                onOpenChange={handleDeleteOpenChange}
+                onOpenChange={setIsDeleteOpen}
                 event={selectedEvent}
                 isDeleting={isDeleting}
                 onConfirm={handleDelete}

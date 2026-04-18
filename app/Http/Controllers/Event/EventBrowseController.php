@@ -40,17 +40,22 @@ class EventBrowseController extends Controller
     {
         abort_unless($event->is_published, 404);
 
+        $isStaffViewer = auth()->check() && (
+            auth()->user()->isAdmin() ||
+            (auth()->user()->isMentor() && $event->mentor_id === auth()->id())
+        );
+
+        if (! $isStaffViewer && $event->status !== EventStatus::Upcoming) {
+            abort(404);
+        }
+
         $alreadyRegistered = auth()->check()
             ? $event->registrations()->where('user_id', auth()->id())->exists()
             : false;
 
         $canViewMeetingLink = auth()->check() && (
             $alreadyRegistered ||
-            auth()->user()->isAdmin() ||
-            (
-                auth()->user()->isMentor() &&
-                $event->mentor_id === auth()->id()
-            )
+            $isStaffViewer
         );
 
         return Inertia::render('events/show', [

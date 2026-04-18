@@ -37,7 +37,7 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])
     ->group(function () {
         Route::resource('users', UserController::class)->except(['show', 'create', 'edit']);
         Route::resource('blogs', AdminBlogPostController::class)->except(['show', 'create', 'edit']);
-        Route::resource('events', AdminEventController::class)->except(['show', 'create', 'edit']);
+        Route::resource('events', AdminEventController::class);
 
         Route::get(
             'events/{event}/registrations',
@@ -70,7 +70,7 @@ Route::middleware(['auth', 'verified', EnsureUserIsMentor::class])
     ->name('mentor.')
     ->group(function () {
         Route::resource('blogs', MentorBlogPostController::class)->except(['show', 'create', 'edit']);
-        Route::resource('events', MentorEventController::class)->except(['show', 'create', 'edit']);
+        Route::resource('events', MentorEventController::class);
 
         Route::get(
             'events/{event}/registrations',

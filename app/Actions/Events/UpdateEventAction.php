@@ -3,6 +3,7 @@
 namespace App\Actions\Events;
 
 use App\Actions\Media\ProcessImageUploadAction;
+use App\Actions\Support\GenerateUniqueSlugAction;
 use App\Enums\MediaImagePreset;
 use App\Http\Requests\Event\UpdateEventRequest;
 use App\Models\Event;
@@ -13,6 +14,7 @@ class UpdateEventAction
 {
     public function __construct(
         private readonly ProcessImageUploadAction $processImageUploadAction,
+        private readonly GenerateUniqueSlugAction $generateUniqueSlugAction,
     ) {
     }
 
@@ -24,6 +26,10 @@ class UpdateEventAction
             $data['mentor_id'] = $request->user()->isAdmin()
                 ? (int) $data['mentor_id']
                 : $request->user()->id;
+
+            $data['slug'] = $event->title !== $data['title']
+                ? $this->generateUniqueSlugAction->handle($data['title'], Event::class, $event->id)
+                : $event->slug;
 
             if ($request->hasFile('poster_image')) {
                 if ($event->poster_image_path) {

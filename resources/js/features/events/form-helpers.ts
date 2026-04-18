@@ -23,7 +23,6 @@ function toDatetimeLocalValue(value: string | null): string {
 export function getDefaultCreateEventForm(): CreateEventForm {
     return {
         title: '',
-        slug: '',
         mentor_id: '',
         category: '',
         description: '',
@@ -47,10 +46,9 @@ export function getDefaultEditEventForm(): EditEventForm {
 export function mapEventToEditEventForm(event: EventItem): EditEventForm {
     return {
         title: event.title,
-        slug: event.slug,
         mentor_id: event.mentor_id ? String(event.mentor_id) : '',
         category: event.category,
-        description: event.description,
+        description: event.description ?? '',
         starts_at: toDatetimeLocalValue(event.starts_at),
         ends_at: toDatetimeLocalValue(event.ends_at),
         registration_closes_at: toDatetimeLocalValue(event.registration_closes_at),
