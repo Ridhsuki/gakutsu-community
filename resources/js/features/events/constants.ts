@@ -41,3 +41,9 @@ export const EVENT_MEETING_PROVIDER_OPTIONS = [
     { value: 'zoom', label: 'Zoom' },
     { value: 'other', label: 'Other' },
 ] as const;
+
+export const EVENT_REGISTRATION_QUESTION_TYPE_OPTIONS = [
+    { value: 'short_text', label: 'Short Text' },
+    { value: 'long_text', label: 'Long Text' },
+    { value: 'select', label: 'Select' },
+] as const;

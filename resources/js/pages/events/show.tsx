@@ -1,9 +1,11 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import type { EventItem } from '@/features/events/types';
+import { Input } from '@/components/ui/input';
+import type { EventItem, EventRegistrationQuestionItem } from '@/features/events/types';
 
 interface PageProps {
     event: EventItem;
+    registrationQuestions: EventRegistrationQuestionItem[];
     alreadyRegistered: boolean;
 }
 
@@ -21,8 +23,22 @@ function formatDate(value: string | null) {
     });
 }
 
-export default function EventsShow({ event, alreadyRegistered }: PageProps) {
-    const form = useForm({});
+export default function EventsShow({
+    event,
+    registrationQuestions,
+    alreadyRegistered,
+}: PageProps) {
+    const initialAnswers = registrationQuestions.reduce<Record<string, string>>(
+        (carry, question) => {
+            carry[String(question.id)] = '';
+            return carry;
+        },
+        {},
+    );
+
+    const form = useForm({
+        answers: initialAnswers,
+    });
 
     const handleRegister = () => {
         form.post(`/events/${event.id}/registrations`, {
@@ -55,31 +71,98 @@ export default function EventsShow({ event, alreadyRegistered }: PageProps) {
                         {event.description}
                     </div>
 
-                    <div className="mt-6 flex flex-wrap gap-3">
-                        {alreadyRegistered ? (
-                            <Button type="button" disabled>
-                                Already Registered
-                            </Button>
-                        ) : (
-                            <Button
-                                type="button"
-                                onClick={handleRegister}
-                                disabled={form.processing}
-                            >
-                                {form.processing ? 'Registering...' : 'Register Event'}
-                            </Button>
-                        )}
+                    <div className="mt-8 space-y-6">
+                        {registrationQuestions.length > 0 ? (
+                            <div className="space-y-4">
+                                <h2 className="text-lg font-semibold">Registration Form</h2>
 
-                        {event.meeting_url ? (
-                            <a
-                                href={event.meeting_url}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="inline-flex h-9 items-center justify-center rounded-md border border-input px-4 text-sm font-medium"
-                            >
-                                Meeting Link
-                            </a>
+                                {registrationQuestions.map((question) => (
+                                    <div key={question.id} className="grid gap-2">
+                                        <label className="text-sm font-medium">
+                                            {question.label}
+                                            {question.is_required ? (
+                                                <span className="ml-1 text-red-600">*</span>
+                                            ) : null}
+                                        </label>
+
+                                        {question.help_text ? (
+                                            <p className="text-xs text-muted-foreground">
+                                                {question.help_text}
+                                            </p>
+                                        ) : null}
+
+                                        {question.type === 'short_text' ? (
+                                            <Input
+                                                value={form.data.answers[String(question.id)] ?? ''}
+                                                onChange={(e) =>
+                                                    form.setData('answers', {
+                                                        ...form.data.answers,
+                                                        [String(question.id)]: e.currentTarget.value,
+                                                    })
+                                                }
+                                                placeholder={question.placeholder ?? ''}
+                                            />
+                                        ) : null}
+
+                                        {question.type === 'long_text' ? (
+                                            <textarea
+                                                value={form.data.answers[String(question.id)] ?? ''}
+                                                onChange={(e) =>
+                                                    form.setData('answers', {
+                                                        ...form.data.answers,
+                                                        [String(question.id)]: e.currentTarget.value,
+                                                    })
+                                                }
+                                                placeholder={question.placeholder ?? ''}
+                                                className="min-h-28 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                            />
+                                        ) : null}
+
+                                        {question.type === 'select' ? (
+                                            <select
+                                                value={form.data.answers[String(question.id)] ?? ''}
+                                                onChange={(e) =>
+                                                    form.setData('answers', {
+                                                        ...form.data.answers,
+                                                        [String(question.id)]: e.currentTarget.value,
+                                                    })
+                                                }
+                                                className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                            >
+                                                <option value="">Select an option</option>
+                                                {(question.options ?? []).map((option) => (
+                                                    <option key={option} value={option}>
+                                                        {option}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        ) : null}
+
+                                        {form.errors[`answers.${question.id}`] ? (
+                                            <p className="text-sm text-red-600">
+                                                {form.errors[`answers.${question.id}`]}
+                                            </p>
+                                        ) : null}
+                                    </div>
+                                ))}
+                            </div>
                         ) : null}
+
+                        <div className="flex flex-wrap gap-3">
+                            {alreadyRegistered ? (
+                                <Button type="button" disabled>
+                                    Already Registered
+                                </Button>
+                            ) : (
+                                <Button
+                                    type="button"
+                                    onClick={handleRegister}
+                                    disabled={form.processing}
+                                >
+                                    {form.processing ? 'Registering...' : 'Register Event'}
+                                </Button>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

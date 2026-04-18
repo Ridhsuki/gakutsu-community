@@ -50,4 +50,9 @@ class EventPolicy
     {
         return $event->registrationIsAvailable();
     }
+
+    public function manageRegistrationQuestions(User $user, Event $event): bool
+    {
+        return $user->isMentor() && $event->instructor_id === $user->id;
+    }
 }

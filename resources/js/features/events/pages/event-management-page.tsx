@@ -105,6 +105,7 @@ export default function EventManagementPage({
                         onEdit={openEditModal}
                         onDelete={openDeleteModal}
                         registrationsBaseUrl={registrationsBaseUrl}
+                        questionsBaseUrl={endpoint}
                     />
 
                     <PaginationBar

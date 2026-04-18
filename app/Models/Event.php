@@ -95,6 +95,11 @@ class Event extends Model
         return $this->hasMany(EventRegistration::class);
     }
 
+    public function registrationQuestions(): HasMany
+    {
+        return $this->hasMany(EventRegistrationQuestion::class);
+    }
+
     #[Scope]
     protected function search(Builder $query, ?string $search): void
     {

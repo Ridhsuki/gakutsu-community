@@ -1,4 +1,4 @@
-import { CalendarDays, Edit, Trash2, Users } from 'lucide-react';
+import { ClipboardList, CalendarDays, Edit, Trash2, Users } from 'lucide-react';
 import { Link } from '@inertiajs/react';
 import EmptyStateRow from '@/components/data-table/empty-state-row';
 import SortableHeader from '@/components/data-table/sortable-header';
@@ -15,6 +15,7 @@ interface EventTableProps {
     onEdit: (event: EventItem) => void;
     onDelete: (event: EventItem) => void;
     registrationsBaseUrl: string;
+    questionsBaseUrl: string;
 }
 
 function formatDate(value: string | null) {
@@ -39,6 +40,7 @@ export default function EventTable({
     onEdit,
     onDelete,
     registrationsBaseUrl,
+    questionsBaseUrl
 }: EventTableProps) {
     return (
         <div className="overflow-x-auto rounded-lg border border-border bg-card">
@@ -101,6 +103,15 @@ export default function EventTable({
                                 <td className="px-4 py-3 text-muted-foreground">{event.access_type === 'free' ? 'Free' : 'Paid'}</td>
                                 <td className="px-4 py-3">
                                     <div className="flex items-center justify-end gap-2">
+                                        <Button type="button" variant="ghost" size="icon" asChild>
+                                            <Link
+                                                href={`${questionsBaseUrl}/${event.id}/registration-questions`}
+                                                aria-label={`Manage registration form for ${event.title}`}
+                                            >
+                                                <ClipboardList className="h-4 w-4 text-emerald-600" />
+                                            </Link>
+                                        </Button>
+
                                         <Button type="button" variant="ghost" size="icon" asChild>
                                             <Link href={`${registrationsBaseUrl}/${event.id}/registrations`} aria-label={`View registrations for ${event.title}`}>
                                                 <Users className="h-4 w-4 text-amber-600" />

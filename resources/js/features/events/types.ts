@@ -1,3 +1,4 @@
+export type EventRegistrationQuestionType = 'short_text' | 'long_text' | 'select';
 export type EventStatus = 'upcoming' | 'cancelled' | 'completed';
 export type EventAccessType = 'free' | 'paid';
 export type EventSortField =
@@ -59,7 +60,7 @@ export interface CreateEventForm {
     poster_image: File | null;
 }
 
-export interface EditEventForm extends CreateEventForm {}
+export interface EditEventForm extends CreateEventForm { }
 
 export interface EventRegistrationItem {
     id: number;
@@ -69,3 +70,31 @@ export interface EventRegistrationItem {
     email_snapshot: string;
     registered_at: string;
 }
+
+export interface EventRegistrationQuestionItem {
+    id: number;
+    event_id: number;
+    label: string;
+    type: EventRegistrationQuestionType;
+    options: string[] | null;
+    placeholder: string | null;
+    help_text: string | null;
+    is_required: boolean;
+    is_active: boolean;
+    sort_order: number;
+    created_at?: string;
+}
+
+export interface CreateEventRegistrationQuestionForm {
+    label: string;
+    type: EventRegistrationQuestionType;
+    options_text: string;
+    placeholder: string;
+    help_text: string;
+    is_required: boolean;
+    is_active: boolean;
+    sort_order: string;
+}
+
+export interface EditEventRegistrationQuestionForm
+    extends CreateEventRegistrationQuestionForm { }
