@@ -5,7 +5,9 @@ import IndexToolbar from '@/components/data-table/index-toolbar';
 import PaginationBar from '@/components/data-table/pagination-bar';
 import { Button } from '@/components/ui/button';
 import EventDeleteDialog from '@/features/events/components/event-delete-dialog';
-import EventTable from '@/features/events/components/event-table';
+import EventCollectionView from '@/features/events/components/event-collection-view';
+import EventViewToggle from '@/features/events/components/event-view-toggle';
+import useEventViewMode from '@/features/events/hooks/use-event-view-mode';
 import useIndexFilters from '@/hooks/use-index-filters';
 import type { EventItem, EventSortField } from '@/features/events/types';
 import type { IndexFilters } from '@/types/filters';
@@ -46,6 +48,8 @@ export default function EventManagementPage({
             only: ['events', 'filters'],
             debounceMs: 350,
         });
+
+    const { viewMode, setViewMode } = useEventViewMode();
 
     const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -94,13 +98,20 @@ export default function EventManagementPage({
                             </Link>
                         </Button>
                     }
+                    controls={
+                        <EventViewToggle
+                            value={viewMode}
+                            onChange={setViewMode}
+                        />
+                    }
                     meta={
                         isReloading ? 'Refreshing data...' : `Total events: ${events.total}`
                     }
                 />
 
                 <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm">
-                    <EventTable
+                    <EventCollectionView
+                        viewMode={viewMode}
                         events={events.data}
                         sortField={sortField}
                         sortDirection={sortDirection}

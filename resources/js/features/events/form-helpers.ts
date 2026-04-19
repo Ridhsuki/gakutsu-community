@@ -34,7 +34,6 @@ export function getDefaultCreateEventForm(): CreateEventForm {
         status: 'upcoming',
         access_type: 'free',
         is_published: false,
-        is_registration_open: true,
         poster_image: null,
     };
 }
@@ -57,7 +56,6 @@ export function mapEventToEditEventForm(event: EventItem): EditEventForm {
         status: event.status,
         access_type: event.access_type,
         is_published: event.is_published,
-        is_registration_open: event.is_registration_open,
         poster_image: null,
     };
 }

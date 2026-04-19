@@ -53,7 +53,7 @@ class EventFactory extends Factory
             'access_type' => $this->faker->randomElement(EventAccessType::cases()),
             'is_published' => $this->faker->boolean(80),
             'registration_closes_at' => $registrationClosesAt,
-            'meeting_provider' => $this->faker->randomElement(['Zoom', 'Google Meet', 'Microsoft Teams', 'Offline']),
+            'meeting_provider' => $this->faker->randomElement(['zoom', 'google_meet', 'microsoft_teams']),
             'meeting_url' => $this->faker->url(),
             'poster_image_path' => null,
             'starts_at' => $startsAt,

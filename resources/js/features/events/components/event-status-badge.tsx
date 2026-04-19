@@ -1,31 +1,52 @@
-import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 import type { EventStatus } from '@/features/events/types';
 
 interface EventStatusBadgeProps {
     status: EventStatus;
 }
 
-const labelMap: Record<EventStatus, string> = {
-    upcoming: 'Upcoming',
-    cancelled: 'Cancelled',
-    completed: 'Completed',
-};
-
-const classMap: Record<EventStatus, string> = {
-    upcoming: 'border-blue-200 bg-blue-50 text-blue-700',
-    cancelled: 'border-red-200 bg-red-50 text-red-700',
-    completed: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+const statusConfig: Record<EventStatus, { label: string; className: string }> = {
+    upcoming: {
+        label: 'Upcoming',
+        className: [
+            'inline-flex items-center px-2.5 py-0.5',
+            'text-[11px] font-medium tracking-wide',
+            'rounded-full border',
+            'bg-blue-500/10 border-blue-500/20 text-blue-500',
+            'backdrop-blur-sm',
+            'dark:bg-blue-500/10 dark:border-blue-400/20 dark:text-blue-400',
+        ].join(' '),
+    },
+    cancelled: {
+        label: 'Cancelled',
+        className: [
+            'inline-flex items-center px-2.5 py-0.5',
+            'text-[11px] font-medium tracking-wide',
+            'rounded-full border',
+            'bg-red-500/10 border-red-500/20 text-red-500',
+            'backdrop-blur-sm',
+            'dark:bg-red-500/10 dark:border-red-400/20 dark:text-red-400',
+        ].join(' '),
+    },
+    completed: {
+        label: 'Completed',
+        className: [
+            'inline-flex items-center px-2.5 py-0.5',
+            'text-[11px] font-medium tracking-wide',
+            'rounded-full border',
+            'bg-emerald-500/10 border-emerald-500/20 text-emerald-500',
+            'backdrop-blur-sm',
+            'dark:bg-emerald-500/10 dark:border-emerald-400/20 dark:text-emerald-400',
+        ].join(' '),
+    },
 };
 
 export default function EventStatusBadge({ status }: EventStatusBadgeProps) {
+    const config = statusConfig[status];
+
     return (
-        <span
-            className={cn(
-                'inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium',
-                classMap[status],
-            )}
-        >
-            {labelMap[status]}
-        </span>
+        <Badge className={config.className}>
+            {config.label}
+        </Badge>
     );
 }

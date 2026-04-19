@@ -28,7 +28,6 @@ interface EventFormLike {
         status: string;
         access_type: string;
         is_published: boolean;
-        is_registration_open: boolean;
         poster_image: File | null;
     };
     setData: (key: string, value: unknown) => void;
@@ -219,14 +218,6 @@ export default function EventFormFields({
                         onCheckedChange={(checked) => form.setData('is_published', Boolean(checked))}
                     />
                     Published
-                </label>
-
-                <label className="flex items-center gap-2 text-sm font-medium">
-                    <Checkbox
-                        checked={form.data.is_registration_open}
-                        onCheckedChange={(checked) => form.setData('is_registration_open', Boolean(checked))}
-                    />
-                    Registration Open
                 </label>
             </div>
         </div>
