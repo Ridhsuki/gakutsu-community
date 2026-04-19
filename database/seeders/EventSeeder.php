@@ -9,6 +9,7 @@ use App\Enums\EventStatus;
 use App\Enums\EventAccessType;
 use App\Enums\EventRegistrationQuestionType;
 use App\Enums\UserRole;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -22,20 +23,20 @@ class EventSeeder extends Seeder
         $admin = User::where('role', UserRole::Admin)->first();
         $mentor = User::where('role', UserRole::Mentor)->first();
 
-
         if (!$admin || !$mentor) {
             $this->command->error('Admin atau Mentor tidak ditemukan! Pastikan seeder User sudah dijalankan.');
             return;
         }
 
-        $eventTitle = 'Strategi Keamanan Digital: Melindungi Informasi di Era Cyber';
+        $eventTitle = 'Up Coming Webinar';
         $event = Event::create([
             'title' => $eventTitle,
             'slug' => Str::slug($eventTitle),
-            'category' => 'Cyber Security',
-            'description' => 'Dalam webinar ini, kita akan membedah berbagai best practices dan fitur terbaru dalam keamanan siber. Sangat cocok untuk pemula maupun yang ingin upgrade skill.',
+            'category' => 'IT',
+            'description' => 'Upcoming Events',
             'starts_at' => now()->addDays(5)->setHour(19)->setMinute(0),
             'ends_at' => now()->addDays(5)->setHour(21)->setMinute(0),
+            'meeting_provider' => 'Zoom',
             'meeting_url' => 'https://zoom.us/j/1234567890',
             'status' => EventStatus::Upcoming,
             'access_type' => EventAccessType::Free,
@@ -54,7 +55,7 @@ class EventSeeder extends Seeder
 
         EventRegistrationQuestion::create([
             'event_id' => $event->id,
-            'label' => 'Apa tingkat pengalaman Anda menggunakan Kali Linux?',
+            'label' => 'Apa tingkat pengalaman Anda menggunakan di bidang ini?',
             'type' => EventRegistrationQuestionType::Select,
             'is_required' => true,
             'options' => [
@@ -72,6 +73,38 @@ class EventSeeder extends Seeder
             'options' => null,
         ]);
 
-        $this->command->info('Event dan Event Registration Questions berhasil di-generate!');
+        $eventTitle2 = 'Webinar: Strategi Keamanan Digital di Era Cyber';
+
+        $descriptionHtml = '
+            <p><strong>WEBINAR: "Strategi Keamanan Digital di Era Cyber"</strong></p>
+            <p>Di era digital, menjaga keamanan data adalah hal wajib. Webinar ini akan memberikan langkah-langkah terbaik untuk melindungi privasi Anda dari serangan siber dan menjaga informasi penting tetap aman.</p>
+            <p>
+                🗓️ Sabtu, 21 September 2024<br>
+                ⏰ Jam 8 malam - selesai<br>
+                📍 Google Meet<br>
+                💰 Biaya Pendaftaran: 25K
+            </p>
+            <p>Webinar ini cocok untuk siapa saja, baik pemula yang ingin belajar dunia IT maupun yang ingin memahami lebih dalam tentang keamanan digital. Dengan materi yang mudah dipahami, Anda akan langsung bisa menerapkannya dalam kehidupan sehari-hari.</p>
+            <p>Mari tingkatkan kesadaran akan keamanan digital dan persiapkan diri menghadapi tantangan siber. Pelajari cara melindungi informasi penting dan menjaga privasi di era modern.</p>
+        ';
+
+        Event::create([
+            'title' => $eventTitle2,
+            'slug' => Str::slug($eventTitle2),
+            'category' => 'Cyber Security',
+            'description' => trim($descriptionHtml),
+            'starts_at' => Carbon::create(2024, 9, 21, 20, 0, 0),
+            'ends_at' => Carbon::create(2024, 9, 21, 22, 0, 0),
+            'meeting_provider' => 'Google Meet',
+            'meeting_url' => null,
+            'status' => EventStatus::Completed,
+            'access_type' => EventAccessType::Paid,
+            'is_published' => true,
+            'created_by' => $admin->id,
+            'mentor_id' => $mentor->id,
+        ]);
+
+
+        $this->command->info('2 Event berhasil di-generate (Event 2 dibuat menggunakan WYSIWYG html, Completed, & Paid)!');
     }
 }
