@@ -118,34 +118,33 @@ export default function EventManagementPage({
                             </Link>
                         </Button>
                     }
+                    filters={
+                        <EventFilterToolbarControl
+                            statusFilter={statusFilter}
+                            publicationFilter={publicationFilter}
+                            accessTypeFilter={accessTypeFilter}
+                            onStatusChange={setStatusFilterAndReload}
+                            onPublicationChange={setPublicationFilterAndReload}
+                            onAccessTypeChange={setAccessTypeFilterAndReload}
+                            onClear={clearFilters}
+                        />
+                    }
                     controls={
-                        <div className="flex w-full flex-col gap-3">
-                            <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap">
-                                <EventViewToggle
-                                    value={viewMode}
-                                    onChange={setViewMode}
-                                />
-
-                                {viewMode === 'cards' ? (
-                                    <EventSortToolbarControl
-                                        sortField={sortField}
-                                        sortDirection={sortDirection}
-                                        onSortFieldChange={setSortFieldAndReload}
-                                        onSortDirectionToggle={toggleSortDirection}
-                                    />
-                                ) : null}
-                            </div>
-
-                            <EventFilterToolbarControl
-                                statusFilter={statusFilter}
-                                publicationFilter={publicationFilter}
-                                accessTypeFilter={accessTypeFilter}
-                                onStatusChange={setStatusFilterAndReload}
-                                onPublicationChange={setPublicationFilterAndReload}
-                                onAccessTypeChange={setAccessTypeFilterAndReload}
-                                onClear={clearFilters}
+                        <>
+                            <EventViewToggle
+                                value={viewMode}
+                                onChange={setViewMode}
                             />
-                        </div>
+
+                            {viewMode === 'cards' ? (
+                                <EventSortToolbarControl
+                                    sortField={sortField}
+                                    sortDirection={sortDirection}
+                                    onSortFieldChange={setSortFieldAndReload}
+                                    onSortDirectionToggle={toggleSortDirection}
+                                />
+                            ) : null}
+                        </>
                     }
                     meta={
                         isReloading ? 'Refreshing data...' : `Total events: ${events.total}`
