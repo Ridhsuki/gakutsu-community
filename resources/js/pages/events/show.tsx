@@ -2,6 +2,8 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { EventItem, EventRegistrationQuestionItem } from '@/features/events/types';
+import RenderRichText from '@/components/rich-text/render-rich-text';
+import EventPosterThumbnail from '@/features/events/components/event-poster-thumbnail';
 
 interface PageProps {
     event: EventItem;
@@ -67,11 +69,14 @@ export default function EventsShow({
                         Start: {formatDate(event.starts_at)}
                     </p>
                 </div>
-
                 <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-                    <div className="prose max-w-none text-sm text-foreground">
-                        {event.description}
-                    </div>
+                    <EventPosterThumbnail
+                        src={event.poster_image_url}
+                        alt={`Poster for ${event.title}`}
+                        className="aspect-[4/3] w-full"
+                    />
+
+                    <RenderRichText html={event.description} className="mt-2" />
 
                     <div className="mt-8 space-y-6">
                         {registrationQuestions.length > 0 && !alreadyRegistered ? (

@@ -3,6 +3,8 @@ import { ArrowLeft, ClipboardList, Edit, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import EventStatusBadge from '@/features/events/components/event-status-badge';
 import type { EventItem } from '@/features/events/types';
+import RenderRichText from '@/components/rich-text/render-rich-text';
+import EventPosterThumbnail from '@/features/events/components/event-poster-thumbnail';
 
 function formatDate(value: string | null) {
     if (!value) return '-';
@@ -62,7 +64,7 @@ export default function EventDetailPage({
                             </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                             <Button type="button" variant="outline" asChild>
                                 <Link href={questionsHref}>
                                     <ClipboardList className="mr-2 h-4 w-4" />
@@ -91,9 +93,7 @@ export default function EventDetailPage({
                     <div className="space-y-6">
                         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
                             <h2 className="text-base font-semibold">Description</h2>
-                            <div className="mt-3 whitespace-pre-line text-sm text-foreground">
-                                {event.description}
-                            </div>
+                            <RenderRichText html={event.description} className="mt-3" />
                         </div>
 
                         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
@@ -168,20 +168,11 @@ export default function EventDetailPage({
                         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
                             <h2 className="text-base font-semibold">Poster</h2>
 
-                            <div className="mt-4 rounded-lg border border-border bg-muted p-4">
-                                {event.poster_image_url ? (
-                                    <img
-                                        src={event.poster_image_url}
-                                        alt={event.title}
-                                        className="h-auto max-h-[420px] w-full object-contain"
-                                        loading="lazy"
-                                    />
-                                ) : (
-                                    <div className="flex min-h-[220px] items-center justify-center text-sm text-muted-foreground">
-                                        No poster uploaded.
-                                    </div>
-                                )}
-                            </div>
+                            <EventPosterThumbnail
+                                src={event.poster_image_url}
+                                alt={`Poster for ${event.title}`}
+                                className="aspect-[4/3] w-full"
+                            />
                         </div>
 
                         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">

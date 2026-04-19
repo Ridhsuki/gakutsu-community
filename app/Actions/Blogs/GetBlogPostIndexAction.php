@@ -25,7 +25,7 @@ class GetBlogPostIndexAction
             ->search($search)
             ->applySort($sortField, $sortDirection)
             ->orderBy('id', 'desc')
-            ->paginate(10)
+            ->paginate(9)
             ->withQueryString();
     }
 }

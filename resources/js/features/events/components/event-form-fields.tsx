@@ -1,5 +1,6 @@
-import { Checkbox } from '@/components/ui/checkbox';
+import DateTimePickerField from '@/components/forms/date-time-picker-field';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
     Select,
     SelectContent,
@@ -7,12 +8,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import EventDescriptionEditor from '@/features/events/components/event-description-editor';
+import EventPosterInput from '@/features/events/components/event-poster-input';
 import {
     EVENT_ACCESS_TYPE_OPTIONS,
     EVENT_MEETING_PROVIDER_OPTIONS,
     EVENT_STATUS_OPTIONS,
 } from '@/features/events/constants';
-import type { EventMentorOption } from '@/features/events/types';
+import type { EventItem, EventMentorOption } from '@/features/events/types';
 
 interface EventFormLike {
     data: {
@@ -39,12 +42,16 @@ interface EventFormFieldsProps {
     form: EventFormLike;
     mentors?: EventMentorOption[];
     canAssignMentor?: boolean;
+    currentEvent?: EventItem | null;
+    onUploadImage?: (file: File) => Promise<string>;
 }
 
 export default function EventFormFields({
     form,
     mentors = [],
     canAssignMentor = false,
+    currentEvent = null,
+    onUploadImage,
 }: EventFormFieldsProps) {
     return (
         <div className="grid gap-4">
@@ -93,10 +100,10 @@ export default function EventFormFields({
 
             <div className="grid gap-2">
                 <label className="text-sm font-medium">Description</label>
-                <textarea
+                <EventDescriptionEditor
                     value={form.data.description}
-                    onChange={(e) => form.setData('description', e.currentTarget.value)}
-                    className="min-h-32 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    onChange={(value) => form.setData('description', value)}
+                    onUploadImage={onUploadImage}
                 />
                 {form.errors.description ? <p className="text-sm text-red-600">{form.errors.description}</p> : null}
             </div>
@@ -104,20 +111,20 @@ export default function EventFormFields({
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="grid gap-2">
                     <label className="text-sm font-medium">Start Date</label>
-                    <Input
-                        type="datetime-local"
+                    <DateTimePickerField
                         value={form.data.starts_at}
-                        onChange={(e) => form.setData('starts_at', e.currentTarget.value)}
+                        onChange={(value) => form.setData('starts_at', value)}
+                        placeholder="Pick start date & time"
                     />
                     {form.errors.starts_at ? <p className="text-sm text-red-600">{form.errors.starts_at}</p> : null}
                 </div>
 
                 <div className="grid gap-2">
                     <label className="text-sm font-medium">End Date</label>
-                    <Input
-                        type="datetime-local"
+                    <DateTimePickerField
                         value={form.data.ends_at}
-                        onChange={(e) => form.setData('ends_at', e.currentTarget.value)}
+                        onChange={(value) => form.setData('ends_at', value)}
+                        placeholder="Pick end date & time"
                     />
                     {form.errors.ends_at ? <p className="text-sm text-red-600">{form.errors.ends_at}</p> : null}
                 </div>
@@ -125,12 +132,14 @@ export default function EventFormFields({
 
             <div className="grid gap-2">
                 <label className="text-sm font-medium">Registration Closes At</label>
-                <Input
-                    type="datetime-local"
+                <DateTimePickerField
                     value={form.data.registration_closes_at}
-                    onChange={(e) => form.setData('registration_closes_at', e.currentTarget.value)}
+                    onChange={(value) => form.setData('registration_closes_at', value)}
+                    placeholder="Pick registration deadline"
                 />
-                {form.errors.registration_closes_at ? <p className="text-sm text-red-600">{form.errors.registration_closes_at}</p> : null}
+                {form.errors.registration_closes_at ? (
+                    <p className="text-sm text-red-600">{form.errors.registration_closes_at}</p>
+                ) : null}
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -202,11 +211,10 @@ export default function EventFormFields({
             </div>
 
             <div className="grid gap-2">
-                <label className="text-sm font-medium">Poster</label>
-                <Input
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.webp"
-                    onChange={(e) => form.setData('poster_image', e.currentTarget.files?.[0] ?? null)}
+                <EventPosterInput
+                    value={form.data.poster_image}
+                    onChange={(file) => form.setData('poster_image', file)}
+                    currentImagePath={currentEvent?.poster_image_path ?? null}
                 />
                 {form.errors.poster_image ? <p className="text-sm text-red-600">{form.errors.poster_image}</p> : null}
             </div>

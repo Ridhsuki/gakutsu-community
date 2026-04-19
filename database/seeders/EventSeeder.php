@@ -42,7 +42,7 @@ class EventSeeder extends Seeder
             'access_type' => EventAccessType::Free,
             'is_published' => true,
             'created_by' => $admin->id,
-            'mentor_id' => $mentor->id,
+            'mentor_id' => 2,
         ]);
 
         EventRegistrationQuestion::create([

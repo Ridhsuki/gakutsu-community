@@ -4,18 +4,24 @@ import { Plus } from 'lucide-react';
 import IndexToolbar from '@/components/data-table/index-toolbar';
 import PaginationBar from '@/components/data-table/pagination-bar';
 import { Button } from '@/components/ui/button';
-import EventDeleteDialog from '@/features/events/components/event-delete-dialog';
 import EventCollectionView from '@/features/events/components/event-collection-view';
+import EventDeleteDialog from '@/features/events/components/event-delete-dialog';
+import EventFilterToolbarControl from '@/features/events/components/event-filter-toolbar-control';
+import EventSortToolbarControl from '@/features/events/components/event-sort-toolbar-control';
 import EventViewToggle from '@/features/events/components/event-view-toggle';
+import useEventIndexFilters from '@/features/events/hooks/use-event-index-filters';
 import useEventViewMode from '@/features/events/hooks/use-event-view-mode';
-import useIndexFilters from '@/hooks/use-index-filters';
 import type { EventItem, EventSortField } from '@/features/events/types';
 import type { IndexFilters } from '@/types/filters';
 import type { PaginatedResponse } from '@/types/pagination';
 
 export interface EventManagementPageSharedProps {
     events: PaginatedResponse<EventItem>;
-    filters: IndexFilters<EventSortField>;
+    filters: IndexFilters<EventSortField> & {
+        status?: string | null;
+        publication?: string | null;
+        access_type?: string | null;
+    };
     createHref: string;
     showBaseUrl: string;
     editBaseUrl: string;
@@ -40,14 +46,28 @@ export default function EventManagementPage({
     headTitle,
     deleteBaseUrl,
 }: EventManagementPageSharedProps) {
-    const { search, setSearch, sortField, sortDirection, isReloading, handleSort } =
-        useIndexFilters<EventSortField>({
-            endpoint: deleteBaseUrl,
-            initialFilters: filters,
-            allowedSortFields: ['title', 'category', 'status', 'starts_at', 'created_at', 'mentor'],
-            only: ['events', 'filters'],
-            debounceMs: 350,
-        });
+    const {
+        search,
+        setSearch,
+        sortField,
+        sortDirection,
+        isReloading,
+        handleSort,
+        setSortFieldAndReload,
+        toggleSortDirection,
+        statusFilter,
+        publicationFilter,
+        accessTypeFilter,
+        setStatusFilterAndReload,
+        setPublicationFilterAndReload,
+        setAccessTypeFilterAndReload,
+        clearFilters,
+    } = useEventIndexFilters({
+        endpoint: deleteBaseUrl,
+        initialFilters: filters,
+        only: ['events', 'filters'],
+        debounceMs: 350,
+    });
 
     const { viewMode, setViewMode } = useEventViewMode();
 
@@ -98,11 +118,33 @@ export default function EventManagementPage({
                             </Link>
                         </Button>
                     }
-                    controls={
-                        <EventViewToggle
-                            value={viewMode}
-                            onChange={setViewMode}
+                    filters={
+                        <EventFilterToolbarControl
+                            statusFilter={statusFilter}
+                            publicationFilter={publicationFilter}
+                            accessTypeFilter={accessTypeFilter}
+                            onStatusChange={setStatusFilterAndReload}
+                            onPublicationChange={setPublicationFilterAndReload}
+                            onAccessTypeChange={setAccessTypeFilterAndReload}
+                            onClear={clearFilters}
                         />
+                    }
+                    controls={
+                        <>
+                            <EventViewToggle
+                                value={viewMode}
+                                onChange={setViewMode}
+                            />
+
+                            {viewMode === 'cards' ? (
+                                <EventSortToolbarControl
+                                    sortField={sortField}
+                                    sortDirection={sortDirection}
+                                    onSortFieldChange={setSortFieldAndReload}
+                                    onSortDirectionToggle={toggleSortDirection}
+                                />
+                            ) : null}
+                        </>
                     }
                     meta={
                         isReloading ? 'Refreshing data...' : `Total events: ${events.total}`

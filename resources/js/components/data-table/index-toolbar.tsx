@@ -10,6 +10,7 @@ interface IndexToolbarProps {
     onSearchChange: (value: string) => void;
     searchPlaceholder?: string;
     actions?: ReactNode;
+    filters?: ReactNode;
     controls?: ReactNode;
     meta?: ReactNode;
     className?: string;
@@ -24,6 +25,7 @@ export default function IndexToolbar({
     onSearchChange,
     searchPlaceholder = 'Search...',
     actions,
+    filters,
     controls,
     meta,
     className,
@@ -38,28 +40,34 @@ export default function IndexToolbar({
             meta={meta}
             className={className}
         >
-            <div
-                className={cn(
-                    'grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start',
-                )}
-            >
-                <SearchInput
-                    value={searchValue}
-                    onChange={onSearchChange}
-                    placeholder={searchPlaceholder}
-                    containerClassName={cn('w-full lg:max-w-md', searchContainerClassName)}
-                />
+            <div className="flex w-full flex-col gap-4">
 
-                {controls ? (
-                    <div
-                        className={cn(
-                            'flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap lg:w-auto lg:justify-end',
-                            controlsContainerClassName,
-                        )}
-                    >
-                        {controls}
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <SearchInput
+                        value={searchValue}
+                        onChange={onSearchChange}
+                        placeholder={searchPlaceholder}
+                        containerClassName={cn('w-full sm:max-w-sm lg:max-w-md shrink-0', searchContainerClassName)}
+                    />
+
+                    {controls ? (
+                        <div
+                            className={cn(
+                                'flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end shrink-0',
+                                controlsContainerClassName,
+                            )}
+                        >
+                            {controls}
+                        </div>
+                    ) : null}
+                </div>
+
+                {filters ? (
+                    <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                        {filters}
                     </div>
                 ) : null}
+
             </div>
         </ResourceToolbar>
     );

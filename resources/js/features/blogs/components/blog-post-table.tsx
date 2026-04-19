@@ -89,10 +89,8 @@ export default function BlogPostTable({
                                             className="h-14 w-24 shrink-0"
                                         />
 
-                                        <div className="min-w-0">
-                                            <div className="truncate font-medium">
-                                                {post.title}
-                                            </div>
+                                        <div className="min-w-0 max-w-[320px]">
+                                            <div className="truncate font-medium">{post.title}</div>
                                             <div className="truncate text-xs text-muted-foreground">
                                                 /{post.slug}
                                             </div>

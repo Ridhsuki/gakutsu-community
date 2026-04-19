@@ -1,7 +1,7 @@
-import { ClipboardList, Edit, Eye, Trash2, Users } from 'lucide-react';
-import { Link } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
+import EventAccessBadge from '@/features/events/components/event-access-badge';
 import EventPosterThumbnail from '@/features/events/components/event-poster-thumbnail';
+import EventPublishBadge from '@/features/events/components/event-publish-badge';
+import EventRowActionsMenu from '@/features/events/components/event-row-actions-menu';
 import EventStatusBadge from '@/features/events/components/event-status-badge';
 import type { EventItem } from '@/features/events/types';
 
@@ -50,10 +50,17 @@ export default function EventCard({
                 <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                         <h3 className="line-clamp-2 text-base font-semibold">{event.title}</h3>
-                        <p className="mt-1 text-xs text-muted-foreground">{event.category}</p>
+                        <p className="mt-1 text-xs text-muted-foreground line-clamp-1">
+                            /{event.slug}
+                        </p>
                     </div>
 
                     <EventStatusBadge status={event.status} />
+                </div>
+
+                <div className="mt-3 flex flex-wrap gap-2">
+                    <EventPublishBadge isPublished={event.is_published} />
+                    <EventAccessBadge accessType={event.access_type} />
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
@@ -61,63 +68,29 @@ export default function EventCard({
                         <div className="text-xs text-muted-foreground">Mentor</div>
                         <div className="font-medium">{event.mentor?.name ?? '-'}</div>
                     </div>
-
                     <div>
                         <div className="text-xs text-muted-foreground">Start</div>
                         <div className="font-medium">{formatDate(event.starts_at)}</div>
                     </div>
-
                     <div>
                         <div className="text-xs text-muted-foreground">Registrants</div>
                         <div className="font-medium">{event.registrations_count ?? 0}</div>
                     </div>
-
                     <div>
                         <div className="text-xs text-muted-foreground">Questions</div>
                         <div className="font-medium">{event.registration_questions_count ?? 0}</div>
                     </div>
                 </div>
 
-                <div className="mt-4 flex items-center justify-end gap-2 border-t border-border pt-4">
-                    <Button type="button" variant="ghost" size="icon" asChild>
-                        <Link href={`${showBaseUrl}/${event.id}`} aria-label={`View ${event.title}`}>
-                            <Eye className="h-4 w-4 text-slate-600" />
-                        </Link>
-                    </Button>
-
-                    <Button type="button" variant="ghost" size="icon" asChild>
-                        <Link
-                            href={`${questionsBaseUrl}/${event.id}/registration-questions`}
-                            aria-label={`Manage registration form for ${event.title}`}
-                        >
-                            <ClipboardList className="h-4 w-4 text-emerald-600" />
-                        </Link>
-                    </Button>
-
-                    <Button type="button" variant="ghost" size="icon" asChild>
-                        <Link
-                            href={`${registrationsBaseUrl}/${event.id}/registrations`}
-                            aria-label={`View registrations for ${event.title}`}
-                        >
-                            <Users className="h-4 w-4 text-amber-600" />
-                        </Link>
-                    </Button>
-
-                    <Button type="button" variant="ghost" size="icon" asChild>
-                        <Link href={`${editBaseUrl}/${event.id}/edit`} aria-label={`Edit ${event.title}`}>
-                            <Edit className="h-4 w-4 text-blue-500" />
-                        </Link>
-                    </Button>
-
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => onDelete(event)}
-                        aria-label={`Delete ${event.title}`}
-                    >
-                        <Trash2 className="h-4 w-4 text-red-500" />
-                    </Button>
+                <div className="mt-4 flex items-center justify-end border-t border-border pt-4">
+                    <EventRowActionsMenu
+                        event={event}
+                        showBaseUrl={showBaseUrl}
+                        editBaseUrl={editBaseUrl}
+                        registrationsBaseUrl={registrationsBaseUrl}
+                        questionsBaseUrl={questionsBaseUrl}
+                        onDelete={onDelete}
+                    />
                 </div>
             </div>
         </article>
