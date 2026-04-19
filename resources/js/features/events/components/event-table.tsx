@@ -1,11 +1,14 @@
-import { ClipboardList, CalendarDays, Edit, Eye, Trash2, Users } from 'lucide-react';
-import { Link } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import EmptyStateRow from '@/components/data-table/empty-state-row';
 import SortableHeader from '@/components/data-table/sortable-header';
-import { Button } from '@/components/ui/button';
+import EventAccessBadge from '@/features/events/components/event-access-badge';
+import EventPosterThumbnail from '@/features/events/components/event-poster-thumbnail';
+import EventPublishBadge from '@/features/events/components/event-publish-badge';
+import EventRowActionsMenu from '@/features/events/components/event-row-actions-menu';
 import EventStatusBadge from '@/features/events/components/event-status-badge';
 import type { EventItem, EventSortField } from '@/features/events/types';
 import type { SortDirection } from '@/types/filters';
+import { CalendarDays } from 'lucide-react';
 
 interface EventTableProps {
     events: EventItem[];
@@ -46,7 +49,7 @@ export default function EventTable({
 }: EventTableProps) {
     return (
         <div className="overflow-x-auto rounded-lg border border-border bg-card">
-            <table className="w-full min-w-[1280px] text-left text-sm">
+            <table className="w-full min-w-[1320px] text-left text-sm">
                 <thead className="bg-muted/50">
                     <tr className="border-b">
                         <SortableHeader
@@ -94,22 +97,39 @@ export default function EventTable({
                 <tbody>
                     {events.length > 0 ? (
                         events.map((event) => (
-                            <tr key={event.id} className="border-b border-border transition hover:bg-accent/50">
+                            <tr
+                                key={event.id}
+                                className="cursor-pointer border-b border-border transition hover:bg-accent/50"
+                                onClick={() => router.visit(`${showBaseUrl}/${event.id}`)}
+                            >
                                 <td className="px-4 py-3">
-                                    <div className="font-medium">{event.title}</div>
-                                    <div className="text-xs text-muted-foreground">/{event.slug}</div>
+                                    <div className="flex min-w-0 items-center gap-3">
+                                        <EventPosterThumbnail
+                                            src={event.poster_image_url}
+                                            alt={`Poster for ${event.title}`}
+                                            className="h-16 w-24 shrink-0"
+                                        />
+
+                                        <div className="min-w-0 max-w-[320px]">
+                                            <div className="truncate font-medium">{event.title}</div>
+                                            <div className="truncate text-xs text-muted-foreground">
+                                                /{event.slug}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
+
                                 <td className="px-4 py-3 text-muted-foreground">{event.category}</td>
                                 <td className="px-4 py-3 text-muted-foreground">{event.mentor?.name ?? '-'}</td>
                                 <td className="px-4 py-3 text-muted-foreground">{formatDate(event.starts_at)}</td>
                                 <td className="px-4 py-3">
                                     <EventStatusBadge status={event.status} />
                                 </td>
-                                <td className="px-4 py-3 text-muted-foreground">
-                                    {event.is_published ? 'Published' : 'Draft'}
+                                <td className="px-4 py-3">
+                                    <EventPublishBadge isPublished={event.is_published} />
                                 </td>
-                                <td className="px-4 py-3 text-muted-foreground">
-                                    {event.access_type === 'free' ? 'Free' : 'Paid'}
+                                <td className="px-4 py-3">
+                                    <EventAccessBadge accessType={event.access_type} />
                                 </td>
                                 <td className="px-4 py-3 text-muted-foreground">
                                     {event.registrations_count ?? 0}
@@ -118,46 +138,15 @@ export default function EventTable({
                                     {event.registration_questions_count ?? 0}
                                 </td>
                                 <td className="px-4 py-3">
-                                    <div className="flex items-center justify-end gap-2">
-                                        <Button type="button" variant="ghost" size="icon" asChild>
-                                            <Link href={`${showBaseUrl}/${event.id}`} aria-label={`View ${event.title}`}>
-                                                <Eye className="h-4 w-4 text-slate-600" />
-                                            </Link>
-                                        </Button>
-
-                                        <Button type="button" variant="ghost" size="icon" asChild>
-                                            <Link
-                                                href={`${questionsBaseUrl}/${event.id}/registration-questions`}
-                                                aria-label={`Manage registration form for ${event.title}`}
-                                            >
-                                                <ClipboardList className="h-4 w-4 text-emerald-600" />
-                                            </Link>
-                                        </Button>
-
-                                        <Button type="button" variant="ghost" size="icon" asChild>
-                                            <Link
-                                                href={`${registrationsBaseUrl}/${event.id}/registrations`}
-                                                aria-label={`View registrations for ${event.title}`}
-                                            >
-                                                <Users className="h-4 w-4 text-amber-600" />
-                                            </Link>
-                                        </Button>
-
-                                        <Button type="button" variant="ghost" size="icon" asChild>
-                                            <Link href={`${editBaseUrl}/${event.id}/edit`} aria-label={`Edit ${event.title}`}>
-                                                <Edit className="h-4 w-4 text-blue-500" />
-                                            </Link>
-                                        </Button>
-
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => onDelete(event)}
-                                            aria-label={`Delete ${event.title}`}
-                                        >
-                                            <Trash2 className="h-4 w-4 text-red-500" />
-                                        </Button>
+                                    <div className="flex items-center justify-end">
+                                        <EventRowActionsMenu
+                                            event={event}
+                                            showBaseUrl={showBaseUrl}
+                                            editBaseUrl={editBaseUrl}
+                                            registrationsBaseUrl={registrationsBaseUrl}
+                                            questionsBaseUrl={questionsBaseUrl}
+                                            onDelete={onDelete}
+                                        />
                                     </div>
                                 </td>
                             </tr>

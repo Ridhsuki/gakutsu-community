@@ -30,17 +30,26 @@ class EventController extends Controller
         $search = $validated['search'] ?? null;
         $sortField = $validated['sort_field'] ?? 'starts_at';
         $sortDirection = $validated['sort_direction'] ?? 'desc';
+        $status = $validated['status'] ?? null;
+        $publication = $validated['publication'] ?? null;
+        $accessType = $validated['access_type'] ?? null;
 
         return Inertia::render('admin/events/index', [
-            'events' => fn () => $getEventIndexAction->handle(
+            'events' => fn() => $getEventIndexAction->handle(
                 search: $search,
                 sortField: $sortField,
                 sortDirection: $sortDirection,
+                status: $status,
+                publication: $publication,
+                accessType: $accessType,
             ),
             'filters' => [
                 'search' => $search,
                 'sort_field' => $sortField,
                 'sort_direction' => $sortDirection,
+                'status' => $status,
+                'publication' => $publication,
+                'access_type' => $accessType,
             ],
         ]);
     }
@@ -48,7 +57,7 @@ class EventController extends Controller
     public function create(): Response
     {
         return Inertia::render('admin/events/create', [
-            'mentors' => fn () => User::query()
+            'mentors' => fn() => User::query()
                 ->select(['id', 'name'])
                 ->where('role', 'mentor')
                 ->orderBy('name')
@@ -81,9 +90,9 @@ class EventController extends Controller
         return Inertia::render('admin/events/edit', [
             'event' => $event->load([
                 'mentor:id,name',
-                'registrationQuestions' => fn ($query) => $query->ordered(),
+                'registrationQuestions' => fn($query) => $query->ordered(),
             ]),
-            'mentors' => fn () => User::query()
+            'mentors' => fn() => User::query()
                 ->select(['id', 'name'])
                 ->where('role', 'mentor')
                 ->orderBy('name')

@@ -29,18 +29,27 @@ class EventController extends Controller
         $search = $validated['search'] ?? null;
         $sortField = $validated['sort_field'] ?? 'starts_at';
         $sortDirection = $validated['sort_direction'] ?? 'desc';
+        $status = $validated['status'] ?? null;
+        $publication = $validated['publication'] ?? null;
+        $accessType = $validated['access_type'] ?? null;
 
         return Inertia::render('mentor/events/index', [
-            'events' => fn () => $getEventIndexAction->handle(
+            'events' => fn() => $getEventIndexAction->handle(
                 search: $search,
                 sortField: $sortField,
                 sortDirection: $sortDirection,
                 mentorId: $request->user()->id,
+                status: $status,
+                publication: $publication,
+                accessType: $accessType,
             ),
             'filters' => [
                 'search' => $search,
                 'sort_field' => $sortField,
                 'sort_direction' => $sortDirection,
+                'status' => $status,
+                'publication' => $publication,
+                'access_type' => $accessType,
             ],
         ]);
     }
@@ -79,7 +88,7 @@ class EventController extends Controller
         return Inertia::render('mentor/events/edit', [
             'event' => $event->load([
                 'mentor:id,name',
-                'registrationQuestions' => fn ($query) => $query->ordered(),
+                'registrationQuestions' => fn($query) => $query->ordered(),
             ]),
         ]);
     }

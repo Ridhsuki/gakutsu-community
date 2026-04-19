@@ -18,6 +18,9 @@ class EventIndexRequest extends FormRequest
             'search' => ['nullable', 'string', 'max:100'],
             'sort_field' => ['nullable', 'in:title,category,status,starts_at,created_at,mentor'],
             'sort_direction' => ['nullable', 'in:asc,desc'],
+            'status' => ['nullable', 'in:upcoming,completed,cancelled'],
+            'publication' => ['nullable', 'in:published,draft'],
+            'access_type' => ['nullable', 'in:free,paid'],
         ];
     }
 }
