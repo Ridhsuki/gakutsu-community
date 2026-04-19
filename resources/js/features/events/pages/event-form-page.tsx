@@ -3,6 +3,7 @@ import { ArrowLeft, ClipboardList, Save } from 'lucide-react';
 import EmptyState from '@/components/ui/empty-state';
 import { Button } from '@/components/ui/button';
 import EventFormFields from '@/features/events/components/event-form-fields';
+import { uploadEventEditorImage } from '@/features/events/lib/upload-editor-image';
 import { getDefaultCreateEventForm, mapEventToEditEventForm } from '@/features/events/form-helpers';
 import type { EventItem, EventMentorOption, EventRegistrationQuestionItem } from '@/features/events/types';
 
@@ -83,6 +84,8 @@ export default function EventFormPage({
                             form={form}
                             mentors={mentors}
                             canAssignMentor={canAssignMentor}
+                            currentEvent={event}
+                            onUploadImage={uploadEventEditorImage}
                         />
                     </div>
 
