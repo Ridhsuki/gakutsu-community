@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Users, LayoutGrid, Home, BookOpen, Cast } from 'lucide-react';
+import { Users, LayoutGrid, Home, BookOpen, CalendarDays } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -35,16 +35,16 @@ export function AppSidebar() {
         },
         ...(auth?.user?.role === 'admin'
             ? [
+                { title: 'Events', href: '/admin/events', icon: CalendarDays },
                 { title: 'Blogs', href: '/admin/blogs', icon: BookOpen },
-                { title: 'Events', href: '/admin/events', icon: Cast },
                 { title: 'Users', href: '/admin/users', icon: Users },
             ]
             : []),
 
         ...(auth?.user?.role === 'mentor'
             ? [
+                { title: 'Events', href: '/mentor/events', icon: CalendarDays },
                 { title: 'Blogs', href: '/mentor/blogs', icon: BookOpen },
-                { title: 'Events', href: '/mentor/events', icon: Cast },
             ]
             : []),
     ];

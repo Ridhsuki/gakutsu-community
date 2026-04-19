@@ -8,6 +8,8 @@ export type EventSortField =
     | 'created_at'
     | 'mentor';
 
+export type EventManagementViewMode = 'table' | 'cards';
+
 export interface EventMentor {
     id: number;
     name: string;
@@ -72,7 +74,6 @@ export interface EventItem {
     status: EventStatus;
     access_type: EventAccessType;
     is_published: boolean;
-    is_registration_open: boolean;
     registration_closes_at: string | null;
     meeting_provider: string | null;
     meeting_url: string | null;
@@ -108,7 +109,6 @@ export interface CreateEventForm {
     status: EventStatus;
     access_type: EventAccessType;
     is_published: boolean;
-    is_registration_open: boolean;
     poster_image: File | null;
 }
 

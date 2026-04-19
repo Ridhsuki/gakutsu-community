@@ -104,7 +104,7 @@ Route::middleware(['auth', 'verified', EnsureUserIsMentor::class])
 
         Route::get(
             'events/{event}/registrations/{registration}',
-            [AdminEventRegistrationController::class, 'show']
+            [MentorEventRegistrationController::class, 'show']
         )->name('events.registrations.show');
     });
 

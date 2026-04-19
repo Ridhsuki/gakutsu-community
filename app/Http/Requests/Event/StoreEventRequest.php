@@ -20,7 +20,6 @@ class StoreEventRequest extends FormRequest
     {
         $this->merge([
             'is_published' => $this->boolean('is_published'),
-            'is_registration_open' => $this->boolean('is_registration_open'),
         ]);
     }
 
@@ -49,7 +48,6 @@ class StoreEventRequest extends FormRequest
             'status' => ['required', Rule::enum(EventStatus::class)],
             'access_type' => ['required', Rule::enum(EventAccessType::class)],
             'is_published' => ['required', 'boolean'],
-            'is_registration_open' => ['required', 'boolean'],
             'poster_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }

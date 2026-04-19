@@ -2,7 +2,6 @@
 
 return [
     'presets' => [
-
         'blog_cover' => [
             'disk' => 'public',
             'directory' => 'media/blog/covers',
@@ -25,11 +24,10 @@ return [
         'event_cover' => [
             'disk' => 'public',
             'directory' => 'media/events/covers',
-            'mode' => 'cover',
+            'mode' => 'scale_down',
             'width' => 1600,
-            'height' => 900,
+            'height' => 1600,
             'quality' => 82,
-            'upsize' => false,
         ],
 
         'profile_photo' => [
