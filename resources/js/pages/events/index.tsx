@@ -1,151 +1,92 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
+import EventPublicCard from '@/components/public/event-public-card';
+import PublicLayout from '@/layouts/public-layout';
 import PaginationBar from '@/components/data-table/pagination-bar';
-import EmptyState from '@/components/ui/empty-state';
-import EventPosterThumbnail from '@/features/events/components/event-poster-thumbnail';
-import type { EventItem } from '@/features/events/types';
 import type { PaginatedResponse } from '@/types/pagination';
-import { CalendarDays } from 'lucide-react';
+import SeoHead from '@/components/public/seo-head';
 
-interface PageProps {
-    events: PaginatedResponse<EventItem>;
-}
+type EventItem = {
+    id: number;
+    title: string;
+    slug: string;
+    category: string;
+    starts_at: string;
+    status: 'upcoming' | 'completed' | 'cancelled';
+    poster_image_url?: string | null;
+    mentor?: {
+        name: string;
+    } | null;
+};
 
-function formatDate(value: string) {
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) return '-';
-
-    return date.toLocaleDateString('id-ID', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-    });
-}
-
-export default function EventsIndex({ events }: PageProps) {
-    const upcomingEvents = events.data.filter((event) => event.status === 'upcoming');
-    const archivedEvents = events.data.filter((event) => event.status !== 'upcoming');
-
+export default function EventsIndex({
+    upcomingEvents,
+    archivedEvents,
+}: {
+    upcomingEvents: PaginatedResponse<EventItem>;
+    archivedEvents: PaginatedResponse<EventItem>;
+}) {
     return (
-        <>
-            <Head title="Events" />
+        <PublicLayout>
+            <SeoHead
+                title="Events"
+                description="Jelajahi webinar dan event komunitas IT dan Cyber Security dari Yok Pelajarin, termasuk event mendatang dan arsip kegiatan."
+            />
 
-            <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8">
-                <div className="space-y-1">
-                    <h1 className="text-2xl font-semibold">Community Events</h1>
-                    <p className="text-sm text-muted-foreground">
-                        Explore upcoming webinars and browse archived community sessions.
+            <div className="mx-auto max-w-7xl px-4 py-12">
+                <div className="mb-10 space-y-2">
+                    <p className="text-sm font-medium text-primary">Events</p>
+                    <h1 className="text-3xl font-semibold tracking-tight">Webinar dan event komunitas</h1>
+                    <p className="max-w-2xl text-muted-foreground">
+                        Temukan webinar terbaru, lihat dokumentasi event yang sudah selesai, dan masuk ke alur registrasi dengan pengalaman publik yang lebih bersih.
                     </p>
                 </div>
 
-                {upcomingEvents.length > 0 ? (
-                    <section className="space-y-4">
-                        <div>
-                            <h2 className="text-xl font-semibold">Upcoming Events</h2>
-                            <p className="text-sm text-muted-foreground">
-                                Open for browsing and registration based on availability.
-                            </p>
-                        </div>
+                <section className="space-y-6">
+                    <div className="space-y-2">
+                        <h2 className="text-2xl font-semibold tracking-tight">Upcoming Events</h2>
+                        <p className="text-sm text-muted-foreground">
+                            Event yang masih aktif dan bisa diakses publik untuk melihat detail dan registrasi.
+                        </p>
+                    </div>
 
-                        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                            {upcomingEvents.map((event) => (
-                                <article
-                                    key={event.id}
-                                    className="rounded-xl border border-border bg-card p-4 shadow-sm"
-                                >
-                                    <EventPosterThumbnail
-                                        src={event.poster_image_url}
-                                        alt={`Poster for ${event.title}`}
-                                        className="aspect-[4/3] w-full"
-                                    />
+                    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                        {upcomingEvents.data.map((event) => (
+                            <EventPublicCard key={event.id} event={event} />
+                        ))}
+                    </div>
 
-                                    <div className="mt-4 space-y-2">
-                                        <h3 className="text-lg font-semibold">{event.title}</h3>
-                                        <p className="text-sm text-muted-foreground">{event.category}</p>
-                                        <p className="text-sm text-muted-foreground">
-                                            Mentor: {event.mentor?.name ?? '-'}
-                                        </p>
-                                        <p className="text-sm text-muted-foreground">
-                                            Starts: {formatDate(event.starts_at)}
-                                        </p>
-                                    </div>
-
-                                    <div className="mt-4">
-                                        <Link
-                                            href={`/events/${event.slug}`}
-                                            className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground"
-                                        >
-                                            View Event
-                                        </Link>
-                                    </div>
-                                </article>
-                            ))}
-                        </div>
-                    </section>
-                ) : null}
-
-                {archivedEvents.length > 0 ? (
-                    <section className="space-y-4">
-                        <div>
-                            <h2 className="text-xl font-semibold">Archive</h2>
-                            <p className="text-sm text-muted-foreground">
-                                Completed and cancelled events kept for documentation.
-                            </p>
-                        </div>
-
-                        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                            {archivedEvents.map((event) => (
-                                <article
-                                    key={event.id}
-                                    className="rounded-xl border border-border bg-card p-4 shadow-sm"
-                                >
-                                    <EventPosterThumbnail
-                                        src={event.poster_image_url}
-                                        alt={`Poster for ${event.title}`}
-                                        className="aspect-[4/3] w-full"
-                                    />
-
-                                    <div className="mt-4 space-y-2">
-                                        <h3 className="text-lg font-semibold">{event.title}</h3>
-                                        <p className="text-sm text-muted-foreground">{event.category}</p>
-                                        <p className="text-sm text-muted-foreground">
-                                            Mentor: {event.mentor?.name ?? '-'}
-                                        </p>
-                                        <p className="text-sm text-muted-foreground">
-                                            Starts: {formatDate(event.starts_at)}
-                                        </p>
-                                        <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                                            Status: {event.status}
-                                        </p>
-                                    </div>
-
-                                    <div className="mt-4">
-                                        <span className="inline-flex h-9 items-center justify-center rounded-md border border-input px-4 text-sm font-medium text-muted-foreground">
-                                            Archived
-                                        </span>
-                                    </div>
-                                </article>
-                            ))}
-                        </div>
-                    </section>
-                ) : null}
-
-                {events.data.length === 0 ? (
-                    <EmptyState
-                        icon={CalendarDays}
-                        title="No events available"
-                        description="Please check back later for new webinars and community sessions."
+                    <PaginationBar
+                        links={upcomingEvents.links}
+                        from={upcomingEvents.from}
+                        to={upcomingEvents.to}
+                        total={upcomingEvents.total}
+                        lastPage={upcomingEvents.last_page}
                     />
-                ) : null}
+                </section>
 
-                <PaginationBar
-                    links={events.links}
-                    from={events.from}
-                    to={events.to}
-                    total={events.total}
-                    lastPage={events.last_page}
-                />
+                <section className="mt-16 space-y-6">
+                    <div className="space-y-2">
+                        <h2 className="text-2xl font-semibold tracking-tight">Archive</h2>
+                        <p className="text-sm text-muted-foreground">
+                            Dokumentasi event yang sudah completed atau cancelled.
+                        </p>
+                    </div>
+
+                    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                        {archivedEvents.data.map((event) => (
+                            <EventPublicCard key={event.id} event={event} archive />
+                        ))}
+                    </div>
+
+                    <PaginationBar
+                        links={archivedEvents.links}
+                        from={archivedEvents.from}
+                        to={archivedEvents.to}
+                        total={archivedEvents.total}
+                        lastPage={archivedEvents.last_page}
+                    />
+                </section>
             </div>
-        </>
+        </PublicLayout>
     );
 }

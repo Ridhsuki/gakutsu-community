@@ -50,20 +50,20 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 1. Membuat 10 Event random
-        Event::factory(10)->create();
+        // Event::factory(10)->create();
 
         // 2. Membuat 5 Event yang pasti Published dan Upcoming untuk mentor tertentu
-        $mentor = User::where('role', \App\Enums\UserRole::Mentor)->first();
-        Event::factory(5)
-            ->published()
-            ->upcoming()
-            ->create([
-                'mentor_id' => $mentor->id,
-                'created_by' => $mentor->id,
-            ]);
+        // $mentor = User::where('role', \App\Enums\UserRole::Mentor)->first();
+        // Event::factory(5)
+        //     ->published()
+        //     ->upcoming()
+        //     ->create([
+        //         'mentor_id' => $mentor->id,
+        //         'created_by' => $mentor->id,
+        //     ]);
 
         // 3. Membuat event yang berbayar dan sudah selesai
-        Event::factory()->completed()->paid()->create();
+        // Event::factory()->completed()->paid()->create();
 
         $this->call([
             EventSeeder::class,

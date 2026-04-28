@@ -19,7 +19,7 @@ export default function RenderRichText({
 
     return (
         <div
-            className={cn('prose prose-sm max-w-none dark:prose-invert', className)}
+            className={cn('rich-content max-w-none text-foreground', className)}
             dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
         />
     );
