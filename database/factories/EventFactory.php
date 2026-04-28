@@ -37,8 +37,8 @@ class EventFactory extends Factory
         $registrationClosesAt = Carbon::instance($startsAt)->subDays($this->faker->numberBetween(1, 5));
 
         return [
-            'created_by' => User::factory(),
-            'mentor_id' => User::factory(),
+            'created_by' => 1,
+            'mentor_id' => 2,
             'title' => rtrim($title, '.'),
             'slug' => Str::slug($title) . '-' . Str::random(5),
             'category' => $this->faker->randomElement([
@@ -53,8 +53,8 @@ class EventFactory extends Factory
             'access_type' => $this->faker->randomElement(EventAccessType::cases()),
             'is_published' => $this->faker->boolean(80),
             'registration_closes_at' => $registrationClosesAt,
-            'meeting_provider' => $this->faker->randomElement(['zoom', 'google_meet', 'microsoft_teams']),
-            'meeting_url' => $this->faker->url(),
+            'meeting_provider' => 'google_meet',
+            'meeting_url' => 'https://meet.google.com/',
             'poster_image_path' => null,
             'starts_at' => $startsAt,
             'ends_at' => $endsAt,

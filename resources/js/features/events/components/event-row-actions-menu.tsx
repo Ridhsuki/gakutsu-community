@@ -46,9 +46,18 @@ export default function EventRowActionsMenu({
                         onSelect={() =>
                             router.visit(`${questionsBaseUrl}/${event.id}/registration-questions`)
                         }
+                        className="flex items-center justify-between group"
                     >
-                        <ClipboardList className="mr-2 h-4 w-4" />
-                        Registration questions
+                        <div className="flex items-center">
+                            <ClipboardList className="mr-4 h-4 w-4" />
+                            <span>Questions</span>
+                        </div>
+
+                        {event.registration_questions_count !== undefined && (
+                            <span className="ml-2 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary/10 px-1.5 text-[10px] font-medium text-primary dark:bg-primary/20 dark:text-primary-foreground">
+                                {event.registration_questions_count}
+                            </span>
+                        )}
                     </DropdownMenuItem>
 
                     <DropdownMenuItem

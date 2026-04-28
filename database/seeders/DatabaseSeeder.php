@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Generate User dummy
-        User::factory()->count(20)->create();
+        User::factory()->count(10)->create();
 
         // Generate Blog Posts for Admin
         BlogPost::factory()->count(11)->create([
@@ -65,8 +65,8 @@ class DatabaseSeeder extends Seeder
         // 3. Membuat event yang berbayar dan sudah selesai
         Event::factory()->completed()->paid()->create();
 
-        // $this->call([
-        //     EventSeeder::class,
-        // ]);
+        $this->call([
+            EventSeeder::class,
+        ]);
     }
 }
