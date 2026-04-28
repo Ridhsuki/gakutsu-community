@@ -1,127 +1,148 @@
 <?php
 
-use App\Http\Controllers\Blog\BlogEditorImageController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
+
+// Controllers
+use App\Http\Controllers\Blog\BlogEditorImageController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Middleware\EnsureUserIsAdmin;
-use App\Http\Middleware\EnsureUserIsMentor;
 use App\Http\Controllers\Admin\BlogPostController as AdminBlogPostController;
-use App\Http\Controllers\Mentor\BlogPostController as MentorBlogPostController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\EventRegistrationController as AdminEventRegistrationController;
-use App\Http\Controllers\Event\EventBrowseController;
-use App\Http\Controllers\Event\EventRegistrationController;
+use App\Http\Controllers\Admin\EventRegistrationQuestionController as AdminEventRegistrationQuestionController;
+
+use App\Http\Controllers\Mentor\BlogPostController as MentorBlogPostController;
 use App\Http\Controllers\Mentor\EventController as MentorEventController;
 use App\Http\Controllers\Mentor\EventRegistrationController as MentorEventRegistrationController;
-use App\Http\Controllers\Admin\EventRegistrationQuestionController as AdminEventRegistrationQuestionController;
 use App\Http\Controllers\Mentor\EventRegistrationQuestionController as MentorEventRegistrationQuestionController;
 
-Route::inertia('/', 'welcome', [
-    'canRegister' => Features::enabled(Features::registration()),
-])->name('home');
+use App\Http\Controllers\Site\HomeController;
+use App\Http\Controllers\Site\BlogController as SiteBlogController;
+use App\Http\Controllers\Site\EventController as SiteEventController;
+use App\Http\Controllers\Event\EventRegistrationController;
 
+// Middleware
+use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Http\Middleware\EnsureUserIsMentor;
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::prefix('blogs')->name('blogs.')->group(function () {
+    Route::get('/', [SiteBlogController::class, 'index'])->name('index');
+    Route::get('{blog:slug}', [SiteBlogController::class, 'show'])->name('show');
 });
 
-Route::middleware(['auth', 'verified'])->post(
-    'editor/blog-images',
-    [BlogEditorImageController::class, 'store']
-)->name('editor.blog-images.store');
+Route::prefix('events')->name('events.')->group(function () {
+    Route::get('/', [SiteEventController::class, 'index'])->name('index');
+    Route::get('{event:slug}', [SiteEventController::class, 'show'])->name('show');
+});
 
-Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])
-    ->prefix('admin')
+/*
+|--------------------------------------------------------------------------
+| Authenticated Routes
+|--------------------------------------------------------------------------
+*/
+/*
+|--------------------------------------------------------------------------
+| Authenticated Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::get('/dashboard', fn() => inertia('dashboard'))->name('dashboard');
+
+    Route::post('editor/blog-images', [BlogEditorImageController::class, 'store'])
+        ->name('editor.blog-images.store');
+
+    Route::prefix('events')->name('events.')->group(function () {
+
+        Route::get('{event:slug}/register', [SiteEventController::class, 'register'])
+            ->name('register');
+
+        Route::post('{event}/registrations', [EventRegistrationController::class, 'store'])
+            ->name('registrations.store');
+    });
+});
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')
     ->name('admin.')
+    ->middleware(['auth', 'verified', EnsureUserIsAdmin::class])
     ->group(function () {
+
         Route::resource('users', UserController::class)->except(['show', 'create', 'edit']);
         Route::resource('blogs', AdminBlogPostController::class)->except(['show', 'create', 'edit']);
         Route::resource('events', AdminEventController::class);
 
-        Route::get(
-            'events/{event}/registrations',
-            [AdminEventRegistrationController::class, 'index']
-        )->name('events.registrations.index');
+        Route::prefix('events/{event}')->group(function () {
 
-        Route::get(
-            'events/{event}/registration-questions',
-            [AdminEventRegistrationQuestionController::class, 'index']
-        )->name('events.registration-questions.index');
+            Route::get('registrations', [AdminEventRegistrationController::class, 'index'])
+                ->name('events.registrations.index');
 
-        Route::post(
-            'events/{event}/registration-questions',
-            [AdminEventRegistrationQuestionController::class, 'store']
-        )->name('events.registration-questions.store');
+            Route::get('registrations/{registration}', [AdminEventRegistrationController::class, 'show'])
+                ->name('events.registrations.show');
 
-        Route::put(
-            'events/{event}/registration-questions/{registrationQuestion}',
-            [AdminEventRegistrationQuestionController::class, 'update']
-        )->name('events.registration-questions.update');
+            Route::prefix('registration-questions')->group(function () {
 
-        Route::delete(
-            'events/{event}/registration-questions/{registrationQuestion}',
-            [AdminEventRegistrationQuestionController::class, 'destroy']
-        )->name('events.registration-questions.destroy');
+                Route::get('/', [AdminEventRegistrationQuestionController::class, 'index'])
+                    ->name('events.registration-questions.index');
 
-        Route::get(
-            'events/{event}/registrations/{registration}',
-            [AdminEventRegistrationController::class, 'show']
-        )->name('events.registrations.show');
+                Route::post('/', [AdminEventRegistrationQuestionController::class, 'store'])
+                    ->name('events.registration-questions.store');
+
+                Route::put('{registrationQuestion}', [AdminEventRegistrationQuestionController::class, 'update'])
+                    ->name('events.registration-questions.update');
+
+                Route::delete('{registrationQuestion}', [AdminEventRegistrationQuestionController::class, 'destroy'])
+                    ->name('events.registration-questions.destroy');
+            });
+        });
     });
 
-Route::middleware(['auth', 'verified', EnsureUserIsMentor::class])
-    ->prefix('mentor')
+/*
+|--------------------------------------------------------------------------
+| Mentor Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('mentor')
     ->name('mentor.')
+    ->middleware(['auth', 'verified', EnsureUserIsMentor::class])
     ->group(function () {
+
         Route::resource('blogs', MentorBlogPostController::class)->except(['show', 'create', 'edit']);
         Route::resource('events', MentorEventController::class);
 
-        Route::get(
-            'events/{event}/registrations',
-            [MentorEventRegistrationController::class, 'index']
-        )->name('events.registrations.index');
+        Route::prefix('events/{event}')->group(function () {
 
-        Route::get(
-            'events/{event}/registration-questions',
-            [MentorEventRegistrationQuestionController::class, 'index']
-        )->name('events.registration-questions.index');
+            Route::get('registrations', [MentorEventRegistrationController::class, 'index'])
+                ->name('events.registrations.index');
 
-        Route::post(
-            'events/{event}/registration-questions',
-            [MentorEventRegistrationQuestionController::class, 'store']
-        )->name('events.registration-questions.store');
+            Route::get('registrations/{registration}', [MentorEventRegistrationController::class, 'show'])
+                ->name('events.registrations.show');
 
-        Route::put(
-            'events/{event}/registration-questions/{registrationQuestion}',
-            [MentorEventRegistrationQuestionController::class, 'update']
-        )->name('events.registration-questions.update');
+            Route::prefix('registration-questions')->group(function () {
 
-        Route::delete(
-            'events/{event}/registration-questions/{registrationQuestion}',
-            [MentorEventRegistrationQuestionController::class, 'destroy']
-        )->name('events.registration-questions.destroy');
+                Route::get('/', [MentorEventRegistrationQuestionController::class, 'index'])
+                    ->name('events.registration-questions.index');
 
-        Route::get(
-            'events/{event}/registrations/{registration}',
-            [MentorEventRegistrationController::class, 'show']
-        )->name('events.registrations.show');
-    });
+                Route::post('/', [MentorEventRegistrationQuestionController::class, 'store'])
+                    ->name('events.registration-questions.store');
 
-Route::get('/events', [EventBrowseController::class, 'index'])->name('events.index');
-Route::get('/events/{event:slug}', [EventBrowseController::class, 'show'])->name('events.show');
+                Route::put('{registrationQuestion}', [MentorEventRegistrationQuestionController::class, 'update'])
+                    ->name('events.registration-questions.update');
 
-Route::middleware(['auth', 'verified'])->post(
-    '/events/{event}/registrations',
-    [EventRegistrationController::class, 'store']
-)->name('events.registrations.store');
-
-
-Route::middleware(['auth', 'verified', EnsureUserIsMentor::class])
-    ->prefix('mentor')
-    ->name('mentor.')
-    ->group(function () {
-
+                Route::delete('{registrationQuestion}', [MentorEventRegistrationQuestionController::class, 'destroy'])
+                    ->name('events.registration-questions.destroy');
+            });
+        });
     });
 
 require __DIR__ . '/settings.php';

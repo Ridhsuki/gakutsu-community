@@ -7,28 +7,46 @@ import SettingsLayout from '@/layouts/settings/layout';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+function isPublicPage(name: string): boolean {
+    return (
+        name === 'welcome' ||
+        name.startsWith('blogs/') ||
+        name.startsWith('events/')
+    );
+}
+
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
+
     layout: (name) => {
-        switch (true) {
-            case name === 'welcome':
-                return null;
-            case name.startsWith('auth/'):
-                return AuthLayout;
-            case name.startsWith('settings/'):
-                return [AppLayout, SettingsLayout];
-            default:
-                return AppLayout;
+        if (isPublicPage(name)) {
+            return null;
         }
+
+        if (name.startsWith('auth/')) {
+            return AuthLayout;
+        }
+
+        if (name.startsWith('settings/')) {
+            return [AppLayout, SettingsLayout];
+        }
+
+        return AppLayout;
     },
+
     strictMode: true,
+
     withApp(app) {
-        return <TooltipProvider delayDuration={0}>{app}</TooltipProvider>;
+        return (
+            <TooltipProvider delayDuration={150}>
+                {app}
+            </TooltipProvider>
+        );
     },
+
     progress: {
-        color: '#4B5563',
+        color: '#106b42',
     },
 });
 
-// This will set light / dark mode on load...
 initializeTheme();
