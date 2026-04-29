@@ -100,6 +100,16 @@ class Event extends Model
         return $this->hasMany(EventRegistrationQuestion::class);
     }
 
+    public function quizQuestions(): HasMany
+    {
+        return $this->hasMany(EventQuizQuestion::class);
+    }
+
+    public function quizAttempts(): HasMany
+    {
+        return $this->hasMany(EventQuizAttempt::class);
+    }
+
     #[Scope]
     protected function search(Builder $query, ?string $search): void
     {
@@ -167,5 +177,18 @@ class Event extends Model
         $registrationDeadline = $this->registration_closes_at ?? $this->starts_at;
 
         return now()->lessThanOrEqualTo($registrationDeadline);
+    }
+
+    public function quizIsAvailable(): bool
+    {
+        if (!$this->is_published) {
+            return false;
+        }
+
+        if ($this->status !== EventStatus::Completed) {
+            return false;
+        }
+
+        return $this->quizQuestions()->where('is_active', true)->exists();
     }
 }

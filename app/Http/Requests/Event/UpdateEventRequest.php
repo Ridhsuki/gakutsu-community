@@ -33,7 +33,7 @@ class UpdateEventRequest extends FormRequest
                 'required',
                 'integer',
                 Rule::exists('users', 'id')->where(
-                    fn ($query) => $query->where('role', UserRole::Mentor->value)
+                    fn($query) => $query->where('role', UserRole::Mentor->value)
                 ),
             ]
             : ['nullable'];
