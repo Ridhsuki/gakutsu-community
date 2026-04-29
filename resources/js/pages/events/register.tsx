@@ -1,8 +1,16 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import PublicLayout from '@/layouts/public-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import SeoHead from '@/components/public/seo-head';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 type EventQuestion = {
     id: number;
@@ -92,7 +100,9 @@ export default function EventRegister({
                                         </label>
 
                                         {question.help_text ? (
-                                            <p className="text-xs text-muted-foreground">{question.help_text}</p>
+                                            <p className="text-xs text-muted-foreground">
+                                                {question.help_text}
+                                            </p>
                                         ) : null}
 
                                         {question.type === 'short_text' ? (
@@ -105,11 +115,12 @@ export default function EventRegister({
                                                     })
                                                 }
                                                 placeholder={question.placeholder ?? ''}
+                                                className="h-10"
                                             />
                                         ) : null}
 
                                         {question.type === 'long_text' ? (
-                                            <textarea
+                                            <Textarea
                                                 value={form.data.answers[String(question.id)]}
                                                 onChange={(e) =>
                                                     form.setData('answers', {
@@ -118,32 +129,37 @@ export default function EventRegister({
                                                     })
                                                 }
                                                 placeholder={question.placeholder ?? ''}
-                                                className="min-h-32 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+                                                className="min-h-32 resize-y"
                                             />
                                         ) : null}
 
                                         {question.type === 'select' ? (
-                                            <select
+                                            <Select
                                                 value={form.data.answers[String(question.id)]}
-                                                onChange={(e) =>
+                                                onValueChange={(value) =>
                                                     form.setData('answers', {
                                                         ...form.data.answers,
-                                                        [String(question.id)]: e.currentTarget.value,
+                                                        [String(question.id)]: value,
                                                     })
                                                 }
-                                                className="h-10 w-full rounded-xl border border-border bg-background px-3 text-sm"
                                             >
-                                                <option value="">Pilih jawaban</option>
-                                                {(question.options ?? []).map((option) => (
-                                                    <option key={option} value={option}>
-                                                        {option}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                                <SelectTrigger className="h-10">
+                                                    <SelectValue placeholder="Pilih jawaban" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {(question.options ?? []).map((option) => (
+                                                        <SelectItem key={option} value={option}>
+                                                            {option}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
                                         ) : null}
 
                                         {form.errors[`answers.${question.id}`] ? (
-                                            <p className="text-sm text-red-500">{form.errors[`answers.${question.id}`]}</p>
+                                            <p className="text-sm text-red-500">
+                                                {form.errors[`answers.${question.id}`]}
+                                            </p>
                                         ) : null}
                                     </div>
                                 ))

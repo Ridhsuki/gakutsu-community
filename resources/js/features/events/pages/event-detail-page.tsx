@@ -45,7 +45,12 @@ export default function EventDetailPage({
 
             <div className="flex h-full w-full flex-col space-y-6 p-6">
                 <div className="flex flex-col gap-3">
-                    <Button type="button" variant="ghost" asChild className="px-0">
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        asChild
+                        className="w-fit mb-4"
+                    >
                         <Link href={backHref}>
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Back to events
