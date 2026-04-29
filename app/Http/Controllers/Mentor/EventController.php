@@ -12,14 +12,12 @@ use App\Http\Requests\Event\EventIndexRequest;
 use App\Http\Requests\Event\StoreEventRequest;
 use App\Http\Requests\Event\UpdateEventRequest;
 use App\Models\Event;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class EventController extends Controller
 {
-    use AuthorizesRequests;
     public function index(
         EventIndexRequest $request,
         GetEventIndexAction $getEventIndexAction,

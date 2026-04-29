@@ -11,15 +11,12 @@ use App\Http\Requests\Blog\BlogPostIndexRequest;
 use App\Http\Requests\Blog\StoreBlogPostRequest;
 use App\Http\Requests\Blog\UpdateBlogPostRequest;
 use App\Models\BlogPost;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class BlogPostController extends Controller
 {
-    use AuthorizesRequests;
-
     public function index(
         BlogPostIndexRequest $request,
         GetBlogPostIndexAction $getBlogPostIndexAction,

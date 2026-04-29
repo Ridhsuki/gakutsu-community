@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Event\EventRegistrationQuestionIndexRequest;
 use App\Http\Requests\Event\StoreEventRegistrationQuestionRequest;
 use App\Http\Requests\Event\UpdateEventRegistrationQuestionRequest;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\Event;
 use App\Models\EventRegistrationQuestion;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +18,6 @@ use Inertia\Response;
 
 class EventRegistrationQuestionController extends Controller
 {
-    use AuthorizesRequests;
     public function index(
         EventRegistrationQuestionIndexRequest $request,
         Event $event,
