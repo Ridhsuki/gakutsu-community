@@ -140,15 +140,6 @@ export default function Welcome(props: PageProps) {
                             >
                                 Jelajahi Blog
                             </Link>
-
-                            {!isLoggedIn && props.canRegister ? (
-                                <Link
-                                    href="/register"
-                                    className="inline-flex h-11 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 px-5 text-sm font-medium text-primary"
-                                >
-                                    Bergabung Gratis
-                                </Link>
-                            ) : null}
                         </Reveal>
                     </div>
 
