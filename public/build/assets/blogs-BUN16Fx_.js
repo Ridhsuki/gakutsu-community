@@ -1,1 +1,0 @@
-import{n as e,t}from"./jsx-runtime-BtV7ocwp.js";import{n,t as r}from"./blog-management-page-0SUVAVbr.js";var i=e(),a=t();function o(e){let t=(0,i.c)(2),o;return t[0]===e?o=t[1]:(o=(0,a.jsx)(r,{...e,endpoint:n,headTitle:`Blog Management`,title:`Blog Management`,description:`Manage blog posts published by admins and mentors.`}),t[0]=e,t[1]=o),o}export{o as default};
