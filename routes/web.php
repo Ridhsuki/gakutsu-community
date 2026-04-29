@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Event\EventQuizController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -25,6 +26,11 @@ use App\Http\Controllers\Event\EventRegistrationController;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\EnsureUserIsMentor;
 
+use App\Http\Controllers\Admin\EventQuizAttemptController as AdminEventQuizAttemptController;
+use App\Http\Controllers\Admin\EventQuizQuestionController as AdminEventQuizQuestionController;
+use App\Http\Controllers\Mentor\EventQuizAttemptController as MentorEventQuizAttemptController;
+use App\Http\Controllers\Mentor\EventQuizQuestionController as MentorEventQuizQuestionController;
+
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -47,11 +53,6 @@ Route::prefix('events')->name('events.')->group(function () {
 | Authenticated Routes
 |--------------------------------------------------------------------------
 */
-/*
-|--------------------------------------------------------------------------
-| Authenticated Routes
-|--------------------------------------------------------------------------
-*/
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', fn() => inertia('dashboard'))->name('dashboard');
@@ -66,6 +67,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::post('{event}/registrations', [EventRegistrationController::class, 'store'])
             ->name('registrations.store');
+
+        // Route::get('{event:slug}/quiz', [EventQuizController::class, 'show'])
+        //     ->middleware(['auth', 'verified'])
+        //     ->name('quiz.show');
+
+        // Route::post('{event}/quiz-attempts', [EventQuizController::class, 'store'])
+        //     ->middleware(['auth', 'verified'])
+        //     ->name('quiz-attempts.store');
+
+        // Route::get('{event:slug}/quiz-result', [EventQuizController::class, 'result'])
+        //     ->middleware(['auth', 'verified'])
+        //     ->name('quiz.result');
     });
 });
 /*
@@ -104,6 +117,26 @@ Route::prefix('admin')
                 Route::delete('{registrationQuestion}', [AdminEventRegistrationQuestionController::class, 'destroy'])
                     ->name('events.registration-questions.destroy');
             });
+
+            Route::prefix('quiz-questions')->group(function () {
+                Route::get('/', [AdminEventQuizQuestionController::class, 'index'])
+                    ->name('events.quiz-questions.index');
+                Route::post('/', [AdminEventQuizQuestionController::class, 'store'])
+                    ->name('events.quiz-questions.store');
+                Route::put('{question}', [AdminEventQuizQuestionController::class, 'update'])
+                    ->name('events.quiz-questions.update');
+                Route::delete('{question}', [AdminEventQuizQuestionController::class, 'destroy'])
+                    ->name('events.quiz-questions.destroy');
+            });
+
+            Route::prefix('quiz-attempts')->group(function () {
+                Route::get('/', [AdminEventQuizAttemptController::class, 'index'])
+                    ->name('events.quiz-attempts.index');
+                Route::get('{attempt}', [AdminEventQuizAttemptController::class, 'show'])
+                    ->name('events.quiz-attempts.show');
+                Route::patch('{attempt}/answers/{answer}', [AdminEventQuizAttemptController::class, 'grade'])
+                    ->name('events.quiz-attempts.answers.update');
+            });
         });
     });
 
@@ -141,6 +174,26 @@ Route::prefix('mentor')
 
                 Route::delete('{registrationQuestion}', [MentorEventRegistrationQuestionController::class, 'destroy'])
                     ->name('events.registration-questions.destroy');
+            });
+
+            Route::prefix('quiz-questions')->group(function () {
+                Route::get('/', [MentorEventQuizQuestionController::class, 'index'])
+                    ->name('events.quiz-questions.index');
+                Route::post('/', [MentorEventQuizQuestionController::class, 'store'])
+                    ->name('events.quiz-questions.store');
+                Route::put('{question}', [MentorEventQuizQuestionController::class, 'update'])
+                    ->name('events.quiz-questions.update');
+                Route::delete('{question}', [MentorEventQuizQuestionController::class, 'destroy'])
+                    ->name('events.quiz-questions.destroy');
+            });
+
+            Route::prefix('quiz-attempts')->group(function () {
+                Route::get('/', [MentorEventQuizAttemptController::class, 'index'])
+                    ->name('events.quiz-attempts.index');
+                Route::get('{attempt}', [MentorEventQuizAttemptController::class, 'show'])
+                    ->name('events.quiz-attempts.show');
+                Route::patch('{attempt}/answers/{answer}', [MentorEventQuizAttemptController::class, 'grade'])
+                    ->name('events.quiz-attempts.answers.update');
             });
         });
     });
