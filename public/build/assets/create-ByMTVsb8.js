@@ -1,0 +1,1 @@
+import{n as e,t}from"./jsx-runtime-BtV7ocwp.js";import{t as n}from"./event-form-page-D8ZUG0v1.js";var r=e(),i=t();function a(e){let t=(0,r.c)(2),{mentors:a}=e,o;return t[0]===a?o=t[1]:(o=(0,i.jsx)(n,{mode:`create`,title:`Create Event`,submitUrl:`/admin/events`,method:`post`,backHref:`/admin/events`,mentors:a,canAssignMentor:!0}),t[0]=a,t[1]=o),o}export{a as default};

@@ -1,0 +1,1 @@
+import{n as e,t}from"./jsx-runtime-BtV7ocwp.js";import{t as n}from"./event-form-page-D8ZUG0v1.js";var r=e(),i=t();function a(){let e=(0,r.c)(1),t;return e[0]===Symbol.for(`react.memo_cache_sentinel`)?(t=(0,i.jsx)(n,{mode:`create`,title:`Create Event`,submitUrl:`/mentor/events`,method:`post`,backHref:`/mentor/events`}),e[0]=t):t=e[0],t}export{a as default};
