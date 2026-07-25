@@ -1,5 +1,5 @@
+import { Link, usePage } from '@inertiajs/react';
 import { MoreHorizontal, Eye, ClipboardList, Users, Edit, Trash2 } from 'lucide-react';
-import { router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -8,6 +8,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import EventQuizShortcuts from '@/features/events/components/event-quiz-shortcuts';
+import { appendFrom } from '@/lib/navigation';
 import type { EventItem } from '@/features/events/types';
 
 interface EventRowActionsMenuProps {
@@ -27,64 +29,60 @@ export default function EventRowActionsMenu({
     questionsBaseUrl,
     onDelete,
 }: EventRowActionsMenuProps) {
-    return (
-        <div onClick={(e) => e.stopPropagation()}>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button type="button" variant="ghost" size="icon" aria-label={`Actions for ${event.title}`}>
-                        <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                </DropdownMenuTrigger>
+    const page = usePage();
+    const rolePrefix: '/admin' | '/mentor' = showBaseUrl.startsWith('/mentor') ? '/mentor' : '/admin';
 
-                <DropdownMenuContent align="end" className="w-52">
-                    <DropdownMenuItem onSelect={() => router.visit(`${showBaseUrl}/${event.id}`)}>
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                <Button type="button" variant="ghost" size="icon">
+                    <MoreHorizontal className="h-4 w-4" />
+                </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem asChild>
+                    <Link href={appendFrom(`${showBaseUrl}/${event.id}`, page.url)}>
                         <Eye className="mr-2 h-4 w-4" />
                         View details
-                    </DropdownMenuItem>
+                    </Link>
+                </DropdownMenuItem>
 
-                    <DropdownMenuItem
-                        onSelect={() =>
-                            router.visit(`${questionsBaseUrl}/${event.id}/registration-questions`)
-                        }
-                        className="flex items-center justify-between group"
-                    >
-                        <div className="flex items-center">
-                            <ClipboardList className="mr-4 h-4 w-4" />
-                            <span>Questions</span>
-                        </div>
+                <DropdownMenuItem asChild>
+                    <Link href={appendFrom(`${questionsBaseUrl}/${event.id}/registration-questions`, page.url)}>
+                        <ClipboardList className="mr-2 h-4 w-4" />
+                        Registration Form
+                    </Link>
+                </DropdownMenuItem>
 
-                        {event.registration_questions_count !== undefined && (
-                            <span className="ml-2 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary/10 px-1.5 text-[10px] font-medium text-primary dark:bg-primary/20 dark:text-primary-foreground">
-                                {event.registration_questions_count}
-                            </span>
-                        )}
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem
-                        onSelect={() =>
-                            router.visit(`${registrationsBaseUrl}/${event.id}/registrations`)
-                        }
-                    >
+                <DropdownMenuItem asChild>
+                    <Link href={appendFrom(`${registrationsBaseUrl}/${event.id}/registrations`, page.url)}>
                         <Users className="mr-2 h-4 w-4" />
                         Registrants
-                    </DropdownMenuItem>
+                    </Link>
+                </DropdownMenuItem>
 
-                    <DropdownMenuItem onSelect={() => router.visit(`${editBaseUrl}/${event.id}/edit`)}>
+                <DropdownMenuSeparator />
+
+                <EventQuizShortcuts eventId={event.id} rolePrefix={rolePrefix} />
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem asChild>
+                    <Link href={appendFrom(`${editBaseUrl}/${event.id}/edit`, page.url)}>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
-                    </DropdownMenuItem>
+                    </Link>
+                </DropdownMenuItem>
 
-                    <DropdownMenuSeparator />
-
-                    <DropdownMenuItem
-                        variant="destructive"
-                        onSelect={() => onDelete(event)}
-                    >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Delete
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </div>
+                <DropdownMenuItem
+                    onClick={() => onDelete(event)}
+                    className="text-destructive focus:text-destructive"
+                >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
 }

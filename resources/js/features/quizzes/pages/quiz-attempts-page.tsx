@@ -1,6 +1,6 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import { ArrowLeft, Eye } from 'lucide-react';
+import { Eye, FileCheck2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -10,6 +10,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import ContextBackButton from '@/components/navigation/context-back-button';
+import { appendFrom } from '@/lib/navigation';
 import type { EventQuizAttemptItem, QuizEventSummary } from '@/features/quizzes/types';
 
 export default function QuizAttemptsPage({
@@ -33,6 +36,7 @@ export default function QuizAttemptsPage({
     detailBaseHref: string;
     headTitle: string;
 }) {
+    const page = usePage();
     const [search, setSearch] = useState(filters.search ?? '');
     const [status, setStatus] = useState(filters.status || 'all');
 
@@ -56,20 +60,16 @@ export default function QuizAttemptsPage({
             <Head title={headTitle} />
 
             <div className="flex h-full w-full flex-col space-y-6 p-6">
-                <div className="flex flex-col gap-3">
-                    <div>
-                        <Button type="button" variant="ghost" asChild className="px-0">
-                            <Link href={backHref}>
-                                <ArrowLeft className="mr-2 h-4 w-4" />
-                                Back to events
-                            </Link>
-                        </Button>
-                    </div>
+                <div className="space-y-3">
+                    <ContextBackButton fallbackHref={backHref} label="Back" />
 
                     <div className="space-y-1">
-                        <h1 className="text-2xl font-semibold tracking-tight">
-                            Quiz Attempts · {event.title}
-                        </h1>
+                        <div className="flex items-center gap-2">
+                            <FileCheck2 className="h-5 w-5 text-primary" />
+                            <h1 className="text-2xl font-semibold tracking-tight">
+                                Quiz Attempts · {event.title}
+                            </h1>
+                        </div>
                         <p className="text-sm text-muted-foreground">
                             View submitted quiz attempts and grading status.
                         </p>
@@ -127,18 +127,28 @@ export default function QuizAttemptsPage({
                                                     {attempt.user?.email ?? '-'}
                                                 </div>
                                             </td>
-                                            <td className="px-4 py-3 capitalize">{attempt.status}</td>
+
                                             <td className="px-4 py-3">
-                                                {attempt.total_score} / {attempt.max_score}
+                                                <Badge variant={attempt.status === 'graded' ? 'default' : 'secondary'}>
+                                                    {attempt.status}
+                                                </Badge>
                                             </td>
+
+                                            <td className="px-4 py-3">
+                                                <div className="font-medium">
+                                                    {attempt.total_score} / {attempt.max_score}
+                                                </div>
+                                            </td>
+
                                             <td className="px-4 py-3 text-muted-foreground">
                                                 {attempt.submitted_at
                                                     ? new Date(attempt.submitted_at).toLocaleString('id-ID')
                                                     : '-'}
                                             </td>
+
                                             <td className="px-4 py-3 text-right">
                                                 <Button type="button" variant="outline" size="sm" asChild>
-                                                    <Link href={`${detailBaseHref}/${attempt.id}`}>
+                                                    <Link href={appendFrom(`${detailBaseHref}/${attempt.id}`, page.url)}>
                                                         <Eye className="mr-2 h-4 w-4" />
                                                         View
                                                     </Link>

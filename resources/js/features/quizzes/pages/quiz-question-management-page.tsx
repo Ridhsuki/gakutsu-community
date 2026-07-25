@@ -1,6 +1,6 @@
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import { useMemo, useState } from 'react';
-import { ArrowLeft, Plus, Save, Trash2, Pencil } from 'lucide-react';
+import { Plus, Save, Trash2, Pencil, ListChecks } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -13,6 +13,8 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import ContextBackButton from '@/components/navigation/context-back-button';
+import EventQuizQuestionDeleteDialog from '@/features/quizzes/components/event-quiz-question-delete-dialog';
 import type {
     EventQuizQuestionItem,
     EventQuizQuestionType,
@@ -58,9 +60,8 @@ export default function QuizQuestionManagementPage({
     headTitle: string;
 }) {
     const [editingQuestion, setEditingQuestion] = useState<EventQuizQuestionItem | null>(null);
-
+    const [deletingQuestion, setDeletingQuestion] = useState<EventQuizQuestionItem | null>(null);
     const form = useForm(makeDefaultForm());
-
     const questionCount = questions.length;
 
     const resetForm = () => {
@@ -95,7 +96,6 @@ export default function QuizQuestionManagementPage({
                 preserveScroll: true,
                 onSuccess: resetForm,
             });
-
             return;
         }
 
@@ -105,13 +105,14 @@ export default function QuizQuestionManagementPage({
         });
     };
 
-    const deleteQuestion = (question: EventQuizQuestionItem) => {
-        if (!window.confirm('Delete this quiz question?')) {
+    const handleDeleteConfirm = () => {
+        if (!deletingQuestion) {
             return;
         }
 
-        router.delete(`${routePrefix}/${question.id}`, {
+        router.delete(`${routePrefix}/${deletingQuestion.id}`, {
             preserveScroll: true,
+            onFinish: () => setDeletingQuestion(null),
         });
     };
 
@@ -156,27 +157,23 @@ export default function QuizQuestionManagementPage({
             <Head title={headTitle} />
 
             <div className="flex h-full w-full flex-col space-y-6 p-6">
-                <div className="flex flex-col gap-3">
-                    <div>
-                        <Button type="button" variant="ghost" asChild className="px-0">
-                            <Link href={backHref}>
-                                <ArrowLeft className="mr-2 h-4 w-4" />
-                                Back to events
-                            </Link>
-                        </Button>
-                    </div>
+                <div className="space-y-3">
+                    <ContextBackButton fallbackHref={backHref} label="Back" />
 
                     <div className="space-y-1">
-                        <h1 className="text-2xl font-semibold tracking-tight">
-                            Quiz Questions · {event.title}
-                        </h1>
+                        <div className="flex items-center gap-2">
+                            <ListChecks className="h-5 w-5 text-primary" />
+                            <h1 className="text-2xl font-semibold tracking-tight">
+                                Quiz Questions · {event.title}
+                            </h1>
+                        </div>
                         <p className="text-sm text-muted-foreground">
-                            Create optional post-event quiz questions for this event.
+                            Manage optional post-event quiz questions for this event.
                         </p>
                     </div>
                 </div>
 
-                <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
+                <div className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_420px]">
                     <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
                         <div className="mb-4 flex items-center justify-between">
                             <div>
@@ -196,19 +193,21 @@ export default function QuizQuestionManagementPage({
                                 orderedQuestions.map((question) => (
                                     <div
                                         key={question.id}
-                                        className="rounded-lg border border-border p-4"
+                                        className="rounded-lg border border-border p-4 transition-colors hover:bg-muted/20"
                                     >
                                         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                                            <div className="space-y-2">
+                                            <div className="min-w-0 space-y-2">
                                                 <div className="flex flex-wrap items-center gap-2">
                                                     <Badge variant="secondary">
                                                         {question.type === 'multiple_choice'
                                                             ? 'Multiple Choice'
                                                             : 'Short Text'}
                                                     </Badge>
+
                                                     <Badge variant="outline">
                                                         {question.points} pts
                                                     </Badge>
+
                                                     <Badge
                                                         variant={question.is_active ? 'default' : 'outline'}
                                                     >
@@ -216,7 +215,7 @@ export default function QuizQuestionManagementPage({
                                                     </Badge>
                                                 </div>
 
-                                                <p className="font-medium">{question.prompt}</p>
+                                                <p className="font-medium leading-6">{question.prompt}</p>
 
                                                 {question.type === 'multiple_choice' ? (
                                                     <ul className="space-y-1 text-sm text-muted-foreground">
@@ -233,7 +232,7 @@ export default function QuizQuestionManagementPage({
                                                 )}
                                             </div>
 
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex shrink-0 items-center gap-2">
                                                 <Button
                                                     type="button"
                                                     variant="outline"
@@ -248,7 +247,7 @@ export default function QuizQuestionManagementPage({
                                                     type="button"
                                                     variant="outline"
                                                     size="sm"
-                                                    onClick={() => deleteQuestion(question)}
+                                                    onClick={() => setDeletingQuestion(question)}
                                                 >
                                                     <Trash2 className="mr-2 h-4 w-4" />
                                                     Delete
@@ -408,6 +407,17 @@ export default function QuizQuestionManagementPage({
                     </div>
                 </div>
             </div>
+
+            <EventQuizQuestionDeleteDialog
+                open={deletingQuestion !== null}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        setDeletingQuestion(null);
+                    }
+                }}
+                question={deletingQuestion}
+                onConfirm={handleDeleteConfirm}
+            />
         </>
     );
 }
