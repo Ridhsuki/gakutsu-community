@@ -4,12 +4,12 @@ import PaginationBar from '@/components/data-table/pagination-bar';
 import ContextBackButton from '@/components/navigation/context-back-button';
 import EventRegistrationTable from '@/features/events/components/event-registration-table';
 import useIndexFilters from '@/hooks/use-index-filters';
-import type { EventItem } from '@/features/events/types';
+import type { EventItem, EventRegistrationItem } from '@/features/events/types';
 import type { PaginatedResponse } from '@/types/pagination';
 
 interface EventRegistrationsPageProps {
     event: EventItem;
-    registrations: PaginatedResponse;
+    registrations: PaginatedResponse<EventRegistrationItem>;
     filters: { search?: string | null };
     endpoint: string;
     detailBaseUrl: string;

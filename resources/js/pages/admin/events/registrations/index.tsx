@@ -1,10 +1,10 @@
 import EventRegistrationsPage from '@/features/events/pages/event-registrations-page';
-import type { EventItem } from '@/features/events/types';
+import type { EventItem, EventRegistrationItem } from '@/features/events/types';
 import type { PaginatedResponse } from '@/types/pagination';
 
 interface Props {
     event: EventItem;
-    registrations: PaginatedResponse;
+    registrations: PaginatedResponse<EventRegistrationItem>;
     filters: {
         search?: string | null;
     };
