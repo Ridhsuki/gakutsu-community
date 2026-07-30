@@ -1,10 +1,10 @@
 import EventRegistrationQuestionManagementPage from '@/features/events/pages/event-registration-question-management-page';
-import type { EventItem } from '@/features/events/types';
+import type { EventItem, EventRegistrationQuestionItem } from '@/features/events/types';
 import type { PaginatedResponse } from '@/types/pagination';
 
 interface Props {
     event: EventItem;
-    questions: PaginatedResponse;
+    questions: PaginatedResponse<EventRegistrationQuestionItem>;
     filters: {
         search?: string | null;
     };

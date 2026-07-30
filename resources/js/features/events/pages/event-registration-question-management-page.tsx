@@ -9,12 +9,12 @@ import EventRegistrationQuestionDeleteDialog from '@/features/events/components/
 import EventRegistrationQuestionEditDialog from '@/features/events/components/event-registration-question-edit-dialog';
 import EventRegistrationQuestionTable from '@/features/events/components/event-registration-question-table';
 import useEventRegistrationQuestionManagement from '@/features/events/hooks/use-event-registration-question-management';
-import type { EventItem } from '@/features/events/types';
+import type { EventItem, EventRegistrationQuestionItem } from '@/features/events/types';
 import type { PaginatedResponse } from '@/types/pagination';
 
 interface PageProps {
     event: EventItem;
-    questions: PaginatedResponse;
+    questions: PaginatedResponse<EventRegistrationQuestionItem>;
     filters: {
         search?: string | null;
     };

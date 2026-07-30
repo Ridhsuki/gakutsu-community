@@ -98,7 +98,7 @@ Source: `storage/logs/recovery/SUMMARY.md` and individual log files. These files
 | -------------- | ---------------------- | -------- | -------------------------------------------- |
 | ESLint         | `npm run lint:check`   | **Failed** | 179 errors, 2 warnings across ~45 files    |
 | Prettier       | `npm run format:check` | **Failed** | 92 files with formatting issues             |
-| TypeScript     | `npm run types:check`  | **Failed** | 7 errors                                    |
+| TypeScript     | `npm run types:check`  | **Passed** | 0 errors. Baseline TypeScript errors resolved in P0-2. |
 | PHP Pint       | `composer lint:check`  | **Failed** | 67 style issues across 152 checked files    |
 | Backend tests  | `php artisan test`     | **Passed** | 40 passed. Test infrastructure restored (RefreshDatabase and MySQL test DB configured). |
 | Frontend build | `npm run build`        | **Passed** | Production client build successful          |
@@ -130,19 +130,17 @@ Source: `storage/logs/recovery/01-eslint.log` (local, not tracked by Git)
 
 ### 2.2 TypeScript Errors
 
-Source: `storage/logs/recovery/03-typescript.log` (local, not tracked by Git)
+**Status:** Resolved. `npm run types:check` reports 0 errors.
 
-| File | Error | Description |
+| File | Error | Resolution |
 | ---- | ----- | ----------- |
-| `features/events/pages/event-detail-page.tsx:177` | TS2322 | `EventPosterThumbnailProps` does not accept `event` prop (expects different shape) |
-| `features/events/pages/event-registration-question-management-page.tsx:17` | TS2314 | `PaginatedResponse<T>` requires 1 type argument |
-| `features/events/pages/event-registrations-page.tsx:12` | TS2314 | `PaginatedResponse<T>` requires 1 type argument |
-| `pages/admin/events/questions/index.tsx:7` | TS2314 | `PaginatedResponse<T>` requires 1 type argument |
-| `pages/admin/events/registrations/index.tsx:7` | TS2314 | `PaginatedResponse<T>` requires 1 type argument |
-| `pages/mentor/events/questions/index.tsx:7` | TS2314 | `PaginatedResponse<T>` requires 1 type argument |
-| `pages/mentor/events/registrations/index.tsx:7` | TS2314 | `PaginatedResponse<T>` requires 1 type argument |
-
-**Classification:** 6 of 7 errors are missing generic type arguments on `PaginatedResponse` — a straightforward fix. 1 error is a prop type mismatch on `EventPosterThumbnail`.
+| `features/events/pages/event-detail-page.tsx:177` | TS2322 | Fixed prop usage to pass `src`, `alt`, and `className` to `EventPosterThumbnail` |
+| `features/events/pages/event-registration-question-management-page.tsx:17` | TS2314 | Provided `EventRegistrationQuestionItem` generic parameter to `PaginatedResponse` |
+| `features/events/pages/event-registrations-page.tsx:12` | TS2314 | Provided `EventRegistrationItem` generic parameter to `PaginatedResponse` |
+| `pages/admin/events/questions/index.tsx:7` | TS2314 | Provided `EventRegistrationQuestionItem` generic parameter to `PaginatedResponse` |
+| `pages/admin/events/registrations/index.tsx:7` | TS2314 | Provided `EventRegistrationItem` generic parameter to `PaginatedResponse` |
+| `pages/mentor/events/questions/index.tsx:7` | TS2314 | Provided `EventRegistrationQuestionItem` generic parameter to `PaginatedResponse` |
+| `pages/mentor/events/registrations/index.tsx:7` | TS2314 | Provided `EventRegistrationItem` generic parameter to `PaginatedResponse` |
 
 ### 2.3 PHP Pint Summary
 
@@ -258,7 +256,7 @@ No remaining code references to "YokPelajarin" were found in application source 
 | No business-feature tests | High | Zero tests for events, registration, quizzes, blogs, authorization |
 | Member quiz flow not wired | Medium | Backend logic exists but routes are commented out |
 | 179 ESLint errors | Medium | Mostly auto-fixable but 6 behavioral issues need manual review |
-| 7 TypeScript errors | Low | Straightforward fixes (missing generics, prop mismatch) |
+| 7 TypeScript errors | Resolved | `npm run types:check` passes with 0 errors |
 | 67 Pint style issues | Low | All mechanical, auto-fixable |
 | SSR hydration risk | Medium | `set-state-in-effect` patterns with browser-only APIs could cause hydration mismatches |
 | No production database yet | Info | Development migration policy applies; migrations mutable |

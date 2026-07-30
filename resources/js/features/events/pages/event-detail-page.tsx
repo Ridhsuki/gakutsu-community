@@ -174,7 +174,11 @@ export default function EventDetailPage({
                     <div className="space-y-6">
                         <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
                             <h2 className="mb-4 text-base font-semibold">Poster</h2>
-                            <EventPosterThumbnail event={event} className="w-full" />
+                            <EventPosterThumbnail
+                                src={event.poster_image_url}
+                                alt={`Poster for ${event.title}`}
+                                className="w-full"
+                            />
                         </div>
 
                         <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
