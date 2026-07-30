@@ -100,7 +100,7 @@ Source: `storage/logs/recovery/SUMMARY.md` and individual log files. These files
 | Prettier       | `npm run format:check` | **Failed** | 92 files with formatting issues             |
 | TypeScript     | `npm run types:check`  | **Failed** | 7 errors                                    |
 | PHP Pint       | `composer lint:check`  | **Failed** | 67 style issues across 152 checked files    |
-| Backend tests  | `php artisan test`     | **Failed** | 33 failed, 7 passed                        |
+| Backend tests  | `php artisan test`     | **Passed** | 40 passed. Test infrastructure restored (RefreshDatabase and MySQL test DB configured). |
 | Frontend build | `npm run build`        | **Passed** | Production client build successful          |
 | SSR build      | `npm run build:ssr`    | **Passed** | Client + SSR build successful               |
 
@@ -161,24 +161,7 @@ Source: `storage/logs/recovery/04-pint.log` (local, not tracked by Git)
 
 ### 2.4 Test Infrastructure Finding
 
-**Suspected primary cause:** `RefreshDatabase` trait is **commented out** in [../tests/Pest.php:18](../tests/Pest.php):
-
-```php
-pest()->extend(TestCase::class)
- // ->use(RefreshDatabase::class)
-    ->in('Feature');
-```
-
-Most of the 33 failing tests show the error:
-```
-SQLSTATE[HY000]: General error: 1 no such table: users
-```
-
-This is consistent with the SQLite in-memory schema never being created. The missing `RefreshDatabase` trait is the **suspected primary cause** of these database-related failures, but this is a hypothesis. The full test suite must be re-run after restoring the trait and each remaining failure must be evaluated individually.
-
-**Separate failure (not a database-table error):** `RegistrationTest > new users can register` fails with `assertAuthenticated()` returning false. This is an authentication assertion failure, unrelated to missing tables. Its root cause is unknown and must be investigated independently after the database infrastructure is restored.
-
-**7 passing tests:** Tests that do not require database operations (rendering login/register pages, unauthenticated redirects, Fortify feature checks).
+**Status:** Resolved. The `RefreshDatabase` trait was restored, and all tests were successfully run against a MySQL testing database. All 40 tests now pass.
 
 ### 2.5 Build Status
 
@@ -271,7 +254,7 @@ No remaining code references to "YokPelajarin" were found in application source 
 
 | Risk | Severity | Notes |
 | ---- | -------- | ----- |
-| Test infrastructure broken | High | `RefreshDatabase` commented out; no tests can validate database operations |
+| Test infrastructure broken | Resolved | `RefreshDatabase` restored; tests run on MySQL testing DB |
 | No business-feature tests | High | Zero tests for events, registration, quizzes, blogs, authorization |
 | Member quiz flow not wired | Medium | Backend logic exists but routes are commented out |
 | 179 ESLint errors | Medium | Mostly auto-fixable but 6 behavioral issues need manual review |
@@ -284,7 +267,6 @@ No remaining code references to "YokPelajarin" were found in application source 
 
 ## 8. Unknowns Requiring Runtime Verification
 
-- Whether the Fortify registration flow correctly logs in the user after registration (test failure at `assertAuthenticated`)
 - Whether poster image upload and processing works end-to-end (Intervention Image integration)
 - Whether the rich text editor image upload pipeline functions correctly
 - SSR rendering of public pages (build passes, but runtime behavior unverified)
