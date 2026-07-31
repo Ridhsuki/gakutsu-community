@@ -6,14 +6,14 @@ import type {
 
 function toDatetimeLocalValue(value: string | null): string {
     if (!value) {
-return '';
-}
+        return '';
+    }
 
     const date = new Date(value);
 
     if (Number.isNaN(date.getTime())) {
-return '';
-}
+        return '';
+    }
 
     const year = date.getFullYear();
     const month = `${date.getMonth() + 1}`.padStart(2, '0');
@@ -54,7 +54,9 @@ export function mapEventToEditEventForm(event: EventItem): EditEventForm {
         description: event.description ?? '',
         starts_at: toDatetimeLocalValue(event.starts_at),
         ends_at: toDatetimeLocalValue(event.ends_at),
-        registration_closes_at: toDatetimeLocalValue(event.registration_closes_at),
+        registration_closes_at: toDatetimeLocalValue(
+            event.registration_closes_at,
+        ),
         meeting_provider: event.meeting_provider ?? '',
         meeting_url: event.meeting_url ?? '',
         status: event.status,

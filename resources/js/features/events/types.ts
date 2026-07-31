@@ -125,4 +125,5 @@ export interface CreateEventRegistrationQuestionForm {
     sort_order: string;
 }
 
-export type EditEventRegistrationQuestionForm = CreateEventRegistrationQuestionForm;
+export type EditEventRegistrationQuestionForm =
+    CreateEventRegistrationQuestionForm;

@@ -27,42 +27,63 @@ export default function UserFormFields<TForm extends UserFormData>({
     return (
         <>
             <div>
-                <label htmlFor={`${mode}-name`} className="mb-1 block text-sm font-medium">
+                <label
+                    htmlFor={`${mode}-name`}
+                    className="mb-1 block text-sm font-medium"
+                >
                     Name
                 </label>
                 <input
                     id={`${mode}-name`}
                     type="text"
                     value={form.data.name}
-                    onChange={(e) => form.setData('name', e.currentTarget.value as TForm['name'])}
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:border-[#106b42]"
+                    onChange={(e) =>
+                        form.setData(
+                            'name',
+                            e.currentTarget.value as TForm['name'],
+                        )
+                    }
+                    className="w-full rounded-md border px-3 py-2 text-sm transition outline-none focus:border-[#106b42]"
                     autoComplete="name"
                 />
                 <InputError message={form.errors.name} />
             </div>
 
             <div>
-                <label htmlFor={`${mode}-email`} className="mb-1 block text-sm font-medium">
+                <label
+                    htmlFor={`${mode}-email`}
+                    className="mb-1 block text-sm font-medium"
+                >
                     Email
                 </label>
                 <input
                     id={`${mode}-email`}
                     type="email"
                     value={form.data.email}
-                    onChange={(e) => form.setData('email', e.currentTarget.value as TForm['email'])}
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:border-[#106b42]"
+                    onChange={(e) =>
+                        form.setData(
+                            'email',
+                            e.currentTarget.value as TForm['email'],
+                        )
+                    }
+                    className="w-full rounded-md border px-3 py-2 text-sm transition outline-none focus:border-[#106b42]"
                     autoComplete="email"
                 />
                 <InputError message={form.errors.email} />
             </div>
 
             <div>
-                <label htmlFor={`${mode}-role`} className="mb-1 block text-sm font-medium">
+                <label
+                    htmlFor={`${mode}-role`}
+                    className="mb-1 block text-sm font-medium"
+                >
                     Role
                 </label>
                 <Select
                     value={form.data.role}
-                    onValueChange={(value) => form.setData('role', value as UserRole as TForm['role'])}
+                    onValueChange={(value) =>
+                        form.setData('role', value as UserRole as TForm['role'])
+                    }
                 >
                     <SelectTrigger id={`${mode}-role`} className="w-full">
                         <SelectValue placeholder="Select role" />
@@ -82,7 +103,10 @@ export default function UserFormFields<TForm extends UserFormData>({
                         Leave password blank if you do not want to change it.
                     </p>
 
-                    <label htmlFor={`${mode}-password`} className="mb-1 block text-sm font-medium">
+                    <label
+                        htmlFor={`${mode}-password`}
+                        className="mb-1 block text-sm font-medium"
+                    >
                         New Password
                     </label>
                     <input
@@ -90,16 +114,22 @@ export default function UserFormFields<TForm extends UserFormData>({
                         type="password"
                         value={form.data.password}
                         onChange={(e) =>
-                            form.setData('password', e.currentTarget.value as TForm['password'])
+                            form.setData(
+                                'password',
+                                e.currentTarget.value as TForm['password'],
+                            )
                         }
-                        className="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:border-[#106b42]"
+                        className="w-full rounded-md border px-3 py-2 text-sm transition outline-none focus:border-[#106b42]"
                         autoComplete="new-password"
                     />
                     <InputError message={form.errors.password} />
                 </div>
             ) : (
                 <div>
-                    <label htmlFor={`${mode}-password`} className="mb-1 block text-sm font-medium">
+                    <label
+                        htmlFor={`${mode}-password`}
+                        className="mb-1 block text-sm font-medium"
+                    >
                         Password
                     </label>
                     <input
@@ -107,9 +137,12 @@ export default function UserFormFields<TForm extends UserFormData>({
                         type="password"
                         value={form.data.password}
                         onChange={(e) =>
-                            form.setData('password', e.currentTarget.value as TForm['password'])
+                            form.setData(
+                                'password',
+                                e.currentTarget.value as TForm['password'],
+                            )
                         }
-                        className="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:border-[#106b42]"
+                        className="w-full rounded-md border px-3 py-2 text-sm transition outline-none focus:border-[#106b42]"
                         autoComplete="new-password"
                     />
                     <InputError message={form.errors.password} />
@@ -117,8 +150,13 @@ export default function UserFormFields<TForm extends UserFormData>({
             )}
 
             <div>
-                <label htmlFor={`${mode}-password-confirmation`} className="mb-1 block text-sm font-medium">
-                    {mode === 'edit' ? 'Confirm New Password' : 'Confirm Password'}
+                <label
+                    htmlFor={`${mode}-password-confirmation`}
+                    className="mb-1 block text-sm font-medium"
+                >
+                    {mode === 'edit'
+                        ? 'Confirm New Password'
+                        : 'Confirm Password'}
                 </label>
                 <input
                     id={`${mode}-password-confirmation`}
@@ -127,10 +165,11 @@ export default function UserFormFields<TForm extends UserFormData>({
                     onChange={(e) =>
                         form.setData(
                             'password_confirmation',
-                            e.currentTarget.value as TForm['password_confirmation'],
+                            e.currentTarget
+                                .value as TForm['password_confirmation'],
                         )
                     }
-                    className="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus:border-[#106b42]"
+                    className="w-full rounded-md border px-3 py-2 text-sm transition outline-none focus:border-[#106b42]"
                     autoComplete="new-password"
                 />
                 <InputError message={form.errors.password_confirmation} />

@@ -34,10 +34,17 @@ export default function EventRegistrationQuestionEditDialog({
                     <EventRegistrationQuestionFormFields form={form} />
 
                     <DialogFooter>
-                        <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => onOpenChange(false)}
+                        >
                             Cancel
                         </Button>
-                        <Button type="submit" disabled={form.processing || !currentQuestion}>
+                        <Button
+                            type="submit"
+                            disabled={form.processing || !currentQuestion}
+                        >
                             {form.processing ? 'Saving...' : 'Save Changes'}
                         </Button>
                     </DialogFooter>

@@ -32,7 +32,8 @@ export default function EventQuizQuestionDeleteDialog({
                         This action cannot be undone.
                         {question ? (
                             <>
-                                {' '}The question{' '}
+                                {' '}
+                                The question{' '}
                                 <span className="font-medium text-foreground">
                                     "{question.prompt}"
                                 </span>{' '}

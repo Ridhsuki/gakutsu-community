@@ -52,7 +52,9 @@ export default function useBlogManagement({
     const [isDeleting, setIsDeleting] = useState(false);
     const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
 
-    const createForm = useForm<CreateBlogPostForm>(getDefaultCreateBlogPostForm());
+    const createForm = useForm<CreateBlogPostForm>(
+        getDefaultCreateBlogPostForm(),
+    );
     const editForm = useForm<EditBlogPostForm>(getDefaultEditBlogPostForm());
 
     const closeCreateModal = () => {
@@ -107,8 +109,8 @@ export default function useBlogManagement({
         event.preventDefault();
 
         if (!selectedPost) {
-return;
-}
+            return;
+        }
 
         editForm.put(`${endpoint}/${selectedPost.id}`, {
             preserveScroll: true,
@@ -121,8 +123,8 @@ return;
 
     const handleDelete = () => {
         if (!selectedPost) {
-return;
-}
+            return;
+        }
 
         setIsDeleting(true);
 

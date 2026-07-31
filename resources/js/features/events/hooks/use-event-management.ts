@@ -101,8 +101,8 @@ export default function useEventManagement({
         event.preventDefault();
 
         if (!selectedEvent) {
-return;
-}
+            return;
+        }
 
         editForm.put(`${endpoint}/${selectedEvent.id}`, {
             preserveScroll: true,
@@ -113,8 +113,8 @@ return;
 
     const handleDelete = () => {
         if (!selectedEvent) {
-return;
-}
+            return;
+        }
 
         setIsDeleting(true);
 
@@ -150,8 +150,11 @@ return;
         handleEditSubmit,
         handleDelete,
 
-        handleCreateOpenChange: (open: boolean) => (open ? setIsCreateOpen(true) : closeCreateModal()),
-        handleEditOpenChange: (open: boolean) => (open ? setIsEditOpen(true) : closeEditModal()),
-        handleDeleteOpenChange: (open: boolean) => (open ? setIsDeleteOpen(true) : closeDeleteModal()),
+        handleCreateOpenChange: (open: boolean) =>
+            open ? setIsCreateOpen(true) : closeCreateModal(),
+        handleEditOpenChange: (open: boolean) =>
+            open ? setIsEditOpen(true) : closeEditModal(),
+        handleDeleteOpenChange: (open: boolean) =>
+            open ? setIsDeleteOpen(true) : closeDeleteModal(),
     };
 }

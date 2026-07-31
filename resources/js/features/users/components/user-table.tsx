@@ -52,7 +52,9 @@ export default function UserTable({
                             onSort={onSort}
                         />
 
-                        <th className="px-4 py-3 text-right font-medium">Actions</th>
+                        <th className="px-4 py-3 text-right font-medium">
+                            Actions
+                        </th>
                     </tr>
                 </thead>
 
@@ -63,8 +65,12 @@ export default function UserTable({
                                 key={user.id}
                                 className="border-b border-border transition hover:bg-accent/50"
                             >
-                                <td className="px-4 py-3 font-medium">{user.name}</td>
-                                <td className="px-4 py-3 text-muted-foreground">{user.email}</td>
+                                <td className="px-4 py-3 font-medium">
+                                    {user.name}
+                                </td>
+                                <td className="px-4 py-3 text-muted-foreground">
+                                    {user.email}
+                                </td>
                                 <td className="px-4 py-3">
                                     <UserRoleBadge role={user.role} />
                                 </td>

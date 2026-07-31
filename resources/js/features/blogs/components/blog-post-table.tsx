@@ -70,7 +70,9 @@ export default function BlogPostTable({
                             onSort={onSort}
                         />
 
-                        <th className="px-4 py-3 text-right font-medium">Actions</th>
+                        <th className="px-4 py-3 text-right font-medium">
+                            Actions
+                        </th>
                     </tr>
                 </thead>
 
@@ -89,8 +91,10 @@ export default function BlogPostTable({
                                             className="h-14 w-24 shrink-0"
                                         />
 
-                                        <div className="min-w-0 max-w-[320px]">
-                                            <div className="truncate font-medium">{post.title}</div>
+                                        <div className="max-w-[320px] min-w-0">
+                                            <div className="truncate font-medium">
+                                                {post.title}
+                                            </div>
                                             <div className="truncate text-xs text-muted-foreground">
                                                 /{post.slug}
                                             </div>

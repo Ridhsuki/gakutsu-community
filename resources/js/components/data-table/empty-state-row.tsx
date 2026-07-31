@@ -24,10 +24,7 @@ export default function EmptyStateRow({
     className,
 }: EmptyStateRowProps) {
     const resolvedTitle = title ?? message ?? 'No data found';
-    const resolvedDescription =
-        title || description
-            ? description
-            : undefined;
+    const resolvedDescription = title || description ? description : undefined;
 
     return (
         <tr>

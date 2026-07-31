@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type {CSSProperties, HTMLAttributes, PropsWithChildren} from 'react';
+import type { CSSProperties, HTMLAttributes, PropsWithChildren } from 'react';
 import { cn } from '@/lib/utils';
 
 type RevealProps = PropsWithChildren<
@@ -33,8 +33,8 @@ export default function Reveal({
 
     useEffect(() => {
         if (typeof window === 'undefined') {
-return;
-}
+            return;
+        }
 
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             setIsVisible(true);
@@ -45,8 +45,8 @@ return;
         const element = ref.current;
 
         if (!element) {
-return;
-}
+            return;
+        }
 
         const observer = new IntersectionObserver(
             ([entry]) => {

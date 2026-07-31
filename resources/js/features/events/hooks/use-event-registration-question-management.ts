@@ -84,8 +84,8 @@ export default function useEventRegistrationQuestionManagement({
         event.preventDefault();
 
         if (!selectedQuestion) {
-return;
-}
+            return;
+        }
 
         editForm.put(`${endpoint}/${selectedQuestion.id}`, {
             preserveScroll: true,
@@ -98,8 +98,8 @@ return;
 
     const handleDelete = () => {
         if (!selectedQuestion) {
-return;
-}
+            return;
+        }
 
         router.delete(`${endpoint}/${selectedQuestion.id}`, {
             preserveScroll: true,
@@ -136,15 +136,15 @@ return;
             setIsEditOpen(open);
 
             if (!open) {
-setSelectedQuestion(null);
-}
+                setSelectedQuestion(null);
+            }
         },
         handleDeleteOpenChange: (open: boolean) => {
             setIsDeleteOpen(open);
 
             if (!open) {
-setSelectedQuestion(null);
-}
+                setSelectedQuestion(null);
+            }
         },
     };
 }

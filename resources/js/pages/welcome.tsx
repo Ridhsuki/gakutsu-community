@@ -1,5 +1,11 @@
 import { Link } from '@inertiajs/react';
-import { ArrowRight, CalendarDays, GraduationCap, ShieldCheck, Users } from 'lucide-react';
+import {
+    ArrowRight,
+    CalendarDays,
+    GraduationCap,
+    ShieldCheck,
+    Users,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import BlogPublicCard from '@/components/public/blog-public-card';
 import EventPublicCard from '@/components/public/event-public-card';
@@ -59,10 +65,11 @@ export default function Welcome(props: PageProps) {
 
     useEffect(() => {
         if (typeof window === 'undefined') {
-return;
-}
+            return;
+        }
 
-        const hasPlayed = window.sessionStorage.getItem(WELCOME_ANIMATION_KEY) === '1';
+        const hasPlayed =
+            window.sessionStorage.getItem(WELCOME_ANIMATION_KEY) === '1';
 
         if (!hasPlayed) {
             setPlayHeroEntry(true);
@@ -113,8 +120,9 @@ return;
                             className="mx-auto mt-5 max-w-2xl"
                         >
                             <p className="text-base leading-7 text-muted-foreground sm:text-lg">
-                                We share, discuss, and sometimes host small webinars.
-                                Yok Pelajarin is a casual community built for learning and growing together.
+                                We share, discuss, and sometimes host small
+                                webinars. Yok Pelajarin is a casual community
+                                built for learning and growing together.
                             </p>
                         </Reveal>
 
@@ -145,10 +153,22 @@ return;
 
                     <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4">
                         {[
-                            { label: 'Member', value: formatStat(props.stats.members) + '+' },
-                            { label: 'Mentor', value: formatStat(props.stats.mentors) + '+' },
-                            { label: 'Events', value: formatStat(props.stats.events) + '+' },
-                            { label: 'Artikel', value: formatStat(props.stats.articles) + '+' },
+                            {
+                                label: 'Member',
+                                value: formatStat(props.stats.members) + '+',
+                            },
+                            {
+                                label: 'Mentor',
+                                value: formatStat(props.stats.mentors) + '+',
+                            },
+                            {
+                                label: 'Events',
+                                value: formatStat(props.stats.events) + '+',
+                            },
+                            {
+                                label: 'Artikel',
+                                value: formatStat(props.stats.articles) + '+',
+                            },
                         ].map((item, index) => (
                             <Reveal
                                 key={item.label}
@@ -159,8 +179,12 @@ return;
                                 blur={10}
                             >
                                 <div className="rounded-2xl border border-border bg-card p-4 text-center shadow-sm">
-                                    <div className="text-2xl font-semibold">{item.value}</div>
-                                    <div className="text-sm text-muted-foreground">{item.label}</div>
+                                    <div className="text-2xl font-semibold">
+                                        {item.value}
+                                    </div>
+                                    <div className="text-sm text-muted-foreground">
+                                        {item.label}
+                                    </div>
                                 </div>
                             </Reveal>
                         ))}
@@ -169,11 +193,22 @@ return;
             </section>
 
             <section className="mx-auto max-w-7xl px-4 py-16">
-                <Reveal className="mb-8 space-y-2" duration={720} distance={20} blur={10}>
-                    <p className="text-sm font-medium text-primary">Kenapa Yok Pelajarin</p>
-                    <h2 className="text-3xl font-semibold tracking-tight">Platform publik yang lebih rapi dan fokus</h2>
+                <Reveal
+                    className="mb-8 space-y-2"
+                    duration={720}
+                    distance={20}
+                    blur={10}
+                >
+                    <p className="text-sm font-medium text-primary">
+                        Kenapa Yok Pelajarin
+                    </p>
+                    <h2 className="text-3xl font-semibold tracking-tight">
+                        Platform publik yang lebih rapi dan fokus
+                    </h2>
                     <p className="max-w-2xl text-muted-foreground">
-                        Surface publik dirancang terpisah dari dashboard agar pengalaman guest dan user lebih ringan, jelas, dan profesional.
+                        Surface publik dirancang terpisah dari dashboard agar
+                        pengalaman guest dan user lebih ringan, jelas, dan
+                        profesional.
                     </p>
                 </Reveal>
 
@@ -190,8 +225,12 @@ return;
                                 <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                                     <Icon className="h-5 w-5" />
                                 </div>
-                                <h3 className="mb-2 text-lg font-semibold">{title}</h3>
-                                <p className="text-sm leading-6 text-muted-foreground">{desc}</p>
+                                <h3 className="mb-2 text-lg font-semibold">
+                                    {title}
+                                </h3>
+                                <p className="text-sm leading-6 text-muted-foreground">
+                                    {desc}
+                                </p>
                             </div>
                         </Reveal>
                     ))}
@@ -199,12 +238,22 @@ return;
             </section>
 
             <section className="mx-auto max-w-7xl px-4 py-16">
-                <Reveal className="mb-8 flex items-end justify-between gap-4" duration={720}>
+                <Reveal
+                    className="mb-8 flex items-end justify-between gap-4"
+                    duration={720}
+                >
                     <div className="space-y-2">
-                        <p className="text-sm font-medium text-primary">Event & Webinar</p>
-                        <h2 className="text-3xl font-semibold tracking-tight">Event terbaru untuk komunitas</h2>
+                        <p className="text-sm font-medium text-primary">
+                            Event & Webinar
+                        </p>
+                        <h2 className="text-3xl font-semibold tracking-tight">
+                            Event terbaru untuk komunitas
+                        </h2>
                     </div>
-                    <Link href="/events" className="text-sm font-medium text-primary">
+                    <Link
+                        href="/events"
+                        className="text-sm font-medium text-primary"
+                    >
                         Lihat semua event
                     </Link>
                 </Reveal>
@@ -225,12 +274,22 @@ return;
             </section>
 
             <section className="mx-auto max-w-7xl px-4 py-16">
-                <Reveal className="mb-8 flex items-end justify-between gap-4" duration={720}>
+                <Reveal
+                    className="mb-8 flex items-end justify-between gap-4"
+                    duration={720}
+                >
                     <div className="space-y-2">
-                        <p className="text-sm font-medium text-primary">Blog Terbaru</p>
-                        <h2 className="text-3xl font-semibold tracking-tight">Artikel, insight, dan materi bacaan</h2>
+                        <p className="text-sm font-medium text-primary">
+                            Blog Terbaru
+                        </p>
+                        <h2 className="text-3xl font-semibold tracking-tight">
+                            Artikel, insight, dan materi bacaan
+                        </h2>
                     </div>
-                    <Link href="/blogs" className="text-sm font-medium text-primary">
+                    <Link
+                        href="/blogs"
+                        className="text-sm font-medium text-primary"
+                    >
                         Semua artikel
                     </Link>
                 </Reveal>
@@ -247,9 +306,10 @@ return;
                             <BlogPublicCard
                                 post={{
                                     ...post,
-                                    excerpt: String(post.content ?? '')
-                                        .replace(/<[^>]*>/g, '')
-                                        .slice(0, 140) + '...',
+                                    excerpt:
+                                        String(post.content ?? '')
+                                            .replace(/<[^>]*>/g, '')
+                                            .slice(0, 140) + '...',
                                 }}
                             />
                         </Reveal>

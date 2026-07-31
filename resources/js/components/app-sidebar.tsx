@@ -21,7 +21,7 @@ const footerNavItems: NavItem[] = [
         title: 'Halaman Utama',
         href: '/',
         icon: Home,
-    }
+    },
 ];
 
 export function AppSidebar() {
@@ -35,17 +35,25 @@ export function AppSidebar() {
         },
         ...(auth?.user?.role === 'admin'
             ? [
-                { title: 'Events', href: '/admin/events', icon: CalendarDays },
-                { title: 'Blogs', href: '/admin/blogs', icon: BookOpen },
-                { title: 'Users', href: '/admin/users', icon: Users },
-            ]
+                  {
+                      title: 'Events',
+                      href: '/admin/events',
+                      icon: CalendarDays,
+                  },
+                  { title: 'Blogs', href: '/admin/blogs', icon: BookOpen },
+                  { title: 'Users', href: '/admin/users', icon: Users },
+              ]
             : []),
 
         ...(auth?.user?.role === 'mentor'
             ? [
-                { title: 'Events', href: '/mentor/events', icon: CalendarDays },
-                { title: 'Blogs', href: '/mentor/blogs', icon: BookOpen },
-            ]
+                  {
+                      title: 'Events',
+                      href: '/mentor/events',
+                      icon: CalendarDays,
+                  },
+                  { title: 'Blogs', href: '/mentor/blogs', icon: BookOpen },
+              ]
             : []),
     ];
 

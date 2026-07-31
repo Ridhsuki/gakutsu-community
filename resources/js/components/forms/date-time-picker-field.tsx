@@ -31,7 +31,9 @@ import {
 import { cn } from '@/lib/utils';
 
 const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
-const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'));
+const MINUTES = Array.from({ length: 60 }, (_, i) =>
+    String(i).padStart(2, '0'),
+);
 const MONTHS = [
     'January',
     'February',
@@ -49,8 +51,8 @@ const MONTHS = [
 
 function toDate(value: string) {
     if (!value) {
-return undefined;
-}
+        return undefined;
+    }
 
     const parsed = new Date(value);
 
@@ -59,8 +61,8 @@ return undefined;
 
 function toDateTimeLocalString(date: Date | undefined) {
     if (!date) {
-return '';
-}
+        return '';
+    }
 
     const yyyy = date.getFullYear();
     const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -103,8 +105,8 @@ export default function DateTimePickerField({
 
     const updateDatePart = (date?: Date) => {
         if (!date) {
-return;
-}
+            return;
+        }
 
         const base = selectedDate ? new Date(selectedDate) : new Date();
 
@@ -146,7 +148,7 @@ return;
                     data-empty={!selectedDate}
                     className={cn(
                         'group h-10 w-full justify-between rounded-lg px-3 text-left font-normal shadow-none transition-colors',
-                        'data-[empty=true]:text-muted-foreground'
+                        'data-[empty=true]:text-muted-foreground',
                     )}
                 >
                     <span className="inline-flex min-w-0 items-center gap-2 truncate">
@@ -161,7 +163,7 @@ return;
                     <ChevronDownIcon
                         className={cn(
                             'h-4 w-4 shrink-0 opacity-50 transition-transform duration-200',
-                            open && 'rotate-180'
+                            open && 'rotate-180',
                         )}
                     />
                 </Button>
@@ -174,7 +176,7 @@ return;
                     'w-[300px] rounded-xl border bg-popover p-0 shadow-lg',
                     'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
                     'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
-                    'data-[side=bottom]:slide-in-from-top-1 data-[side=top]:slide-in-from-bottom-1'
+                    'data-[side=bottom]:slide-in-from-top-1 data-[side=top]:slide-in-from-bottom-1',
                 )}
             >
                 <div className="border-b border-border px-2.5 py-2">
@@ -184,7 +186,9 @@ return;
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 rounded-md text-muted-foreground hover:text-foreground"
-                            onClick={() => setDisplayMonth(addMonths(displayMonth, -1))}
+                            onClick={() =>
+                                setDisplayMonth(addMonths(displayMonth, -1))
+                            }
                         >
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
@@ -199,7 +203,10 @@ return;
                                 </SelectTrigger>
                                 <SelectContent>
                                     {MONTHS.map((month, index) => (
-                                        <SelectItem key={month} value={String(index)}>
+                                        <SelectItem
+                                            key={month}
+                                            value={String(index)}
+                                        >
                                             {month}
                                         </SelectItem>
                                     ))}
@@ -215,7 +222,10 @@ return;
                                 </SelectTrigger>
                                 <SelectContent className="max-h-56">
                                     {yearOptions.map((year) => (
-                                        <SelectItem key={year} value={String(year)}>
+                                        <SelectItem
+                                            key={year}
+                                            value={String(year)}
+                                        >
                                             {year}
                                         </SelectItem>
                                     ))}
@@ -228,7 +238,9 @@ return;
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 rounded-md text-muted-foreground hover:text-foreground"
-                            onClick={() => setDisplayMonth(addMonths(displayMonth, 1))}
+                            onClick={() =>
+                                setDisplayMonth(addMonths(displayMonth, 1))
+                            }
                         >
                             <ChevronRight className="h-4 w-4" />
                         </Button>
@@ -251,7 +263,7 @@ return;
                 </div>
 
                 <div className="border-t border-border px-3 py-2.5">
-                    <div className="mb-2 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
+                    <div className="mb-2 flex items-center gap-1.5 text-[11px] font-medium tracking-[0.08em] text-muted-foreground uppercase">
                         <Clock3 className="h-3.5 w-3.5" />
                         <span>Time</span>
                     </div>
@@ -259,7 +271,9 @@ return;
                     <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
                         <Select
                             value={selectedHour}
-                            onValueChange={(hour) => updateTimePart(hour, undefined)}
+                            onValueChange={(hour) =>
+                                updateTimePart(hour, undefined)
+                            }
                             disabled={!selectedDate}
                         >
                             <SelectTrigger className="h-8 rounded-md text-sm">
@@ -280,7 +294,9 @@ return;
 
                         <Select
                             value={selectedMinute}
-                            onValueChange={(minute) => updateTimePart(undefined, minute)}
+                            onValueChange={(minute) =>
+                                updateTimePart(undefined, minute)
+                            }
                             disabled={!selectedDate}
                         >
                             <SelectTrigger className="h-8 rounded-md text-sm">

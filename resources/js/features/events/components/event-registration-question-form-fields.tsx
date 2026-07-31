@@ -37,9 +37,13 @@ export default function EventRegistrationQuestionFormFields({
                 <label className="text-sm font-medium">Question Label</label>
                 <Input
                     value={form.data.label}
-                    onChange={(e) => form.setData('label', e.currentTarget.value)}
+                    onChange={(e) =>
+                        form.setData('label', e.currentTarget.value)
+                    }
                 />
-                {form.errors.label ? <p className="text-sm text-red-600">{form.errors.label}</p> : null}
+                {form.errors.label ? (
+                    <p className="text-sm text-red-600">{form.errors.label}</p>
+                ) : null}
             </div>
 
             <div className="grid gap-2">
@@ -52,14 +56,21 @@ export default function EventRegistrationQuestionFormFields({
                         <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
-                        {EVENT_REGISTRATION_QUESTION_TYPE_OPTIONS.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
-                                {option.label}
-                            </SelectItem>
-                        ))}
+                        {EVENT_REGISTRATION_QUESTION_TYPE_OPTIONS.map(
+                            (option) => (
+                                <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                >
+                                    {option.label}
+                                </SelectItem>
+                            ),
+                        )}
                     </SelectContent>
                 </Select>
-                {form.errors.type ? <p className="text-sm text-red-600">{form.errors.type}</p> : null}
+                {form.errors.type ? (
+                    <p className="text-sm text-red-600">{form.errors.type}</p>
+                ) : null}
             </div>
 
             {isSelect ? (
@@ -67,7 +78,9 @@ export default function EventRegistrationQuestionFormFields({
                     <label className="text-sm font-medium">Options</label>
                     <textarea
                         value={form.data.options_text}
-                        onChange={(e) => form.setData('options_text', e.currentTarget.value)}
+                        onChange={(e) =>
+                            form.setData('options_text', e.currentTarget.value)
+                        }
                         className="min-h-28 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                         placeholder={'One option per line\nOption A\nOption B'}
                     />
@@ -75,7 +88,9 @@ export default function EventRegistrationQuestionFormFields({
                         One option per line.
                     </p>
                     {form.errors.options_text ? (
-                        <p className="text-sm text-red-600">{form.errors.options_text}</p>
+                        <p className="text-sm text-red-600">
+                            {form.errors.options_text}
+                        </p>
                     ) : null}
                 </div>
             ) : null}
@@ -84,19 +99,31 @@ export default function EventRegistrationQuestionFormFields({
                 <label className="text-sm font-medium">Placeholder</label>
                 <Input
                     value={form.data.placeholder}
-                    onChange={(e) => form.setData('placeholder', e.currentTarget.value)}
+                    onChange={(e) =>
+                        form.setData('placeholder', e.currentTarget.value)
+                    }
                 />
-                {form.errors.placeholder ? <p className="text-sm text-red-600">{form.errors.placeholder}</p> : null}
+                {form.errors.placeholder ? (
+                    <p className="text-sm text-red-600">
+                        {form.errors.placeholder}
+                    </p>
+                ) : null}
             </div>
 
             <div className="grid gap-2">
                 <label className="text-sm font-medium">Help Text</label>
                 <textarea
                     value={form.data.help_text}
-                    onChange={(e) => form.setData('help_text', e.currentTarget.value)}
+                    onChange={(e) =>
+                        form.setData('help_text', e.currentTarget.value)
+                    }
                     className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 />
-                {form.errors.help_text ? <p className="text-sm text-red-600">{form.errors.help_text}</p> : null}
+                {form.errors.help_text ? (
+                    <p className="text-sm text-red-600">
+                        {form.errors.help_text}
+                    </p>
+                ) : null}
             </div>
 
             <div className="grid gap-2">
@@ -105,9 +132,15 @@ export default function EventRegistrationQuestionFormFields({
                     type="number"
                     min="1"
                     value={form.data.sort_order}
-                    onChange={(e) => form.setData('sort_order', e.currentTarget.value)}
+                    onChange={(e) =>
+                        form.setData('sort_order', e.currentTarget.value)
+                    }
                 />
-                {form.errors.sort_order ? <p className="text-sm text-red-600">{form.errors.sort_order}</p> : null}
+                {form.errors.sort_order ? (
+                    <p className="text-sm text-red-600">
+                        {form.errors.sort_order}
+                    </p>
+                ) : null}
             </div>
 
             <div className="grid gap-3">

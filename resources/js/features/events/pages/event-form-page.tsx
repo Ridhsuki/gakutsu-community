@@ -3,9 +3,16 @@ import { ArrowLeft, ClipboardList, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import EmptyState from '@/components/ui/empty-state';
 import EventFormFields from '@/features/events/components/event-form-fields';
-import { getDefaultCreateEventForm, mapEventToEditEventForm } from '@/features/events/form-helpers';
+import {
+    getDefaultCreateEventForm,
+    mapEventToEditEventForm,
+} from '@/features/events/form-helpers';
 import { uploadEventEditorImage } from '@/features/events/lib/upload-editor-image';
-import type { EventItem, EventMentorOption, EventRegistrationQuestionItem } from '@/features/events/types';
+import type {
+    EventItem,
+    EventMentorOption,
+    EventRegistrationQuestionItem,
+} from '@/features/events/types';
 
 interface EventFormPageProps {
     mode: 'create' | 'edit';
@@ -61,7 +68,12 @@ export default function EventFormPage({
             <div className="flex h-full w-full flex-col space-y-6 p-6">
                 <div className="flex flex-col gap-3">
                     <div>
-                        <Button type="button" variant="ghost" asChild className="px-0">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            asChild
+                            className="px-0"
+                        >
                             <Link href={backHref}>
                                 <ArrowLeft className="mr-2 h-4 w-4" />
                                 Back to events
@@ -70,7 +82,9 @@ export default function EventFormPage({
                     </div>
 
                     <div className="space-y-1">
-                        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+                        <h1 className="text-2xl font-semibold tracking-tight">
+                            {title}
+                        </h1>
                         <p className="text-sm text-muted-foreground">
                             {mode === 'create'
                                 ? 'Create a new event and save it before configuring the registration form.'
@@ -79,7 +93,10 @@ export default function EventFormPage({
                     </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+                <form
+                    onSubmit={handleSubmit}
+                    className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]"
+                >
                     <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
                         <EventFormFields
                             form={form}
@@ -94,17 +111,21 @@ export default function EventFormPage({
                         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
                             <h2 className="text-base font-semibold">Actions</h2>
                             <p className="mt-1 text-sm text-muted-foreground">
-                                Save the event first, then continue with registration form setup.
+                                Save the event first, then continue with
+                                registration form setup.
                             </p>
 
                             <div className="mt-4 flex flex-col gap-3">
-                                <Button type="submit" disabled={form.processing}>
+                                <Button
+                                    type="submit"
+                                    disabled={form.processing}
+                                >
                                     <Save className="mr-2 h-4 w-4" />
                                     {form.processing
                                         ? 'Saving...'
                                         : mode === 'create'
-                                            ? 'Create Event'
-                                            : 'Save Changes'}
+                                          ? 'Create Event'
+                                          : 'Save Changes'}
                                 </Button>
 
                                 <Button type="button" variant="outline" asChild>
@@ -116,14 +137,20 @@ export default function EventFormPage({
                         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
                             <div className="flex items-start justify-between gap-3">
                                 <div>
-                                    <h2 className="text-base font-semibold">Registration Form</h2>
+                                    <h2 className="text-base font-semibold">
+                                        Registration Form
+                                    </h2>
                                     <p className="mt-1 text-sm text-muted-foreground">
                                         Additional questions for participants.
                                     </p>
                                 </div>
 
                                 {manageQuestionsHref ? (
-                                    <Button type="button" variant="outline" asChild>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        asChild
+                                    >
                                         <Link href={manageQuestionsHref}>
                                             <ClipboardList className="mr-2 h-4 w-4" />
                                             Manage
@@ -142,24 +169,43 @@ export default function EventFormPage({
                                 ) : registrationQuestions.length > 0 ? (
                                     <div className="space-y-3">
                                         <div className="text-sm text-muted-foreground">
-                                            Total questions: {registrationQuestions.length}
+                                            Total questions:{' '}
+                                            {registrationQuestions.length}
                                         </div>
 
                                         <div className="rounded-lg border border-border">
                                             <div className="divide-y divide-border">
-                                                {registrationQuestions.slice(0, 5).map((question) => (
-                                                    <div key={question.id} className="flex items-start justify-between gap-3 p-3">
-                                                        <div>
-                                                            <div className="font-medium">{question.label}</div>
+                                                {registrationQuestions
+                                                    .slice(0, 5)
+                                                    .map((question) => (
+                                                        <div
+                                                            key={question.id}
+                                                            className="flex items-start justify-between gap-3 p-3"
+                                                        >
+                                                            <div>
+                                                                <div className="font-medium">
+                                                                    {
+                                                                        question.label
+                                                                    }
+                                                                </div>
+                                                                <div className="text-xs text-muted-foreground">
+                                                                    {
+                                                                        question.type
+                                                                    }{' '}
+                                                                    ·{' '}
+                                                                    {question.is_required
+                                                                        ? 'Required'
+                                                                        : 'Optional'}
+                                                                </div>
+                                                            </div>
                                                             <div className="text-xs text-muted-foreground">
-                                                                {question.type} · {question.is_required ? 'Required' : 'Optional'}
+                                                                #
+                                                                {
+                                                                    question.sort_order
+                                                                }
                                                             </div>
                                                         </div>
-                                                        <div className="text-xs text-muted-foreground">
-                                                            #{question.sort_order}
-                                                        </div>
-                                                    </div>
-                                                ))}
+                                                    ))}
                                             </div>
                                         </div>
                                     </div>

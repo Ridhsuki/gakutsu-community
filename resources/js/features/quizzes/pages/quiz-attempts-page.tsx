@@ -12,7 +12,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import type { EventQuizAttemptItem, QuizEventSummary } from '@/features/quizzes/types';
+import type {
+    EventQuizAttemptItem,
+    QuizEventSummary,
+} from '@/features/quizzes/types';
 import { appendFrom } from '@/lib/navigation';
 
 export default function QuizAttemptsPage({
@@ -51,7 +54,7 @@ export default function QuizAttemptsPage({
                 preserveScroll: true,
                 preserveState: true,
                 replace: true,
-            }
+            },
         );
     };
 
@@ -90,7 +93,9 @@ export default function QuizAttemptsPage({
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">All status</SelectItem>
-                                <SelectItem value="submitted">Submitted</SelectItem>
+                                <SelectItem value="submitted">
+                                    Submitted
+                                </SelectItem>
                                 <SelectItem value="graded">Graded</SelectItem>
                             </SelectContent>
                         </Select>
@@ -104,51 +109,89 @@ export default function QuizAttemptsPage({
                         <table className="w-full text-sm">
                             <thead className="bg-muted/50">
                                 <tr className="border-b">
-                                    <th className="px-4 py-3 text-left font-medium">User</th>
-                                    <th className="px-4 py-3 text-left font-medium">Status</th>
-                                    <th className="px-4 py-3 text-left font-medium">Score</th>
-                                    <th className="px-4 py-3 text-left font-medium">Submitted</th>
-                                    <th className="px-4 py-3 text-right font-medium">Action</th>
+                                    <th className="px-4 py-3 text-left font-medium">
+                                        User
+                                    </th>
+                                    <th className="px-4 py-3 text-left font-medium">
+                                        Status
+                                    </th>
+                                    <th className="px-4 py-3 text-left font-medium">
+                                        Score
+                                    </th>
+                                    <th className="px-4 py-3 text-left font-medium">
+                                        Submitted
+                                    </th>
+                                    <th className="px-4 py-3 text-right font-medium">
+                                        Action
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {attempts.data.length === 0 ? (
                                     <tr>
-                                        <td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">
+                                        <td
+                                            colSpan={5}
+                                            className="px-4 py-8 text-center text-muted-foreground"
+                                        >
                                             No attempts found.
                                         </td>
                                     </tr>
                                 ) : (
                                     attempts.data.map((attempt) => (
-                                        <tr key={attempt.id} className="border-b">
+                                        <tr
+                                            key={attempt.id}
+                                            className="border-b"
+                                        >
                                             <td className="px-4 py-3">
-                                                <div className="font-medium">{attempt.user?.name ?? '-'}</div>
+                                                <div className="font-medium">
+                                                    {attempt.user?.name ?? '-'}
+                                                </div>
                                                 <div className="text-xs text-muted-foreground">
                                                     {attempt.user?.email ?? '-'}
                                                 </div>
                                             </td>
 
                                             <td className="px-4 py-3">
-                                                <Badge variant={attempt.status === 'graded' ? 'default' : 'secondary'}>
+                                                <Badge
+                                                    variant={
+                                                        attempt.status ===
+                                                        'graded'
+                                                            ? 'default'
+                                                            : 'secondary'
+                                                    }
+                                                >
                                                     {attempt.status}
                                                 </Badge>
                                             </td>
 
                                             <td className="px-4 py-3">
                                                 <div className="font-medium">
-                                                    {attempt.total_score} / {attempt.max_score}
+                                                    {attempt.total_score} /{' '}
+                                                    {attempt.max_score}
                                                 </div>
                                             </td>
 
                                             <td className="px-4 py-3 text-muted-foreground">
                                                 {attempt.submitted_at
-                                                    ? new Date(attempt.submitted_at).toLocaleString('id-ID')
+                                                    ? new Date(
+                                                          attempt.submitted_at,
+                                                      ).toLocaleString('id-ID')
                                                     : '-'}
                                             </td>
 
                                             <td className="px-4 py-3 text-right">
-                                                <Button type="button" variant="outline" size="sm" asChild>
-                                                    <Link href={appendFrom(`${detailBaseHref}/${attempt.id}`, page.url)}>
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    size="sm"
+                                                    asChild
+                                                >
+                                                    <Link
+                                                        href={appendFrom(
+                                                            `${detailBaseHref}/${attempt.id}`,
+                                                            page.url,
+                                                        )}
+                                                    >
                                                         <Eye className="mr-2 h-4 w-4" />
                                                         View
                                                     </Link>

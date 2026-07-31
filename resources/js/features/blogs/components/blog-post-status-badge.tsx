@@ -5,7 +5,10 @@ interface BlogPostStatusBadgeProps {
     status: BlogPostStatus;
 }
 
-const statusConfig: Record<BlogPostStatus, { label: string; className: string }> = {
+const statusConfig: Record<
+    BlogPostStatus,
+    { label: string; className: string }
+> = {
     published: {
         label: 'Published',
         className: [
@@ -30,12 +33,10 @@ const statusConfig: Record<BlogPostStatus, { label: string; className: string }>
     },
 };
 
-export default function BlogPostStatusBadge({ status }: BlogPostStatusBadgeProps) {
+export default function BlogPostStatusBadge({
+    status,
+}: BlogPostStatusBadgeProps) {
     const config = statusConfig[status];
 
-    return (
-        <Badge className={config.className}>
-            {config.label}
-        </Badge>
-    );
+    return <Badge className={config.className}>{config.label}</Badge>;
 }

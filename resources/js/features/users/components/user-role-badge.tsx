@@ -5,7 +5,10 @@ interface UserRoleBadgeProps {
     role: UserRole;
 }
 
-const roleConfig: Record<UserRole | 'member', { label: string; className: string }> = {
+const roleConfig: Record<
+    UserRole | 'member',
+    { label: string; className: string }
+> = {
     admin: {
         label: 'Admin',
         className: [
@@ -44,9 +47,5 @@ const roleConfig: Record<UserRole | 'member', { label: string; className: string
 export default function UserRoleBadge({ role }: UserRoleBadgeProps) {
     const config = roleConfig[role] ?? roleConfig.member;
 
-    return (
-        <Badge className={config.className}>
-            {config.label}
-        </Badge>
-    );
+    return <Badge className={config.className}>{config.label}</Badge>;
 }

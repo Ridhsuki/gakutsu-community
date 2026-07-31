@@ -24,25 +24,40 @@ export default function EventRegistrationQuestionTable({
                         <th className="px-4 py-3 font-medium">Required</th>
                         <th className="px-4 py-3 font-medium">Active</th>
                         <th className="px-4 py-3 font-medium">Order</th>
-                        <th className="px-4 py-3 text-right font-medium">Actions</th>
+                        <th className="px-4 py-3 text-right font-medium">
+                            Actions
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     {questions.length > 0 ? (
                         questions.map((question) => (
-                            <tr key={question.id} className="border-b border-border">
+                            <tr
+                                key={question.id}
+                                className="border-b border-border"
+                            >
                                 <td className="px-4 py-3">
-                                    <div className="font-medium">{question.label}</div>
+                                    <div className="font-medium">
+                                        {question.label}
+                                    </div>
                                     {question.help_text ? (
                                         <div className="text-xs text-muted-foreground">
                                             {question.help_text}
                                         </div>
                                     ) : null}
                                 </td>
-                                <td className="px-4 py-3 text-muted-foreground">{question.type}</td>
-                                <td className="px-4 py-3 text-muted-foreground">{question.is_required ? 'Yes' : 'No'}</td>
-                                <td className="px-4 py-3 text-muted-foreground">{question.is_active ? 'Active' : 'Inactive'}</td>
-                                <td className="px-4 py-3 text-muted-foreground">{question.sort_order}</td>
+                                <td className="px-4 py-3 text-muted-foreground">
+                                    {question.type}
+                                </td>
+                                <td className="px-4 py-3 text-muted-foreground">
+                                    {question.is_required ? 'Yes' : 'No'}
+                                </td>
+                                <td className="px-4 py-3 text-muted-foreground">
+                                    {question.is_active ? 'Active' : 'Inactive'}
+                                </td>
+                                <td className="px-4 py-3 text-muted-foreground">
+                                    {question.sort_order}
+                                </td>
                                 <td className="px-4 py-3">
                                     <div className="flex items-center justify-end gap-2">
                                         <Button

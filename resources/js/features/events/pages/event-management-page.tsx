@@ -82,8 +82,8 @@ export default function EventManagementPage({
 
     const handleDelete = () => {
         if (!selectedEvent) {
-return;
-}
+            return;
+        }
 
         setIsDeleting(true);
 
@@ -149,7 +149,9 @@ return;
                         </>
                     }
                     meta={
-                        isReloading ? 'Refreshing data...' : `Total events: ${events.total}`
+                        isReloading
+                            ? 'Refreshing data...'
+                            : `Total events: ${events.total}`
                     }
                 />
 

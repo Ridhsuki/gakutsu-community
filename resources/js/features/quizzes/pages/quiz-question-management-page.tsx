@@ -59,8 +59,10 @@ export default function QuizQuestionManagementPage({
     backHref: string;
     headTitle: string;
 }) {
-    const [editingQuestion, setEditingQuestion] = useState<EventQuizQuestionItem | null>(null);
-    const [deletingQuestion, setDeletingQuestion] = useState<EventQuizQuestionItem | null>(null);
+    const [editingQuestion, setEditingQuestion] =
+        useState<EventQuizQuestionItem | null>(null);
+    const [deletingQuestion, setDeletingQuestion] =
+        useState<EventQuizQuestionItem | null>(null);
     const form = useForm(makeDefaultForm());
     const questionCount = questions.length;
 
@@ -128,7 +130,11 @@ export default function QuizQuestionManagementPage({
         ]);
     };
 
-    const updateOption = (index: number, key: keyof OptionDraft, value: string | boolean | number) => {
+    const updateOption = (
+        index: number,
+        key: keyof OptionDraft,
+        value: string | boolean | number,
+    ) => {
         const next = [...form.data.options];
         next[index] = {
             ...next[index],
@@ -149,8 +155,11 @@ export default function QuizQuestionManagementPage({
     };
 
     const orderedQuestions = useMemo(
-        () => [...questions].sort((a, b) => a.sort_order - b.sort_order || a.id - b.id),
-        [questions]
+        () =>
+            [...questions].sort(
+                (a, b) => a.sort_order - b.sort_order || a.id - b.id,
+            ),
+        [questions],
     );
 
     return (
@@ -169,7 +178,8 @@ export default function QuizQuestionManagementPage({
                             </h1>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                            Manage optional post-event quiz questions for this event.
+                            Manage optional post-event quiz questions for this
+                            event.
                         </p>
                     </div>
                 </div>
@@ -178,7 +188,9 @@ export default function QuizQuestionManagementPage({
                     <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
                         <div className="mb-4 flex items-center justify-between">
                             <div>
-                                <h2 className="text-base font-semibold">Question List</h2>
+                                <h2 className="text-base font-semibold">
+                                    Question List
+                                </h2>
                                 <p className="text-sm text-muted-foreground">
                                     Total questions: {questionCount}
                                 </p>
@@ -200,7 +212,8 @@ export default function QuizQuestionManagementPage({
                                             <div className="min-w-0 space-y-2">
                                                 <div className="flex flex-wrap items-center gap-2">
                                                     <Badge variant="secondary">
-                                                        {question.type === 'multiple_choice'
+                                                        {question.type ===
+                                                        'multiple_choice'
                                                             ? 'Multiple Choice'
                                                             : 'Short Text'}
                                                     </Badge>
@@ -210,21 +223,41 @@ export default function QuizQuestionManagementPage({
                                                     </Badge>
 
                                                     <Badge
-                                                        variant={question.is_active ? 'default' : 'outline'}
+                                                        variant={
+                                                            question.is_active
+                                                                ? 'default'
+                                                                : 'outline'
+                                                        }
                                                     >
-                                                        {question.is_active ? 'Active' : 'Inactive'}
+                                                        {question.is_active
+                                                            ? 'Active'
+                                                            : 'Inactive'}
                                                     </Badge>
                                                 </div>
 
-                                                <p className="font-medium leading-6">{question.prompt}</p>
+                                                <p className="leading-6 font-medium">
+                                                    {question.prompt}
+                                                </p>
 
-                                                {question.type === 'multiple_choice' ? (
+                                                {question.type ===
+                                                'multiple_choice' ? (
                                                     <ul className="space-y-1 text-sm text-muted-foreground">
-                                                        {question.options.map((option) => (
-                                                            <li key={option.id}>
-                                                                {option.is_correct ? '✓' : '•'} {option.option_text}
-                                                            </li>
-                                                        ))}
+                                                        {question.options.map(
+                                                            (option) => (
+                                                                <li
+                                                                    key={
+                                                                        option.id
+                                                                    }
+                                                                >
+                                                                    {option.is_correct
+                                                                        ? '✓'
+                                                                        : '•'}{' '}
+                                                                    {
+                                                                        option.option_text
+                                                                    }
+                                                                </li>
+                                                            ),
+                                                        )}
                                                     </ul>
                                                 ) : (
                                                     <p className="text-sm text-muted-foreground">
@@ -238,7 +271,9 @@ export default function QuizQuestionManagementPage({
                                                     type="button"
                                                     variant="outline"
                                                     size="sm"
-                                                    onClick={() => startEdit(question)}
+                                                    onClick={() =>
+                                                        startEdit(question)
+                                                    }
                                                 >
                                                     <Pencil className="mr-2 h-4 w-4" />
                                                     Edit
@@ -248,7 +283,11 @@ export default function QuizQuestionManagementPage({
                                                     type="button"
                                                     variant="outline"
                                                     size="sm"
-                                                    onClick={() => setDeletingQuestion(question)}
+                                                    onClick={() =>
+                                                        setDeletingQuestion(
+                                                            question,
+                                                        )
+                                                    }
                                                 >
                                                     <Trash2 className="mr-2 h-4 w-4" />
                                                     Delete
@@ -264,71 +303,110 @@ export default function QuizQuestionManagementPage({
                     <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
                         <div className="space-y-1">
                             <h2 className="text-base font-semibold">
-                                {editingQuestion ? 'Edit Question' : 'Create Question'}
+                                {editingQuestion
+                                    ? 'Edit Question'
+                                    : 'Create Question'}
                             </h2>
                             <p className="text-sm text-muted-foreground">
-                                Multiple choice questions are auto-graded. Short text answers require manual grading.
+                                Multiple choice questions are auto-graded. Short
+                                text answers require manual grading.
                             </p>
                         </div>
 
                         <div className="mt-4 grid gap-4">
                             <div className="grid gap-2">
-                                <label className="text-sm font-medium">Question Type</label>
+                                <label className="text-sm font-medium">
+                                    Question Type
+                                </label>
                                 <Select
                                     value={form.data.type}
-                                    onValueChange={(value: EventQuizQuestionType) =>
-                                        form.setData('type', value)
-                                    }
+                                    onValueChange={(
+                                        value: EventQuizQuestionType,
+                                    ) => form.setData('type', value)}
                                 >
                                     <SelectTrigger>
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="multiple_choice">Multiple Choice</SelectItem>
-                                        <SelectItem value="short_text">Short Text</SelectItem>
+                                        <SelectItem value="multiple_choice">
+                                            Multiple Choice
+                                        </SelectItem>
+                                        <SelectItem value="short_text">
+                                            Short Text
+                                        </SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
 
                             <div className="grid gap-2">
-                                <label className="text-sm font-medium">Prompt</label>
+                                <label className="text-sm font-medium">
+                                    Prompt
+                                </label>
                                 <Textarea
                                     value={form.data.prompt}
-                                    onChange={(e) => form.setData('prompt', e.currentTarget.value)}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            'prompt',
+                                            e.currentTarget.value,
+                                        )
+                                    }
                                     className="min-h-28"
                                 />
                                 {form.errors.prompt ? (
-                                    <p className="text-sm text-red-500">{form.errors.prompt}</p>
+                                    <p className="text-sm text-red-500">
+                                        {form.errors.prompt}
+                                    </p>
                                 ) : null}
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <label className="text-sm font-medium">Points</label>
+                                    <label className="text-sm font-medium">
+                                        Points
+                                    </label>
                                     <Input
                                         type="number"
                                         min={1}
                                         value={form.data.points}
-                                        onChange={(e) => form.setData('points', Number(e.currentTarget.value))}
+                                        onChange={(e) =>
+                                            form.setData(
+                                                'points',
+                                                Number(e.currentTarget.value),
+                                            )
+                                        }
                                     />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <label className="text-sm font-medium">Sort Order</label>
+                                    <label className="text-sm font-medium">
+                                        Sort Order
+                                    </label>
                                     <Input
                                         type="number"
                                         min={0}
                                         value={form.data.sort_order}
-                                        onChange={(e) => form.setData('sort_order', Number(e.currentTarget.value))}
+                                        onChange={(e) =>
+                                            form.setData(
+                                                'sort_order',
+                                                Number(e.currentTarget.value),
+                                            )
+                                        }
                                     />
                                 </div>
                             </div>
 
                             <div className="grid gap-2">
-                                <label className="text-sm font-medium">Explanation</label>
+                                <label className="text-sm font-medium">
+                                    Explanation
+                                </label>
                                 <Textarea
                                     value={form.data.explanation}
-                                    onChange={(e) => form.setData('explanation', e.currentTarget.value)}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            'explanation',
+                                            e.currentTarget.value,
+                                        )
+                                    }
                                     className="min-h-24"
                                 />
                             </div>
@@ -336,7 +414,12 @@ export default function QuizQuestionManagementPage({
                             <label className="flex items-center gap-2 text-sm font-medium">
                                 <Checkbox
                                     checked={form.data.is_active}
-                                    onCheckedChange={(checked) => form.setData('is_active', Boolean(checked))}
+                                    onCheckedChange={(checked) =>
+                                        form.setData(
+                                            'is_active',
+                                            Boolean(checked),
+                                        )
+                                    }
                                 />
                                 Active
                             </label>
@@ -344,62 +427,107 @@ export default function QuizQuestionManagementPage({
                             {form.data.type === 'multiple_choice' ? (
                                 <div className="space-y-3 rounded-lg border border-border p-4">
                                     <div className="flex items-center justify-between">
-                                        <h3 className="text-sm font-semibold">Options</h3>
-                                        <Button type="button" variant="outline" size="sm" onClick={addOption}>
+                                        <h3 className="text-sm font-semibold">
+                                            Options
+                                        </h3>
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={addOption}
+                                        >
                                             <Plus className="mr-2 h-4 w-4" />
                                             Add Option
                                         </Button>
                                     </div>
 
                                     <div className="space-y-3">
-                                        {form.data.options.map((option, index) => (
-                                            <div key={index} className="grid gap-2 rounded-md border border-border p-3">
-                                                <Input
-                                                    value={option.option_text}
-                                                    onChange={(e) =>
-                                                        updateOption(index, 'option_text', e.currentTarget.value)
-                                                    }
-                                                    placeholder={`Option ${index + 1}`}
-                                                />
+                                        {form.data.options.map(
+                                            (option, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="grid gap-2 rounded-md border border-border p-3"
+                                                >
+                                                    <Input
+                                                        value={
+                                                            option.option_text
+                                                        }
+                                                        onChange={(e) =>
+                                                            updateOption(
+                                                                index,
+                                                                'option_text',
+                                                                e.currentTarget
+                                                                    .value,
+                                                            )
+                                                        }
+                                                        placeholder={`Option ${index + 1}`}
+                                                    />
 
-                                                <div className="flex items-center justify-between">
-                                                    <label className="flex items-center gap-2 text-sm">
-                                                        <Checkbox
-                                                            checked={option.is_correct}
-                                                            onCheckedChange={(checked) =>
-                                                                updateOption(index, 'is_correct', Boolean(checked))
+                                                    <div className="flex items-center justify-between">
+                                                        <label className="flex items-center gap-2 text-sm">
+                                                            <Checkbox
+                                                                checked={
+                                                                    option.is_correct
+                                                                }
+                                                                onCheckedChange={(
+                                                                    checked,
+                                                                ) =>
+                                                                    updateOption(
+                                                                        index,
+                                                                        'is_correct',
+                                                                        Boolean(
+                                                                            checked,
+                                                                        ),
+                                                                    )
+                                                                }
+                                                            />
+                                                            Correct answer
+                                                        </label>
+
+                                                        <Button
+                                                            type="button"
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={() =>
+                                                                removeOption(
+                                                                    index,
+                                                                )
                                                             }
-                                                        />
-                                                        Correct answer
-                                                    </label>
-
-                                                    <Button
-                                                        type="button"
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        onClick={() => removeOption(index)}
-                                                    >
-                                                        Remove
-                                                    </Button>
+                                                        >
+                                                            Remove
+                                                        </Button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ),
+                                        )}
                                     </div>
 
                                     {form.errors.options ? (
-                                        <p className="text-sm text-red-500">{form.errors.options}</p>
+                                        <p className="text-sm text-red-500">
+                                            {form.errors.options}
+                                        </p>
                                     ) : null}
                                 </div>
                             ) : null}
 
                             <div className="flex items-center gap-2 pt-2">
-                                <Button type="button" onClick={submit} disabled={form.processing}>
+                                <Button
+                                    type="button"
+                                    onClick={submit}
+                                    disabled={form.processing}
+                                >
                                     <Save className="mr-2 h-4 w-4" />
-                                    {editingQuestion ? 'Save Changes' : 'Create Question'}
+                                    {editingQuestion
+                                        ? 'Save Changes'
+                                        : 'Create Question'}
                                 </Button>
 
                                 {editingQuestion ? (
-                                    <Button type="button" variant="outline" onClick={resetForm}>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={resetForm}
+                                    >
                                         Cancel
                                     </Button>
                                 ) : null}

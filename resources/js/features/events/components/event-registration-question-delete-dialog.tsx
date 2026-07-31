@@ -30,14 +30,23 @@ export default function EventRegistrationQuestionDeleteDialog({
                     Are you sure you want to delete{' '}
                     <span className="font-medium text-foreground">
                         {question?.label ?? 'this question'}
-                    </span>?
+                    </span>
+                    ?
                 </p>
 
                 <DialogFooter>
-                    <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => onOpenChange(false)}
+                    >
                         Cancel
                     </Button>
-                    <Button type="button" variant="destructive" onClick={onConfirm}>
+                    <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={onConfirm}
+                    >
                         Delete
                     </Button>
                 </DialogFooter>

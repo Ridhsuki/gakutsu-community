@@ -59,8 +59,7 @@ export default function BlogPostEditor({
         content: value || '',
         editorProps: {
             attributes: {
-                class:
-                    'tiptap-editor min-h-[260px] w-full rounded-b-md border-x border-b border-border bg-background px-4 py-3 text-sm text-foreground outline-none',
+                class: 'tiptap-editor min-h-[260px] w-full rounded-b-md border-x border-b border-border bg-background px-4 py-3 text-sm text-foreground outline-none',
             },
         },
         onUpdate: ({ editor }) => {
@@ -70,8 +69,8 @@ export default function BlogPostEditor({
 
     useEffect(() => {
         if (!editor) {
-return;
-}
+            return;
+        }
 
         const current = editor.getHTML();
 
@@ -82,8 +81,8 @@ return;
 
     const openLinkDialog = () => {
         if (!editor) {
-return;
-}
+            return;
+        }
 
         const previousUrl = editor.getAttributes('link').href || '';
         setCurrentLink(previousUrl);
@@ -92,8 +91,8 @@ return;
 
     const handleSaveLink = (url: string) => {
         if (!editor) {
-return;
-}
+            return;
+        }
 
         if (url === '') {
             editor.chain().focus().extendMarkRange('link').unsetLink().run();
@@ -101,18 +100,25 @@ return;
             return;
         }
 
-        editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+        editor
+            .chain()
+            .focus()
+            .extendMarkRange('link')
+            .setLink({ href: url })
+            .run();
     };
 
     const handleRemoveLink = () => {
         if (!editor) {
-return;
-}
+            return;
+        }
 
         editor.chain().focus().extendMarkRange('link').unsetLink().run();
     };
 
-    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
         const file = event.target.files?.[0];
 
         if (!file || !editor || !onUploadImage) {
@@ -154,8 +160,18 @@ return;
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                        className={editor.isActive('heading', { level: 1 }) ? 'bg-accent' : ''}
+                        onClick={() =>
+                            editor
+                                .chain()
+                                .focus()
+                                .toggleHeading({ level: 1 })
+                                .run()
+                        }
+                        className={
+                            editor.isActive('heading', { level: 1 })
+                                ? 'bg-accent'
+                                : ''
+                        }
                     >
                         <Heading1 className="h-4 w-4" />
                     </Button>
@@ -164,8 +180,18 @@ return;
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                        className={editor.isActive('heading', { level: 2 }) ? 'bg-accent' : ''}
+                        onClick={() =>
+                            editor
+                                .chain()
+                                .focus()
+                                .toggleHeading({ level: 2 })
+                                .run()
+                        }
+                        className={
+                            editor.isActive('heading', { level: 2 })
+                                ? 'bg-accent'
+                                : ''
+                        }
                     >
                         <Heading2 className="h-4 w-4" />
                     </Button>
@@ -174,7 +200,9 @@ return;
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={() => editor.chain().focus().toggleBold().run()}
+                        onClick={() =>
+                            editor.chain().focus().toggleBold().run()
+                        }
                         className={editor.isActive('bold') ? 'bg-accent' : ''}
                     >
                         <Bold className="h-4 w-4" />
@@ -184,7 +212,9 @@ return;
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={() => editor.chain().focus().toggleItalic().run()}
+                        onClick={() =>
+                            editor.chain().focus().toggleItalic().run()
+                        }
                         className={editor.isActive('italic') ? 'bg-accent' : ''}
                     >
                         <Italic className="h-4 w-4" />
@@ -194,8 +224,12 @@ return;
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={() => editor.chain().focus().toggleBulletList().run()}
-                        className={editor.isActive('bulletList') ? 'bg-accent' : ''}
+                        onClick={() =>
+                            editor.chain().focus().toggleBulletList().run()
+                        }
+                        className={
+                            editor.isActive('bulletList') ? 'bg-accent' : ''
+                        }
                     >
                         <List className="h-4 w-4" />
                     </Button>
@@ -204,8 +238,12 @@ return;
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                        className={editor.isActive('orderedList') ? 'bg-accent' : ''}
+                        onClick={() =>
+                            editor.chain().focus().toggleOrderedList().run()
+                        }
+                        className={
+                            editor.isActive('orderedList') ? 'bg-accent' : ''
+                        }
                     >
                         <ListOrdered className="h-4 w-4" />
                     </Button>
@@ -214,8 +252,12 @@ return;
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                        className={editor.isActive('blockquote') ? 'bg-accent' : ''}
+                        onClick={() =>
+                            editor.chain().focus().toggleBlockquote().run()
+                        }
+                        className={
+                            editor.isActive('blockquote') ? 'bg-accent' : ''
+                        }
                     >
                         <Quote className="h-4 w-4" />
                     </Button>
@@ -258,7 +300,9 @@ return;
                             variant="ghost"
                             size="sm"
                             onClick={() => editor.chain().focus().undo().run()}
-                            disabled={!editor.can().chain().focus().undo().run()}
+                            disabled={
+                                !editor.can().chain().focus().undo().run()
+                            }
                         >
                             <Undo2 className="h-4 w-4" />
                         </Button>
@@ -268,7 +312,9 @@ return;
                             variant="ghost"
                             size="sm"
                             onClick={() => editor.chain().focus().redo().run()}
-                            disabled={!editor.can().chain().focus().redo().run()}
+                            disabled={
+                                !editor.can().chain().focus().redo().run()
+                            }
                         >
                             <Redo2 className="h-4 w-4" />
                         </Button>
@@ -288,9 +334,10 @@ return;
                 onOpenChange={setIsLinkDialogOpen}
                 initialUrl={currentLink}
                 onSubmit={handleSaveLink}
-                onRemove={editor.isActive('link') ? handleRemoveLink : undefined}
+                onRemove={
+                    editor.isActive('link') ? handleRemoveLink : undefined
+                }
             />
         </>
-
     );
 }

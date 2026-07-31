@@ -24,7 +24,9 @@ export function getDefaultEditBlogPostForm(): EditBlogPostForm {
     };
 }
 
-export function mapBlogPostToEditBlogPostForm(post: BlogPost): EditBlogPostForm {
+export function mapBlogPostToEditBlogPostForm(
+    post: BlogPost,
+): EditBlogPostForm {
     return {
         title: post.title,
         slug: post.slug,

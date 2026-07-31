@@ -3,7 +3,9 @@ import type { BlogManagementViewMode } from '@/features/blogs/types';
 
 const STORAGE_KEY = 'yokpelajarin.blog-management.view-mode';
 
-function isValidViewMode(value: string | null): value is BlogManagementViewMode {
+function isValidViewMode(
+    value: string | null,
+): value is BlogManagementViewMode {
     return value === 'table' || value === 'cards';
 }
 

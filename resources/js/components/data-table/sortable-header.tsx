@@ -36,8 +36,8 @@ export default function SortableHeader<TField extends string>({
         align === 'right'
             ? 'text-right'
             : align === 'center'
-                ? 'text-center'
-                : 'text-left';
+              ? 'text-center'
+              : 'text-left';
 
     return (
         <th className={`px-4 py-3 font-medium ${alignClass} ${className}`}>

@@ -59,12 +59,16 @@ export default function EventFormFields({
                 <label className="text-sm font-medium">Title</label>
                 <Input
                     value={form.data.title}
-                    onChange={(e) => form.setData('title', e.currentTarget.value)}
+                    onChange={(e) =>
+                        form.setData('title', e.currentTarget.value)
+                    }
                 />
                 <p className="text-xs text-muted-foreground">
                     Slug will be generated automatically from the title.
                 </p>
-                {form.errors.title ? <p className="text-sm text-red-600">{form.errors.title}</p> : null}
+                {form.errors.title ? (
+                    <p className="text-sm text-red-600">{form.errors.title}</p>
+                ) : null}
             </div>
 
             {canAssignMentor ? (
@@ -72,20 +76,29 @@ export default function EventFormFields({
                     <label className="text-sm font-medium">Mentor</label>
                     <Select
                         value={form.data.mentor_id}
-                        onValueChange={(value) => form.setData('mentor_id', value)}
+                        onValueChange={(value) =>
+                            form.setData('mentor_id', value)
+                        }
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Select mentor" />
                         </SelectTrigger>
                         <SelectContent>
                             {mentors.map((mentor) => (
-                                <SelectItem key={mentor.id} value={String(mentor.id)}>
+                                <SelectItem
+                                    key={mentor.id}
+                                    value={String(mentor.id)}
+                                >
                                     {mentor.name}
                                 </SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
-                    {form.errors.mentor_id ? <p className="text-sm text-red-600">{form.errors.mentor_id}</p> : null}
+                    {form.errors.mentor_id ? (
+                        <p className="text-sm text-red-600">
+                            {form.errors.mentor_id}
+                        </p>
+                    ) : null}
                 </div>
             ) : null}
 
@@ -93,9 +106,15 @@ export default function EventFormFields({
                 <label className="text-sm font-medium">Category</label>
                 <Input
                     value={form.data.category}
-                    onChange={(e) => form.setData('category', e.currentTarget.value)}
+                    onChange={(e) =>
+                        form.setData('category', e.currentTarget.value)
+                    }
                 />
-                {form.errors.category ? <p className="text-sm text-red-600">{form.errors.category}</p> : null}
+                {form.errors.category ? (
+                    <p className="text-sm text-red-600">
+                        {form.errors.category}
+                    </p>
+                ) : null}
             </div>
 
             <div className="grid gap-2">
@@ -105,7 +124,11 @@ export default function EventFormFields({
                     onChange={(value) => form.setData('description', value)}
                     onUploadImage={onUploadImage}
                 />
-                {form.errors.description ? <p className="text-sm text-red-600">{form.errors.description}</p> : null}
+                {form.errors.description ? (
+                    <p className="text-sm text-red-600">
+                        {form.errors.description}
+                    </p>
+                ) : null}
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -116,7 +139,11 @@ export default function EventFormFields({
                         onChange={(value) => form.setData('starts_at', value)}
                         placeholder="Pick start date & time"
                     />
-                    {form.errors.starts_at ? <p className="text-sm text-red-600">{form.errors.starts_at}</p> : null}
+                    {form.errors.starts_at ? (
+                        <p className="text-sm text-red-600">
+                            {form.errors.starts_at}
+                        </p>
+                    ) : null}
                 </div>
 
                 <div className="grid gap-2">
@@ -126,19 +153,29 @@ export default function EventFormFields({
                         onChange={(value) => form.setData('ends_at', value)}
                         placeholder="Pick end date & time"
                     />
-                    {form.errors.ends_at ? <p className="text-sm text-red-600">{form.errors.ends_at}</p> : null}
+                    {form.errors.ends_at ? (
+                        <p className="text-sm text-red-600">
+                            {form.errors.ends_at}
+                        </p>
+                    ) : null}
                 </div>
             </div>
 
             <div className="grid gap-2">
-                <label className="text-sm font-medium">Registration Closes At</label>
+                <label className="text-sm font-medium">
+                    Registration Closes At
+                </label>
                 <DateTimePickerField
                     value={form.data.registration_closes_at}
-                    onChange={(value) => form.setData('registration_closes_at', value)}
+                    onChange={(value) =>
+                        form.setData('registration_closes_at', value)
+                    }
                     placeholder="Pick registration deadline"
                 />
                 {form.errors.registration_closes_at ? (
-                    <p className="text-sm text-red-600">{form.errors.registration_closes_at}</p>
+                    <p className="text-sm text-red-600">
+                        {form.errors.registration_closes_at}
+                    </p>
                 ) : null}
             </div>
 
@@ -154,7 +191,10 @@ export default function EventFormFields({
                         </SelectTrigger>
                         <SelectContent>
                             {EVENT_STATUS_OPTIONS.map((option) => (
-                                <SelectItem key={option.value} value={option.value}>
+                                <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                >
                                     {option.label}
                                 </SelectItem>
                             ))}
@@ -166,14 +206,19 @@ export default function EventFormFields({
                     <label className="text-sm font-medium">Access Type</label>
                     <Select
                         value={form.data.access_type}
-                        onValueChange={(value) => form.setData('access_type', value)}
+                        onValueChange={(value) =>
+                            form.setData('access_type', value)
+                        }
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Select access type" />
                         </SelectTrigger>
                         <SelectContent>
                             {EVENT_ACCESS_TYPE_OPTIONS.map((option) => (
-                                <SelectItem key={option.value} value={option.value}>
+                                <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                >
                                     {option.label}
                                 </SelectItem>
                             ))}
@@ -182,17 +227,24 @@ export default function EventFormFields({
                 </div>
 
                 <div className="grid gap-2">
-                    <label className="text-sm font-medium">Meeting Provider</label>
+                    <label className="text-sm font-medium">
+                        Meeting Provider
+                    </label>
                     <Select
                         value={form.data.meeting_provider}
-                        onValueChange={(value) => form.setData('meeting_provider', value)}
+                        onValueChange={(value) =>
+                            form.setData('meeting_provider', value)
+                        }
                     >
                         <SelectTrigger>
                             <SelectValue placeholder="Select provider" />
                         </SelectTrigger>
                         <SelectContent>
                             {EVENT_MEETING_PROVIDER_OPTIONS.map((option) => (
-                                <SelectItem key={option.value} value={option.value}>
+                                <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                >
                                     {option.label}
                                 </SelectItem>
                             ))}
@@ -205,9 +257,15 @@ export default function EventFormFields({
                 <label className="text-sm font-medium">Meeting URL</label>
                 <Input
                     value={form.data.meeting_url}
-                    onChange={(e) => form.setData('meeting_url', e.currentTarget.value)}
+                    onChange={(e) =>
+                        form.setData('meeting_url', e.currentTarget.value)
+                    }
                 />
-                {form.errors.meeting_url ? <p className="text-sm text-red-600">{form.errors.meeting_url}</p> : null}
+                {form.errors.meeting_url ? (
+                    <p className="text-sm text-red-600">
+                        {form.errors.meeting_url}
+                    </p>
+                ) : null}
             </div>
 
             <div className="grid gap-2">
@@ -216,14 +274,20 @@ export default function EventFormFields({
                     onChange={(file) => form.setData('poster_image', file)}
                     currentImagePath={currentEvent?.poster_image_path ?? null}
                 />
-                {form.errors.poster_image ? <p className="text-sm text-red-600">{form.errors.poster_image}</p> : null}
+                {form.errors.poster_image ? (
+                    <p className="text-sm text-red-600">
+                        {form.errors.poster_image}
+                    </p>
+                ) : null}
             </div>
 
             <div className="grid gap-3">
                 <label className="flex items-center gap-2 text-sm font-medium">
                     <Checkbox
                         checked={form.data.is_published}
-                        onCheckedChange={(checked) => form.setData('is_published', Boolean(checked))}
+                        onCheckedChange={(checked) =>
+                            form.setData('is_published', Boolean(checked))
+                        }
                     />
                     Published
                 </label>

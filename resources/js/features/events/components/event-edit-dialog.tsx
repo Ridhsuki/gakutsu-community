@@ -44,10 +44,17 @@ export default function EventEditDialog({
                     />
 
                     <DialogFooter>
-                        <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => onOpenChange(false)}
+                        >
                             Cancel
                         </Button>
-                        <Button type="submit" disabled={form.processing || !currentEvent}>
+                        <Button
+                            type="submit"
+                            disabled={form.processing || !currentEvent}
+                        >
                             {form.processing ? 'Saving...' : 'Save Changes'}
                         </Button>
                     </DialogFooter>

@@ -16,14 +16,14 @@ type BlogCardItem = {
 
 function formatDate(value: string | null | undefined) {
     if (!value) {
-return '-';
-}
+        return '-';
+    }
 
     const date = new Date(value);
 
     if (Number.isNaN(date.getTime())) {
-return '-';
-}
+        return '-';
+    }
 
     return date.toLocaleDateString('id-ID', {
         day: '2-digit',
@@ -44,8 +44,12 @@ export default function BlogPublicCard({ post }: { post: BlogCardItem }) {
 
             <div className="space-y-4 p-5">
                 <div className="space-y-2">
-                    <h3 className="line-clamp-2 text-lg font-semibold">{post.title}</h3>
-                    <p className="line-clamp-3 text-sm text-muted-foreground">{post.excerpt}</p>
+                    <h3 className="line-clamp-2 text-lg font-semibold">
+                        {post.title}
+                    </h3>
+                    <p className="line-clamp-3 text-sm text-muted-foreground">
+                        {post.excerpt}
+                    </p>
                 </div>
 
                 <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">

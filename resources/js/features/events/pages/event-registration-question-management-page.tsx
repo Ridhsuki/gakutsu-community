@@ -9,7 +9,10 @@ import EventRegistrationQuestionDeleteDialog from '@/features/events/components/
 import EventRegistrationQuestionEditDialog from '@/features/events/components/event-registration-question-edit-dialog';
 import EventRegistrationQuestionTable from '@/features/events/components/event-registration-question-table';
 import useEventRegistrationQuestionManagement from '@/features/events/hooks/use-event-registration-question-management';
-import type { EventItem, EventRegistrationQuestionItem } from '@/features/events/types';
+import type {
+    EventItem,
+    EventRegistrationQuestionItem,
+} from '@/features/events/types';
 import type { PaginatedResponse } from '@/types/pagination';
 
 interface PageProps {
@@ -61,14 +64,18 @@ export default function EventRegistrationQuestionManagementPage({
 
             <div className="flex h-full w-full flex-col space-y-6 p-6">
                 <div className="space-y-3">
-                    <ContextBackButton fallbackHref={fallbackHref} label="Back" />
+                    <ContextBackButton
+                        fallbackHref={fallbackHref}
+                        label="Back"
+                    />
 
                     <div className="space-y-1">
                         <h1 className="text-2xl font-semibold tracking-tight">
                             Registration Form · {event.title}
                         </h1>
                         <p className="text-sm text-muted-foreground">
-                            Manage additional registration questions for this event.
+                            Manage additional registration questions for this
+                            event.
                         </p>
                     </div>
                 </div>

@@ -15,8 +15,8 @@ export default function BlogPostCoverInput({
 
     const currentImageUrl = useMemo(() => {
         if (!currentImagePath) {
-return null;
-}
+            return null;
+        }
 
         return `/storage/${currentImagePath}`;
     }, [currentImagePath]);
@@ -37,7 +37,10 @@ return null;
     return (
         <div className="space-y-3">
             <div>
-                <label htmlFor="cover_image" className="mb-1 block text-sm font-medium">
+                <label
+                    htmlFor="cover_image"
+                    className="mb-1 block text-sm font-medium"
+                >
                     Cover Image
                 </label>
                 <input

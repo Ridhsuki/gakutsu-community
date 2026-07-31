@@ -27,29 +27,40 @@ export default function BlogShow({
         <PublicLayout>
             <SeoHead
                 title={post.title}
-                description={String(post.content ?? '').replace(/<[^>]*>/g, '').slice(0, 155)}
+                description={String(post.content ?? '')
+                    .replace(/<[^>]*>/g, '')
+                    .slice(0, 155)}
                 image={post.cover_image_url ?? null}
                 type="article"
             />
 
             <div className="mx-auto max-w-5xl px-4 py-12">
-                <Link href="/blogs" className="inline-flex text-sm font-medium text-primary">
+                <Link
+                    href="/blogs"
+                    className="inline-flex text-sm font-medium text-primary"
+                >
                     ← Kembali ke blog
                 </Link>
 
                 <div className="mt-6 space-y-4">
-                    <p className="text-sm font-medium text-primary">Blog Artikel</p>
-                    <h1 className="max-w-4xl text-4xl font-semibold tracking-tight">{post.title}</h1>
+                    <p className="text-sm font-medium text-primary">
+                        Blog Artikel
+                    </p>
+                    <h1 className="max-w-4xl text-4xl font-semibold tracking-tight">
+                        {post.title}
+                    </h1>
                     <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                         <span>Author: {post.author?.name ?? '-'}</span>
                         <span>
                             Published:{' '}
                             {post.published_at
-                                ? new Date(post.published_at).toLocaleDateString('id-ID', {
-                                    day: '2-digit',
-                                    month: 'short',
-                                    year: 'numeric',
-                                })
+                                ? new Date(
+                                      post.published_at,
+                                  ).toLocaleDateString('id-ID', {
+                                      day: '2-digit',
+                                      month: 'short',
+                                      year: 'numeric',
+                                  })
                                 : '-'}
                         </span>
                     </div>
@@ -72,9 +83,12 @@ export default function BlogShow({
                 {relatedPosts.length > 0 ? (
                     <section className="mt-12">
                         <div className="mb-6 space-y-2">
-                            <h2 className="text-2xl font-semibold tracking-tight">Artikel terkait</h2>
+                            <h2 className="text-2xl font-semibold tracking-tight">
+                                Artikel terkait
+                            </h2>
                             <p className="text-sm text-muted-foreground">
-                                Beberapa tulisan lain yang mungkin relevan untuk dibaca berikutnya.
+                                Beberapa tulisan lain yang mungkin relevan untuk
+                                dibaca berikutnya.
                             </p>
                         </div>
 
@@ -84,7 +98,10 @@ export default function BlogShow({
                                     key={related.id}
                                     post={{
                                         ...related,
-                                        excerpt: String(related.content ?? '').replace(/<[^>]*>/g, '').slice(0, 140) + '...',
+                                        excerpt:
+                                            String(related.content ?? '')
+                                                .replace(/<[^>]*>/g, '')
+                                                .slice(0, 140) + '...',
                                     }}
                                 />
                             ))}

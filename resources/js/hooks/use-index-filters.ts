@@ -51,14 +51,18 @@ export default function useIndexFilters<TSortField extends string>(
         nextSortField: TSortField,
         nextSortDirection: SortDirection,
     ) => {
-        router.get(endpoint, buildIndexQuery(nextSearch, nextSortField, nextSortDirection), {
-            only,
-            preserveState: true,
-            preserveScroll: true,
-            replace: true,
-            onStart: () => setIsReloading(true),
-            onFinish: () => setIsReloading(false),
-        });
+        router.get(
+            endpoint,
+            buildIndexQuery(nextSearch, nextSortField, nextSortDirection),
+            {
+                only,
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+                onStart: () => setIsReloading(true),
+                onFinish: () => setIsReloading(false),
+            },
+        );
     };
 
     useEffect(() => {
@@ -80,8 +84,8 @@ export default function useIndexFilters<TSortField extends string>(
         nextSortDirection: SortDirection,
     ) => {
         if (!allowedSortFields.includes(nextSortField)) {
-return;
-}
+            return;
+        }
 
         setSortField(nextSortField);
         setSortDirection(nextSortDirection);
@@ -90,8 +94,8 @@ return;
 
     const setSortFieldAndReload = (nextSortField: TSortField) => {
         if (!allowedSortFields.includes(nextSortField)) {
-return;
-}
+            return;
+        }
 
         setSortField(nextSortField);
         reload(search, nextSortField, sortDirection);
@@ -103,15 +107,16 @@ return;
     };
 
     const toggleSortDirection = () => {
-        const nextDirection: SortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        const nextDirection: SortDirection =
+            sortDirection === 'asc' ? 'desc' : 'asc';
         setSortDirection(nextDirection);
         reload(search, sortField, nextDirection);
     };
 
     const handleSort = (field: TSortField) => {
         if (!allowedSortFields.includes(field)) {
-return;
-}
+            return;
+        }
 
         const nextDirection: SortDirection =
             sortField === field && sortDirection === 'asc' ? 'desc' : 'asc';
