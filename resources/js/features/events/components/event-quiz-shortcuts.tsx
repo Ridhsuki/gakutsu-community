@@ -15,8 +15,14 @@ export default function EventQuizShortcuts({
 }) {
     const page = usePage();
 
-    const questionHref = appendFrom(`${rolePrefix}/events/${eventId}/quiz-questions`, page.url);
-    const attemptsHref = appendFrom(`${rolePrefix}/events/${eventId}/quiz-attempts`, page.url);
+    const questionHref = appendFrom(
+        `${rolePrefix}/events/${eventId}/quiz-questions`,
+        page.url,
+    );
+    const attemptsHref = appendFrom(
+        `${rolePrefix}/events/${eventId}/quiz-attempts`,
+        page.url,
+    );
 
     if (variant === 'inline') {
         return (

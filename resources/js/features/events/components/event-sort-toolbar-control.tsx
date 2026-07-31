@@ -34,10 +34,12 @@ export default function EventSortToolbarControl({
     const isAscending = sortDirection === 'asc';
 
     return (
-        <div className="grid w-full gap-2 sm:grid-cols-[minmax(180px,220px)_auto] sm:w-auto">
+        <div className="grid w-full gap-2 sm:w-auto sm:grid-cols-[minmax(180px,220px)_auto]">
             <Select
                 value={sortField}
-                onValueChange={(value) => onSortFieldChange(value as EventSortField)}
+                onValueChange={(value) =>
+                    onSortFieldChange(value as EventSortField)
+                }
             >
                 <SelectTrigger className="h-9 w-full">
                     <SelectValue placeholder="Sort by" />

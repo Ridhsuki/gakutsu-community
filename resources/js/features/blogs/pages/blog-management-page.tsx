@@ -109,7 +109,9 @@ export default function BlogManagementPage({
                         </>
                     }
                     meta={
-                        isReloading ? 'Refreshing data...' : `Total posts: ${posts.total}`
+                        isReloading
+                            ? 'Refreshing data...'
+                            : `Total posts: ${posts.total}`
                     }
                 />
 

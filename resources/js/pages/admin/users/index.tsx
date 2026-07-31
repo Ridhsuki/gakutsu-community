@@ -34,14 +34,20 @@ interface PageProps {
 }
 
 export default function UserIndex({ users, filters }: PageProps) {
-    const { search, setSearch, sortField, sortDirection, isReloading, handleSort } =
-        useIndexFilters<UserSortField>({
-            endpoint: USERS_INDEX_URL,
-            initialFilters: filters,
-            allowedSortFields: USER_ALLOWED_SORT_FIELDS,
-            only: ['users', 'filters'],
-            debounceMs: 350,
-        });
+    const {
+        search,
+        setSearch,
+        sortField,
+        sortDirection,
+        isReloading,
+        handleSort,
+    } = useIndexFilters<UserSortField>({
+        endpoint: USERS_INDEX_URL,
+        initialFilters: filters,
+        allowedSortFields: USER_ALLOWED_SORT_FIELDS,
+        only: ['users', 'filters'],
+        debounceMs: 350,
+    });
 
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
@@ -103,8 +109,8 @@ export default function UserIndex({ users, filters }: PageProps) {
         event.preventDefault();
 
         if (!selectedUser) {
-return;
-}
+            return;
+        }
 
         editForm.put(`${USERS_INDEX_URL}/${selectedUser.id}`, {
             preserveScroll: true,
@@ -116,8 +122,8 @@ return;
 
     const handleDelete = () => {
         if (!selectedUser) {
-return;
-}
+            return;
+        }
 
         setIsDeleting(true);
 
@@ -154,7 +160,9 @@ return;
                         </Button>
                     }
                     meta={
-                        isReloading ? 'Refreshing data...' : `Total users: ${users.total}`
+                        isReloading
+                            ? 'Refreshing data...'
+                            : `Total users: ${users.total}`
                     }
                 />
 
@@ -181,21 +189,27 @@ return;
 
             <UserCreateDialog
                 open={isCreateOpen}
-                onOpenChange={(open) => (open ? setIsCreateOpen(true) : closeCreateModal())}
+                onOpenChange={(open) =>
+                    open ? setIsCreateOpen(true) : closeCreateModal()
+                }
                 form={createForm}
                 onSubmit={handleCreateSubmit}
             />
 
             <UserEditDialog
                 open={isEditOpen}
-                onOpenChange={(open) => (open ? setIsEditOpen(true) : closeEditModal())}
+                onOpenChange={(open) =>
+                    open ? setIsEditOpen(true) : closeEditModal()
+                }
                 form={editForm}
                 onSubmit={handleEditSubmit}
             />
 
             <UserDeleteDialog
                 open={isDeleteOpen}
-                onOpenChange={(open) => (open ? setIsDeleteOpen(true) : closeDeleteModal())}
+                onOpenChange={(open) =>
+                    open ? setIsDeleteOpen(true) : closeDeleteModal()
+                }
                 user={selectedUser}
                 isDeleting={isDeleting}
                 onConfirm={handleDelete}

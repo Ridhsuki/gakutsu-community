@@ -10,7 +10,10 @@ export function appendFrom(path: string, currentUrl: string): string {
     return `${path}${separator}${params.toString()}`;
 }
 
-export function resolveBackHref(currentUrl: string, fallbackHref: string): string {
+export function resolveBackHref(
+    currentUrl: string,
+    fallbackHref: string,
+): string {
     const [, search = ''] = currentUrl.split('?');
     const params = new URLSearchParams(search);
     const from = params.get('from');

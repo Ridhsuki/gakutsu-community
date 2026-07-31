@@ -26,23 +26,23 @@ export default function WebinarCard({ webinar }: WebinarCardProps) {
             <div className="flex flex-1 flex-col gap-4 p-6">
                 {/* Badges */}
                 <div className="flex flex-wrap items-center gap-2">
-                    <Badge className="bg-[#e6f4ed] text-[#106b42] hover:bg-[#d0eadc] border-0 font-medium">
+                    <Badge className="border-0 bg-[#e6f4ed] font-medium text-[#106b42] hover:bg-[#d0eadc]">
                         {webinar.category}
                     </Badge>
                     {webinar.isLive && (
-                        <Badge className="bg-red-500 text-white border-0 font-medium animate-pulse">
+                        <Badge className="animate-pulse border-0 bg-red-500 font-medium text-white">
                             🔴 Live
                         </Badge>
                     )}
                     {webinar.isFree && (
-                        <Badge className="bg-amber-100 text-amber-700 border-0 font-medium">
+                        <Badge className="border-0 bg-amber-100 font-medium text-amber-700">
                             Gratis
                         </Badge>
                     )}
                 </div>
 
                 {/* Title */}
-                <h3 className="text-lg font-semibold text-gray-900 leading-snug group-hover:text-[#106b42] transition-colors duration-200">
+                <h3 className="text-lg leading-snug font-semibold text-gray-900 transition-colors duration-200 group-hover:text-[#106b42]">
                     {webinar.title}
                 </h3>
 
@@ -67,8 +67,12 @@ export default function WebinarCard({ webinar }: WebinarCardProps) {
                         {webinar.mentor.charAt(0)}
                     </div>
                     <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-gray-800">{webinar.mentor}</p>
-                        <p className="truncate text-xs text-gray-500">{webinar.mentorRole}</p>
+                        <p className="truncate text-sm font-semibold text-gray-800">
+                            {webinar.mentor}
+                        </p>
+                        <p className="truncate text-xs text-gray-500">
+                            {webinar.mentorRole}
+                        </p>
                     </div>
                     <User className="ml-auto size-4 shrink-0 text-gray-300" />
                 </div>

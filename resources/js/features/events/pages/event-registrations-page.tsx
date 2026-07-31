@@ -44,7 +44,10 @@ export default function EventRegistrationsPage({
 
             <div className="flex h-full w-full flex-col space-y-6 p-6">
                 <div className="space-y-3">
-                    <ContextBackButton fallbackHref={fallbackHref} label="Back" />
+                    <ContextBackButton
+                        fallbackHref={fallbackHref}
+                        label="Back"
+                    />
 
                     <div className="space-y-1">
                         <h1 className="text-2xl font-semibold tracking-tight">

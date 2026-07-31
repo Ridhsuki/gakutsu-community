@@ -3,7 +3,10 @@ import { FileSearch } from 'lucide-react';
 import ContextBackButton from '@/components/navigation/context-back-button';
 import { Badge } from '@/components/ui/badge';
 import QuizManualGradeCard from '@/features/quizzes/components/quiz-manual-grade-card';
-import type { EventQuizAttemptItem, QuizEventSummary } from '@/features/quizzes/types';
+import type {
+    EventQuizAttemptItem,
+    QuizEventSummary,
+} from '@/features/quizzes/types';
 
 export default function QuizAttemptDetailPage({
     attempt,
@@ -23,7 +26,10 @@ export default function QuizAttemptDetailPage({
 
             <div className="flex h-full w-full flex-col space-y-6 p-6">
                 <div className="space-y-3">
-                    <ContextBackButton fallbackHref={backHref} label="Back to attempts" />
+                    <ContextBackButton
+                        fallbackHref={backHref}
+                        label="Back to attempts"
+                    />
 
                     <div className="space-y-1">
                         <div className="flex items-center gap-2">
@@ -33,8 +39,17 @@ export default function QuizAttemptDetailPage({
                             </h1>
                         </div>
                         <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-                            <span>Score: {attempt.total_score} / {attempt.max_score}</span>
-                            <Badge variant={attempt.status === 'graded' ? 'default' : 'secondary'}>
+                            <span>
+                                Score: {attempt.total_score} /{' '}
+                                {attempt.max_score}
+                            </span>
+                            <Badge
+                                variant={
+                                    attempt.status === 'graded'
+                                        ? 'default'
+                                        : 'secondary'
+                                }
+                            >
                                 {attempt.status}
                             </Badge>
                         </div>
@@ -43,11 +58,15 @@ export default function QuizAttemptDetailPage({
 
                 <div className="space-y-4">
                     {(attempt.answers ?? []).map((answer) => (
-                        <div key={answer.id} className="rounded-xl border border-border bg-card p-5 shadow-sm">
+                        <div
+                            key={answer.id}
+                            className="rounded-xl border border-border bg-card p-5 shadow-sm"
+                        >
                             <div className="space-y-3">
                                 <div className="flex flex-wrap items-center gap-2">
                                     <Badge variant="secondary">
-                                        {answer.question_type_snapshot === 'multiple_choice'
+                                        {answer.question_type_snapshot ===
+                                        'multiple_choice'
                                             ? 'Multiple Choice'
                                             : 'Short Text'}
                                     </Badge>
@@ -57,13 +76,27 @@ export default function QuizAttemptDetailPage({
                                     </Badge>
                                 </div>
 
-                                <h3 className="font-semibold">{answer.question_prompt_snapshot}</h3>
+                                <h3 className="font-semibold">
+                                    {answer.question_prompt_snapshot}
+                                </h3>
 
-                                {answer.question_type_snapshot === 'multiple_choice' ? (
+                                {answer.question_type_snapshot ===
+                                'multiple_choice' ? (
                                     <div className="space-y-2 text-sm text-muted-foreground">
-                                        <p>Selected answer: {answer.option_text_snapshot ?? '-'}</p>
-                                        <p>Result: {answer.is_correct ? 'Correct' : 'Incorrect'}</p>
-                                        <p>Score: {answer.awarded_score} / {answer.question_points_snapshot}</p>
+                                        <p>
+                                            Selected answer:{' '}
+                                            {answer.option_text_snapshot ?? '-'}
+                                        </p>
+                                        <p>
+                                            Result:{' '}
+                                            {answer.is_correct
+                                                ? 'Correct'
+                                                : 'Incorrect'}
+                                        </p>
+                                        <p>
+                                            Score: {answer.awarded_score} /{' '}
+                                            {answer.question_points_snapshot}
+                                        </p>
                                     </div>
                                 ) : (
                                     <QuizManualGradeCard

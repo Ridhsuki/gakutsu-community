@@ -41,19 +41,21 @@ export default function IndexToolbar({
             className={className}
         >
             <div className="flex w-full flex-col gap-4">
-
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <SearchInput
                         value={searchValue}
                         onChange={onSearchChange}
                         placeholder={searchPlaceholder}
-                        containerClassName={cn('w-full sm:max-w-sm lg:max-w-md shrink-0', searchContainerClassName)}
+                        containerClassName={cn(
+                            'w-full shrink-0 sm:max-w-sm lg:max-w-md',
+                            searchContainerClassName,
+                        )}
                     />
 
                     {controls ? (
                         <div
                             className={cn(
-                                'flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end shrink-0',
+                                'flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end',
                                 controlsContainerClassName,
                             )}
                         >
@@ -67,7 +69,6 @@ export default function IndexToolbar({
                         {filters}
                     </div>
                 ) : null}
-
             </div>
         </ResourceToolbar>
     );

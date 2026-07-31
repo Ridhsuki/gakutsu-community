@@ -24,7 +24,11 @@ const navItems = [
     { label: 'Blog', href: '/blogs' },
 ];
 
-export default function SiteHeader({ canRegister = true }: { canRegister?: boolean }) {
+export default function SiteHeader({
+    canRegister = true,
+}: {
+    canRegister?: boolean;
+}) {
     const { props, url } = usePage<AuthProps>();
     const user = props.auth?.user;
     const [open, setOpen] = useState(false);
@@ -55,7 +59,7 @@ export default function SiteHeader({ canRegister = true }: { canRegister?: boole
                                 'text-sm transition-colors',
                                 isActive(item.href)
                                     ? 'font-medium text-primary'
-                                    : 'text-muted-foreground hover:text-foreground'
+                                    : 'text-muted-foreground hover:text-foreground',
                             )}
                         >
                             {item.label}
@@ -94,7 +98,11 @@ export default function SiteHeader({ canRegister = true }: { canRegister?: boole
                         onClick={() => setOpen((v) => !v)}
                         aria-label="Toggle menu"
                     >
-                        {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                        {open ? (
+                            <X className="h-4 w-4" />
+                        ) : (
+                            <Menu className="h-4 w-4" />
+                        )}
                     </Button>
                 </div>
             </div>
@@ -110,7 +118,7 @@ export default function SiteHeader({ canRegister = true }: { canRegister?: boole
                                     'rounded-md px-3 py-2 text-sm transition-colors',
                                     isActive(item.href)
                                         ? 'bg-primary/10 font-medium text-primary'
-                                        : 'hover:bg-muted'
+                                        : 'hover:bg-muted',
                                 )}
                             >
                                 {item.label}
@@ -124,7 +132,11 @@ export default function SiteHeader({ canRegister = true }: { canRegister?: boole
                                 </Button>
                             ) : (
                                 <>
-                                    <Button variant="outline" asChild className="w-full">
+                                    <Button
+                                        variant="outline"
+                                        asChild
+                                        className="w-full"
+                                    >
                                         <Link href="/login">Masuk</Link>
                                     </Button>
 

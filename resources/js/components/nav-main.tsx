@@ -18,13 +18,20 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
 
             <SidebarMenu>
                 {items.map((item) => {
-                    const isActive = item.isActive ?? isCurrentOrParentUrl(item.href);
+                    const isActive =
+                        item.isActive ?? isCurrentOrParentUrl(item.href);
 
                     return (
                         <SidebarMenuItem key={item.title}>
-                            <SidebarMenuButton asChild isActive={isActive} tooltip={{ children: item.title }}>
+                            <SidebarMenuButton
+                                asChild
+                                isActive={isActive}
+                                tooltip={{ children: item.title }}
+                            >
                                 <Link href={item.href}>
-                                    {item.icon ? <item.icon className="h-4 w-4" /> : null}
+                                    {item.icon ? (
+                                        <item.icon className="h-4 w-4" />
+                                    ) : null}
                                     <span>{item.title}</span>
                                 </Link>
                             </SidebarMenuButton>

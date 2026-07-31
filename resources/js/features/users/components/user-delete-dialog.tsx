@@ -32,12 +32,18 @@ export default function UserDeleteDialog({
 
                 <p className="text-sm text-muted-foreground">
                     Are you sure you want to delete{' '}
-                    <span className="font-semibold text-foreground">{user?.name}</span>? This action
-                    cannot be undone.
+                    <span className="font-semibold text-foreground">
+                        {user?.name}
+                    </span>
+                    ? This action cannot be undone.
                 </p>
 
                 <DialogFooter>
-                    <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => onOpenChange(false)}
+                    >
                         Cancel
                     </Button>
                     <Button

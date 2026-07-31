@@ -48,12 +48,17 @@ export default function EventShow({
         <PublicLayout>
             <SeoHead
                 title={event.title}
-                description={String(event.description ?? '').replace(/<[^>]*>/g, '').slice(0, 155)}
+                description={String(event.description ?? '')
+                    .replace(/<[^>]*>/g, '')
+                    .slice(0, 155)}
                 image={event.poster_image_url ?? null}
             />
 
             <div className="mx-auto max-w-6xl px-4 py-12">
-                <Link href="/events" className="inline-flex text-sm font-medium text-primary">
+                <Link
+                    href="/events"
+                    className="inline-flex text-sm font-medium text-primary"
+                >
                     ← Kembali ke events
                 </Link>
 
@@ -62,9 +67,13 @@ export default function EventShow({
                         <div className="space-y-4">
                             <div className="flex flex-wrap items-center gap-3">
                                 <EventStatusBadge status={event.status} />
-                                <span className="text-sm font-medium text-primary">{event.category}</span>
+                                <span className="text-sm font-medium text-primary">
+                                    {event.category}
+                                </span>
                             </div>
-                            <h1 className="text-4xl font-semibold tracking-tight">{event.title}</h1>
+                            <h1 className="text-4xl font-semibold tracking-tight">
+                                {event.title}
+                            </h1>
                         </div>
 
                         <EventPosterThumbnail
@@ -80,13 +89,17 @@ export default function EventShow({
 
                     <aside className="space-y-6">
                         <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
-                            <h2 className="text-lg font-semibold">Informasi Event</h2>
+                            <h2 className="text-lg font-semibold">
+                                Informasi Event
+                            </h2>
 
                             <div className="mt-5 space-y-4 text-sm">
                                 <div className="flex items-center gap-3">
                                     <CalendarDays className="h-4 w-4 text-primary" />
                                     <span>
-                                        {new Date(event.starts_at).toLocaleDateString('id-ID', {
+                                        {new Date(
+                                            event.starts_at,
+                                        ).toLocaleDateString('id-ID', {
                                             day: '2-digit',
                                             month: 'short',
                                             year: 'numeric',
@@ -101,7 +114,9 @@ export default function EventShow({
 
                                 <div className="flex items-center gap-3">
                                     <CircleHelp className="h-4 w-4 text-primary" />
-                                    <span>{questionCount} pertanyaan registrasi</span>
+                                    <span>
+                                        {questionCount} pertanyaan registrasi
+                                    </span>
                                 </div>
                             </div>
 

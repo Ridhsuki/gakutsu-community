@@ -10,8 +10,8 @@ export default function SiteFooter() {
                         <AppLogo />
                     </div>
                     <p className="max-w-md text-sm text-muted-foreground">
-                        A place to learn IT and cybersecurity together.
-                        Just sharing, discussing, and learning step by step.
+                        A place to learn IT and cybersecurity together. Just
+                        sharing, discussing, and learning step by step.
                     </p>
                 </div>
 
@@ -36,7 +36,10 @@ export default function SiteFooter() {
 
             <div className="border-t border-border/60">
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 text-xs text-muted-foreground">
-                    <p>© {new Date().getFullYear()} Yok Pelajarin. All rights reserved.</p>
+                    <p>
+                        © {new Date().getFullYear()} Yok Pelajarin. All rights
+                        reserved.
+                    </p>
                 </div>
             </div>
         </footer>

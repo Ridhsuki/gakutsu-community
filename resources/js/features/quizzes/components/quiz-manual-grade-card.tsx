@@ -25,7 +25,7 @@ export default function QuizManualGradeCard({
     return (
         <div className="space-y-4">
             <div className="rounded-lg border border-border bg-muted/30 p-4">
-                <p className="whitespace-pre-wrap text-sm">
+                <p className="text-sm whitespace-pre-wrap">
                     {answer.answer_text || '-'}
                 </p>
             </div>
@@ -39,7 +39,10 @@ export default function QuizManualGradeCard({
                         max={answer.question_points_snapshot}
                         value={form.data.awarded_score}
                         onChange={(e) =>
-                            form.setData('awarded_score', Number(e.currentTarget.value))
+                            form.setData(
+                                'awarded_score',
+                                Number(e.currentTarget.value),
+                            )
                         }
                     />
                 </div>
@@ -49,13 +52,19 @@ export default function QuizManualGradeCard({
                     <Textarea
                         className="min-h-24"
                         value={form.data.feedback}
-                        onChange={(e) => form.setData('feedback', e.currentTarget.value)}
+                        onChange={(e) =>
+                            form.setData('feedback', e.currentTarget.value)
+                        }
                     />
                 </div>
             </div>
 
             <div className="flex justify-end">
-                <Button type="button" onClick={submit} disabled={form.processing}>
+                <Button
+                    type="button"
+                    onClick={submit}
+                    disabled={form.processing}
+                >
                     Save Grade
                 </Button>
             </div>

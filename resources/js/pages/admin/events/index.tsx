@@ -1,7 +1,9 @@
 import EventManagementPage from '@/features/events/pages/event-management-page';
-import type {EventManagementPageSharedProps} from '@/features/events/pages/event-management-page';
+import type { EventManagementPageSharedProps } from '@/features/events/pages/event-management-page';
 
-export default function AdminEventIndex(props: EventManagementPageSharedProps['events'] extends never ? never : any) {
+export default function AdminEventIndex(
+    props: EventManagementPageSharedProps['events'] extends never ? never : any,
+) {
     return (
         <EventManagementPage
             {...props}

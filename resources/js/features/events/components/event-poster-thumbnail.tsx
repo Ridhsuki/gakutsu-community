@@ -33,7 +33,10 @@ export default function EventPosterThumbnail({
                     loading="lazy"
                     decoding="async"
                     onError={() => setHasError(true)}
-                    className={cn('h-full w-full object-contain', imageClassName)}
+                    className={cn(
+                        'h-full w-full object-contain',
+                        imageClassName,
+                    )}
                 />
             ) : (
                 <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground">

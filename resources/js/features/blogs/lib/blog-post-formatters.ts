@@ -1,13 +1,13 @@
 export function formatBlogPostDate(value: string | null): string {
     if (!value) {
-return '-';
-}
+        return '-';
+    }
 
     const date = new Date(value);
 
     if (Number.isNaN(date.getTime())) {
-return '-';
-}
+        return '-';
+    }
 
     return date.toLocaleDateString('id-ID', {
         day: '2-digit',

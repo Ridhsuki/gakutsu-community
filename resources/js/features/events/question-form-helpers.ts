@@ -27,7 +27,9 @@ export function mapQuestionToEditForm(
     return {
         label: question.label,
         type: question.type,
-        options_text: Array.isArray(question.options) ? question.options.join('\n') : '',
+        options_text: Array.isArray(question.options)
+            ? question.options.join('\n')
+            : '',
         placeholder: question.placeholder ?? '',
         help_text: question.help_text ?? '',
         is_required: question.is_required,

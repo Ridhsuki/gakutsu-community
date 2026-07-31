@@ -3,7 +3,9 @@ import type { EventManagementViewMode } from '@/features/events/types';
 
 const STORAGE_KEY = 'yokpelajarin.event-management.view-mode';
 
-function isValidViewMode(value: string | null): value is EventManagementViewMode {
+function isValidViewMode(
+    value: string | null,
+): value is EventManagementViewMode {
     return value === 'table' || value === 'cards';
 }
 

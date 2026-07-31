@@ -1,5 +1,8 @@
 import EventRegistrationQuestionManagementPage from '@/features/events/pages/event-registration-question-management-page';
-import type { EventItem, EventRegistrationQuestionItem } from '@/features/events/types';
+import type {
+    EventItem,
+    EventRegistrationQuestionItem,
+} from '@/features/events/types';
 import type { PaginatedResponse } from '@/types/pagination';
 
 interface Props {

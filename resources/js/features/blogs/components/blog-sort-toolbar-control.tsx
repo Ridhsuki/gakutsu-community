@@ -27,10 +27,12 @@ export default function BlogSortToolbarControl({
     const isAscending = sortDirection === 'asc';
 
     return (
-        <div className="grid w-full gap-2 sm:grid-cols-[minmax(180px,220px)_auto] sm:w-auto">
+        <div className="grid w-full gap-2 sm:w-auto sm:grid-cols-[minmax(180px,220px)_auto]">
             <Select
                 value={sortField}
-                onValueChange={(value) => onSortFieldChange(value as BlogPostSortField)}
+                onValueChange={(value) =>
+                    onSortFieldChange(value as BlogPostSortField)
+                }
             >
                 <SelectTrigger className="h-9 w-full">
                     <SelectValue placeholder="Sort by" />
@@ -38,10 +40,7 @@ export default function BlogSortToolbarControl({
 
                 <SelectContent>
                     {BLOG_SORT_OPTIONS.map((option) => (
-                        <SelectItem
-                            key={option.value}
-                            value={option.value}
-                        >
+                        <SelectItem key={option.value} value={option.value}>
                             {option.label}
                         </SelectItem>
                     ))}

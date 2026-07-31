@@ -32,14 +32,26 @@ export default function EventDeleteDialog({
 
                 <p className="text-sm text-muted-foreground">
                     Are you sure you want to delete{' '}
-                    <span className="font-medium text-foreground">{event?.title ?? 'this event'}</span>?
+                    <span className="font-medium text-foreground">
+                        {event?.title ?? 'this event'}
+                    </span>
+                    ?
                 </p>
 
                 <DialogFooter>
-                    <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => onOpenChange(false)}
+                    >
                         Cancel
                     </Button>
-                    <Button type="button" variant="destructive" onClick={onConfirm} disabled={isDeleting}>
+                    <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={onConfirm}
+                        disabled={isDeleting}
+                    >
                         {isDeleting ? 'Deleting...' : 'Delete'}
                     </Button>
                 </DialogFooter>

@@ -31,7 +31,11 @@ export default function EventRegistrationQuestionCreateDialog({
                     <EventRegistrationQuestionFormFields form={form} />
 
                     <DialogFooter>
-                        <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => onOpenChange(false)}
+                        >
                             Cancel
                         </Button>
                         <Button type="submit" disabled={form.processing}>

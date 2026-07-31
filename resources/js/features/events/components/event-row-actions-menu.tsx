@@ -1,5 +1,12 @@
 import { Link, usePage } from '@inertiajs/react';
-import { MoreHorizontal, Eye, ClipboardList, Users, Edit, Trash2 } from 'lucide-react';
+import {
+    MoreHorizontal,
+    Eye,
+    ClipboardList,
+    Users,
+    Edit,
+    Trash2,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -30,7 +37,9 @@ export default function EventRowActionsMenu({
     onDelete,
 }: EventRowActionsMenuProps) {
     const page = usePage();
-    const rolePrefix: '/admin' | '/mentor' = showBaseUrl.startsWith('/mentor') ? '/mentor' : '/admin';
+    const rolePrefix: '/admin' | '/mentor' = showBaseUrl.startsWith('/mentor')
+        ? '/mentor'
+        : '/admin';
 
     return (
         <DropdownMenu>
@@ -42,21 +51,36 @@ export default function EventRowActionsMenu({
 
             <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem asChild>
-                    <Link href={appendFrom(`${showBaseUrl}/${event.id}`, page.url)}>
+                    <Link
+                        href={appendFrom(
+                            `${showBaseUrl}/${event.id}`,
+                            page.url,
+                        )}
+                    >
                         <Eye className="mr-2 h-4 w-4" />
                         View details
                     </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
-                    <Link href={appendFrom(`${questionsBaseUrl}/${event.id}/registration-questions`, page.url)}>
+                    <Link
+                        href={appendFrom(
+                            `${questionsBaseUrl}/${event.id}/registration-questions`,
+                            page.url,
+                        )}
+                    >
                         <ClipboardList className="mr-2 h-4 w-4" />
                         Registration Form
                     </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
-                    <Link href={appendFrom(`${registrationsBaseUrl}/${event.id}/registrations`, page.url)}>
+                    <Link
+                        href={appendFrom(
+                            `${registrationsBaseUrl}/${event.id}/registrations`,
+                            page.url,
+                        )}
+                    >
                         <Users className="mr-2 h-4 w-4" />
                         Registrants
                     </Link>
@@ -64,12 +88,20 @@ export default function EventRowActionsMenu({
 
                 <DropdownMenuSeparator />
 
-                <EventQuizShortcuts eventId={event.id} rolePrefix={rolePrefix} />
+                <EventQuizShortcuts
+                    eventId={event.id}
+                    rolePrefix={rolePrefix}
+                />
 
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem asChild>
-                    <Link href={appendFrom(`${editBaseUrl}/${event.id}/edit`, page.url)}>
+                    <Link
+                        href={appendFrom(
+                            `${editBaseUrl}/${event.id}/edit`,
+                            page.url,
+                        )}
+                    >
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
                     </Link>

@@ -97,7 +97,7 @@ Source: `storage/logs/recovery/SUMMARY.md` and individual log files. These files
 | Check          | Command                | Status   | Details                                      |
 | -------------- | ---------------------- | -------- | -------------------------------------------- |
 | ESLint         | `npm run lint:check`   | **Failed** | 5 errors, 2 warnings across 7 files. Mechanical issues resolved in P0-3; only P0-4 behavioral findings remain. |
-| Prettier       | `npm run format:check` | **Failed** | 92 files with formatting issues             |
+| Prettier       | `npm run format:check` | **Passed** | 0 formatting issues. Resolved in P0-6.       |
 | TypeScript     | `npm run types:check`  | **Passed** | 0 errors. Baseline TypeScript errors resolved in P0-2. |
 | PHP Pint       | `composer lint:check`  | **Passed** | 0 style issues. Baseline Pint issues resolved in P0-5. |
 | Backend tests  | `php artisan test`     | **Passed** | 40 passed. Test infrastructure restored (RefreshDatabase and MySQL test DB configured). |
@@ -257,6 +257,7 @@ No remaining code references to "YokPelajarin" were found in application source 
 | 5 ESLint errors, 2 warnings | Medium | Mechanical findings resolved in P0-3; 7 behavioral findings (5 errors, 2 warnings) remain for P0-4 manual review |
 | 7 TypeScript errors | Resolved | `npm run types:check` passes with 0 errors |
 | 67 Pint style issues | Resolved | `composer lint:check` passes with 0 issues |
+| Prettier style issues | Resolved | `npm run format:check` passes with 0 issues |
 | SSR hydration risk | Medium | `set-state-in-effect` patterns with browser-only APIs could cause hydration mismatches |
 | No production database yet | Info | Development migration policy applies; migrations mutable |
 

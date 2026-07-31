@@ -1,11 +1,7 @@
 import EventFormPage from '@/features/events/pages/event-form-page';
 import type { EventItem } from '@/features/events/types';
 
-export default function MentorEventEdit({
-    event,
-}: {
-    event: EventItem;
-}) {
+export default function MentorEventEdit({ event }: { event: EventItem }) {
     return (
         <EventFormPage
             mode="edit"

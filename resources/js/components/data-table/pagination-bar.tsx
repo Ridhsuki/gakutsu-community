@@ -27,15 +27,15 @@ export default function PaginationBar({
     only = [],
 }: PaginationBarProps) {
     if (lastPage <= 1) {
-return null;
-}
+        return null;
+    }
 
-    const previousLink = links.find(
-        (link) => cleanPaginationLabel(link.label).toLowerCase().includes('previous')
+    const previousLink = links.find((link) =>
+        cleanPaginationLabel(link.label).toLowerCase().includes('previous'),
     );
 
-    const nextLink = links.find(
-        (link) => cleanPaginationLabel(link.label).toLowerCase().includes('next')
+    const nextLink = links.find((link) =>
+        cleanPaginationLabel(link.label).toLowerCase().includes('next'),
     );
 
     const pageLinks = links.filter((link) => !isNavigationLabel(link.label));

@@ -48,24 +48,28 @@ export default function BlogPostCard({
 
                 <dl className="mt-4 grid grid-cols-1 gap-3 text-sm text-muted-foreground sm:grid-cols-2">
                     <div>
-                        <dt className="text-[11px] font-medium uppercase tracking-wide text-foreground/70">
+                        <dt className="text-[11px] font-medium tracking-wide text-foreground/70 uppercase">
                             Author
                         </dt>
                         <dd className="mt-1">{post.author?.name ?? '-'}</dd>
                     </div>
 
                     <div>
-                        <dt className="text-[11px] font-medium uppercase tracking-wide text-foreground/70">
+                        <dt className="text-[11px] font-medium tracking-wide text-foreground/70 uppercase">
                             Published
                         </dt>
-                        <dd className="mt-1">{formatBlogPostDate(post.published_at)}</dd>
+                        <dd className="mt-1">
+                            {formatBlogPostDate(post.published_at)}
+                        </dd>
                     </div>
 
                     <div className="sm:col-span-2">
-                        <dt className="text-[11px] font-medium uppercase tracking-wide text-foreground/70">
+                        <dt className="text-[11px] font-medium tracking-wide text-foreground/70 uppercase">
                             Created
                         </dt>
-                        <dd className="mt-1">{formatBlogPostDate(post.created_at)}</dd>
+                        <dd className="mt-1">
+                            {formatBlogPostDate(post.created_at)}
+                        </dd>
                     </div>
                 </dl>
 

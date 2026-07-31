@@ -31,16 +31,12 @@ export default function BlogsIndex({
     const handleSearch = (value: string) => {
         setSearch(value);
 
-        router.get(
-            '/blogs',
-            value.trim() ? { search: value.trim() } : {},
-            {
-                preserveScroll: true,
-                preserveState: true,
-                replace: true,
-                only: ['posts', 'filters'],
-            },
-        );
+        router.get('/blogs', value.trim() ? { search: value.trim() } : {}, {
+            preserveScroll: true,
+            preserveState: true,
+            replace: true,
+            only: ['posts', 'filters'],
+        });
     };
 
     return (
@@ -53,9 +49,12 @@ export default function BlogsIndex({
             <div className="mx-auto max-w-7xl px-4 py-12">
                 <div className="mb-8 space-y-2">
                     <p className="text-sm font-medium text-primary">Blog</p>
-                    <h1 className="text-3xl font-semibold tracking-tight">Artikel dan insight terbaru</h1>
+                    <h1 className="text-3xl font-semibold tracking-tight">
+                        Artikel dan insight terbaru
+                    </h1>
                     <p className="max-w-2xl text-muted-foreground">
-                        Kumpulan tulisan tentang IT, cyber security, pengembangan karier, dan pembelajaran komunitas.
+                        Kumpulan tulisan tentang IT, cyber security,
+                        pengembangan karier, dan pembelajaran komunitas.
                     </p>
                 </div>
 
@@ -73,7 +72,10 @@ export default function BlogsIndex({
                             key={post.id}
                             post={{
                                 ...post,
-                                excerpt: String(post.content ?? '').replace(/<[^>]*>/g, '').slice(0, 140) + '...',
+                                excerpt:
+                                    String(post.content ?? '')
+                                        .replace(/<[^>]*>/g, '')
+                                        .slice(0, 140) + '...',
                             }}
                         />
                     ))}

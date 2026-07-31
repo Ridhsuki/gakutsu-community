@@ -41,11 +41,14 @@ export default function EventRegister({
     questions: EventQuestion[];
     alreadyRegistered: boolean;
 }) {
-    const initialAnswers = questions.reduce<Record<string, string>>((carry, item) => {
-        carry[String(item.id)] = '';
+    const initialAnswers = questions.reduce<Record<string, string>>(
+        (carry, item) => {
+            carry[String(item.id)] = '';
 
-        return carry;
-    }, {});
+            return carry;
+        },
+        {},
+    );
 
     const form = useForm({
         answers: initialAnswers,
@@ -67,16 +70,24 @@ export default function EventRegister({
             />
 
             <div className="mx-auto max-w-4xl px-4 py-12">
-                <Link href={`/events/${event.slug}`} className="inline-flex text-sm font-medium text-primary">
+                <Link
+                    href={`/events/${event.slug}`}
+                    className="inline-flex text-sm font-medium text-primary"
+                >
                     ← Kembali ke detail event
                 </Link>
 
                 <div className="mt-6 rounded-3xl border border-border bg-card p-6 shadow-sm">
                     <div className="space-y-2">
-                        <p className="text-sm font-medium text-primary">Registrasi Event</p>
-                        <h1 className="text-3xl font-semibold tracking-tight">{event.title}</h1>
+                        <p className="text-sm font-medium text-primary">
+                            Registrasi Event
+                        </p>
+                        <h1 className="text-3xl font-semibold tracking-tight">
+                            {event.title}
+                        </h1>
                         <p className="text-sm text-muted-foreground">
-                            Mentor: {event.mentor?.name ?? '-'} · {event.category}
+                            Mentor: {event.mentor?.name ?? '-'} ·{' '}
+                            {event.category}
                         </p>
                     </div>
 
@@ -88,15 +99,22 @@ export default function EventRegister({
                         <form onSubmit={submit} className="mt-8 space-y-6">
                             {questions.length === 0 ? (
                                 <div className="rounded-2xl border border-dashed border-border p-6 text-sm text-muted-foreground">
-                                    Event ini tidak memiliki pertanyaan tambahan. Klik tombol di bawah untuk menyelesaikan registrasi.
+                                    Event ini tidak memiliki pertanyaan
+                                    tambahan. Klik tombol di bawah untuk
+                                    menyelesaikan registrasi.
                                 </div>
                             ) : (
                                 questions.map((question) => (
-                                    <div key={question.id} className="space-y-2">
+                                    <div
+                                        key={question.id}
+                                        className="space-y-2"
+                                    >
                                         <label className="text-sm font-medium">
                                             {question.label}
                                             {question.is_required ? (
-                                                <span className="ml-1 text-red-500">*</span>
+                                                <span className="ml-1 text-red-500">
+                                                    *
+                                                </span>
                                             ) : null}
                                         </label>
 
@@ -108,39 +126,60 @@ export default function EventRegister({
 
                                         {question.type === 'short_text' ? (
                                             <Input
-                                                value={form.data.answers[String(question.id)]}
+                                                value={
+                                                    form.data.answers[
+                                                        String(question.id)
+                                                    ]
+                                                }
                                                 onChange={(e) =>
                                                     form.setData('answers', {
                                                         ...form.data.answers,
-                                                        [String(question.id)]: e.currentTarget.value,
+                                                        [String(question.id)]:
+                                                            e.currentTarget
+                                                                .value,
                                                     })
                                                 }
-                                                placeholder={question.placeholder ?? ''}
+                                                placeholder={
+                                                    question.placeholder ?? ''
+                                                }
                                                 className="h-10"
                                             />
                                         ) : null}
 
                                         {question.type === 'long_text' ? (
                                             <Textarea
-                                                value={form.data.answers[String(question.id)]}
+                                                value={
+                                                    form.data.answers[
+                                                        String(question.id)
+                                                    ]
+                                                }
                                                 onChange={(e) =>
                                                     form.setData('answers', {
                                                         ...form.data.answers,
-                                                        [String(question.id)]: e.currentTarget.value,
+                                                        [String(question.id)]:
+                                                            e.currentTarget
+                                                                .value,
                                                     })
                                                 }
-                                                placeholder={question.placeholder ?? ''}
+                                                placeholder={
+                                                    question.placeholder ?? ''
+                                                }
                                                 className="min-h-32 resize-y"
                                             />
                                         ) : null}
 
                                         {question.type === 'select' ? (
                                             <Select
-                                                value={form.data.answers[String(question.id)]}
+                                                value={
+                                                    form.data.answers[
+                                                        String(question.id)
+                                                    ]
+                                                }
                                                 onValueChange={(value) =>
                                                     form.setData('answers', {
                                                         ...form.data.answers,
-                                                        [String(question.id)]: value,
+                                                        [String(question.id)]:
+                                                            value,
                                                     })
                                                 }
                                             >
@@ -148,8 +187,13 @@ export default function EventRegister({
                                                     <SelectValue placeholder="Pilih jawaban" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    {(question.options ?? []).map((option) => (
-                                                        <SelectItem key={option} value={option}>
+                                                    {(
+                                                        question.options ?? []
+                                                    ).map((option) => (
+                                                        <SelectItem
+                                                            key={option}
+                                                            value={option}
+                                                        >
                                                             {option}
                                                         </SelectItem>
                                                     ))}
@@ -157,9 +201,15 @@ export default function EventRegister({
                                             </Select>
                                         ) : null}
 
-                                        {form.errors[`answers.${question.id}`] ? (
+                                        {form.errors[
+                                            `answers.${question.id}`
+                                        ] ? (
                                             <p className="text-sm text-red-500">
-                                                {form.errors[`answers.${question.id}`]}
+                                                {
+                                                    form.errors[
+                                                        `answers.${question.id}`
+                                                    ]
+                                                }
                                             </p>
                                         ) : null}
                                     </div>
@@ -167,11 +217,18 @@ export default function EventRegister({
                             )}
 
                             <div className="flex flex-col gap-3 sm:flex-row">
-                                <Button type="submit" disabled={form.processing}>
-                                    {form.processing ? 'Mengirim...' : 'Kirim Jawaban & Daftar'}
+                                <Button
+                                    type="submit"
+                                    disabled={form.processing}
+                                >
+                                    {form.processing
+                                        ? 'Mengirim...'
+                                        : 'Kirim Jawaban & Daftar'}
                                 </Button>
                                 <Button type="button" variant="outline" asChild>
-                                    <Link href={`/events/${event.slug}`}>Batal</Link>
+                                    <Link href={`/events/${event.slug}`}>
+                                        Batal
+                                    </Link>
                                 </Button>
                             </div>
                         </form>

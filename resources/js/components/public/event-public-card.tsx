@@ -20,8 +20,8 @@ function formatDate(value: string) {
     const date = new Date(value);
 
     if (Number.isNaN(date.getTime())) {
-return '-';
-}
+        return '-';
+    }
 
     return date.toLocaleDateString('id-ID', {
         day: '2-digit',
@@ -48,10 +48,12 @@ export default function EventPublicCard({
             <div className="space-y-4 p-5">
                 <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                        <p className="mb-1 text-xs font-medium uppercase tracking-wide text-primary">
+                        <p className="mb-1 text-xs font-medium tracking-wide text-primary uppercase">
                             {event.category}
                         </p>
-                        <h3 className="line-clamp-2 text-lg font-semibold">{event.title}</h3>
+                        <h3 className="line-clamp-2 text-lg font-semibold">
+                            {event.title}
+                        </h3>
                     </div>
                     <EventStatusBadge status={event.status} />
                 </div>

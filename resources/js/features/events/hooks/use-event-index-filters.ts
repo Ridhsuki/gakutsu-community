@@ -52,7 +52,9 @@ export default function useEventIndexFilters({
     const [sortDirection, setSortDirection] = useState<SortDirection>(
         initialFilters.sort_direction ?? 'desc',
     );
-    const [statusFilter, setStatusFilter] = useState(initialFilters.status ?? 'all');
+    const [statusFilter, setStatusFilter] = useState(
+        initialFilters.status ?? 'all',
+    );
     const [publicationFilter, setPublicationFilter] = useState(
         initialFilters.publication ?? 'all',
     );
@@ -144,7 +146,8 @@ export default function useEventIndexFilters({
     };
 
     const toggleSortDirection = () => {
-        const nextDirection: SortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        const nextDirection: SortDirection =
+            sortDirection === 'asc' ? 'desc' : 'asc';
         setSortDirection(nextDirection);
 
         reload(

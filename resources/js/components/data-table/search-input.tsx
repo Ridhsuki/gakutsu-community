@@ -17,8 +17,13 @@ export default function SearchInput({
     containerClassName,
 }: SearchInputProps) {
     return (
-        <div className={cn('relative w-full sm:max-w-xs md:max-w-sm', containerClassName)}>
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <div
+            className={cn(
+                'relative w-full sm:max-w-xs md:max-w-sm',
+                containerClassName,
+            )}
+        >
+            <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 
             <input
                 type="search"
@@ -26,7 +31,7 @@ export default function SearchInput({
                 onChange={(e) => onChange(e.currentTarget.value)}
                 placeholder={placeholder}
                 className={cn(
-                    'h-9 w-full rounded-md border border-input bg-background py-2 pl-10 pr-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/20',
+                    'h-9 w-full rounded-md border border-input bg-background py-2 pr-3 pl-10 text-sm text-foreground transition outline-none focus:border-primary focus:ring-2 focus:ring-ring/20',
                     className,
                 )}
             />

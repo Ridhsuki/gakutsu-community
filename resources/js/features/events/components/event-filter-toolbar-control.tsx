@@ -45,7 +45,10 @@ export default function EventFilterToolbarControl({
                 </SelectContent>
             </Select>
 
-            <Select value={publicationFilter} onValueChange={onPublicationChange}>
+            <Select
+                value={publicationFilter}
+                onValueChange={onPublicationChange}
+            >
                 <SelectTrigger className="h-9 w-full">
                     <SelectValue placeholder="Publication" />
                 </SelectTrigger>
