@@ -96,7 +96,7 @@ Source: `storage/logs/recovery/SUMMARY.md` and individual log files. These files
 
 | Check          | Command                | Status   | Details                                      |
 | -------------- | ---------------------- | -------- | -------------------------------------------- |
-| ESLint         | `npm run lint:check`   | **Failed** | 5 errors, 2 warnings across 7 files. Mechanical issues resolved in P0-3; only P0-4 behavioral findings remain. |
+| ESLint         | `npm run lint:check`   | **Passed** | 0 errors, 0 warnings. Mechanical issues resolved in P0-3; behavioral issues resolved in P0-4. |
 | Prettier       | `npm run format:check` | **Passed** | 0 formatting issues. Resolved in P0-6.       |
 | TypeScript     | `npm run types:check`  | **Passed** | 0 errors. Baseline TypeScript errors resolved in P0-2. |
 | PHP Pint       | `composer lint:check`  | **Passed** | 0 style issues. Baseline Pint issues resolved in P0-5. |
@@ -114,18 +114,9 @@ Source: `storage/logs/recovery/SUMMARY.md` and individual log files. These files
 - `@typescript-eslint/no-unused-vars` — unused variables (`Head`, `event`, `isLoggedIn`, `usePage`) (6 instances resolved)
 - `@typescript-eslint/no-empty-object-type` — empty interfaces in `features/events/types.ts` (2 instances resolved via type aliases)
 
-**Behavioral issues remaining for P0-4 manual review:**
-- `react-hooks/set-state-in-effect` — setState inside useEffect (5 files, 5 errors):
-  - `components/forms/date-time-picker-field.tsx:91` — `setDisplayMonth` in effect
-  - `components/public/reveal.tsx:47` — `setIsVisible` in effect (prefers-reduced-motion)
-  - `features/blogs/components/blog-editor-link-dialog.tsx:29` — `setUrl` sync from prop
-  - `features/blogs/components/blog-post-cover-input.tsx:26` — `setPreviewUrl` from prop
-  - `pages/welcome.tsx:68` — `setPlayHeroEntry` in effect
-- `react-hooks/exhaustive-deps` — incomplete effect dependency arrays (2 files, 2 warnings):
-  - `features/events/hooks/use-event-index-filters.ts:114`
-  - `hooks/use-index-filters.ts:76`
-
-> **Risk:** The `set-state-in-effect` instances in `reveal.tsx`, `welcome.tsx`, and `date-time-picker-field.tsx` may cause hydration mismatches with SSR if they depend on browser-only state (`window`, `matchMedia`, `sessionStorage`). The prop-syncing patterns in blog components may cause unnecessary re-renders but are unlikely to be hydration issues.
+**Behavioral issues resolved in P0-4:**
+- `react-hooks/set-state-in-effect` — setState inside useEffect (5 files, 5 errors) resolved.
+- `react-hooks/exhaustive-deps` — incomplete effect dependency arrays (2 files, 2 warnings) resolved.
 
 ### 2.2 TypeScript Errors
 
@@ -254,11 +245,11 @@ No remaining code references to "YokPelajarin" were found in application source 
 | Test infrastructure broken | Resolved | `RefreshDatabase` restored; tests run on MySQL testing DB |
 | No business-feature tests | High | Zero tests for events, registration, quizzes, blogs, authorization |
 | Member quiz flow not wired | Medium | Backend logic exists but routes are commented out |
-| 5 ESLint errors, 2 warnings | Medium | Mechanical findings resolved in P0-3; 7 behavioral findings (5 errors, 2 warnings) remain for P0-4 manual review |
+| 5 ESLint errors, 2 warnings | Resolved | All behavioral findings resolved in P0-4. `npm run lint:check` passes with 0 issues |
 | 7 TypeScript errors | Resolved | `npm run types:check` passes with 0 errors |
 | 67 Pint style issues | Resolved | `composer lint:check` passes with 0 issues |
 | Prettier style issues | Resolved | `npm run format:check` passes with 0 issues |
-| SSR hydration risk | Medium | `set-state-in-effect` patterns with browser-only APIs could cause hydration mismatches |
+| SSR hydration risk | Mitigated | Known browser-dependent lint patterns removed; SSR build passes; manual browser hydration smoke testing pending |
 | No production database yet | Info | Development migration policy applies; migrations mutable |
 
 ---

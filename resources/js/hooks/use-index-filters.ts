@@ -1,5 +1,5 @@
 import { router } from '@inertiajs/react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { IndexFilters, SortDirection } from '@/types/filters';
 
 interface UseIndexFiltersOptions<TSortField extends string> {
@@ -46,24 +46,41 @@ export default function useIndexFilters<TSortField extends string>(
 
     const isFirstSearchRender = useRef(true);
 
-    const reload = (
-        nextSearch: string,
-        nextSortField: TSortField,
-        nextSortDirection: SortDirection,
-    ) => {
-        router.get(
-            endpoint,
-            buildIndexQuery(nextSearch, nextSortField, nextSortDirection),
-            {
-                only,
-                preserveState: true,
-                preserveScroll: true,
-                replace: true,
-                onStart: () => setIsReloading(true),
-                onFinish: () => setIsReloading(false),
-            },
-        );
-    };
+    const reload = useCallback(
+        (
+            nextSearch: string,
+            nextSortField: TSortField,
+            nextSortDirection: SortDirection,
+        ) => {
+            router.get(
+                endpoint,
+                buildIndexQuery(nextSearch, nextSortField, nextSortDirection),
+                {
+                    only,
+                    preserveState: true,
+                    preserveScroll: true,
+                    replace: true,
+                    onStart: () => setIsReloading(true),
+                    onFinish: () => setIsReloading(false),
+                },
+            );
+        },
+        [endpoint, only],
+    );
+
+    const latestValues = useRef({
+        sortField,
+        sortDirection,
+        reload,
+    });
+
+    useEffect(() => {
+        latestValues.current = {
+            sortField,
+            sortDirection,
+            reload,
+        };
+    }, [sortField, sortDirection, reload]);
 
     useEffect(() => {
         if (isFirstSearchRender.current) {
@@ -73,11 +90,12 @@ export default function useIndexFilters<TSortField extends string>(
         }
 
         const timeoutId = window.setTimeout(() => {
-            reload(search, sortField, sortDirection);
+            const current = latestValues.current;
+            current.reload(search, current.sortField, current.sortDirection);
         }, debounceMs);
 
         return () => window.clearTimeout(timeoutId);
-    }, [search]);
+    }, [search, debounceMs]);
 
     const applySort = (
         nextSortField: TSortField,

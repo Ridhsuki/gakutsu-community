@@ -1,5 +1,5 @@
 import { router } from '@inertiajs/react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { EventSortField } from '@/features/events/types';
 import type { SortDirection } from '@/types/filters';
 
@@ -65,34 +65,64 @@ export default function useEventIndexFilters({
 
     const isFirstSearchRender = useRef(true);
 
-    const reload = (
-        nextSearch: string,
-        nextSortField: EventSortField,
-        nextSortDirection: SortDirection,
-        nextStatus: string,
-        nextPublication: string,
-        nextAccessType: string,
-    ) => {
-        router.get(
-            endpoint,
-            buildQuery(
-                nextSearch,
-                nextSortField,
-                nextSortDirection,
-                nextStatus,
-                nextPublication,
-                nextAccessType,
-            ),
-            {
-                only,
-                preserveState: true,
-                preserveScroll: true,
-                replace: true,
-                onStart: () => setIsReloading(true),
-                onFinish: () => setIsReloading(false),
-            },
-        );
-    };
+    const reload = useCallback(
+        (
+            nextSearch: string,
+            nextSortField: EventSortField,
+            nextSortDirection: SortDirection,
+            nextStatus: string,
+            nextPublication: string,
+            nextAccessType: string,
+        ) => {
+            router.get(
+                endpoint,
+                buildQuery(
+                    nextSearch,
+                    nextSortField,
+                    nextSortDirection,
+                    nextStatus,
+                    nextPublication,
+                    nextAccessType,
+                ),
+                {
+                    only,
+                    preserveState: true,
+                    preserveScroll: true,
+                    replace: true,
+                    onStart: () => setIsReloading(true),
+                    onFinish: () => setIsReloading(false),
+                },
+            );
+        },
+        [endpoint, only],
+    );
+
+    const latestValues = useRef({
+        sortField,
+        sortDirection,
+        statusFilter,
+        publicationFilter,
+        accessTypeFilter,
+        reload,
+    });
+
+    useEffect(() => {
+        latestValues.current = {
+            sortField,
+            sortDirection,
+            statusFilter,
+            publicationFilter,
+            accessTypeFilter,
+            reload,
+        };
+    }, [
+        sortField,
+        sortDirection,
+        statusFilter,
+        publicationFilter,
+        accessTypeFilter,
+        reload,
+    ]);
 
     useEffect(() => {
         if (isFirstSearchRender.current) {
@@ -102,18 +132,19 @@ export default function useEventIndexFilters({
         }
 
         const timeoutId = window.setTimeout(() => {
-            reload(
+            const current = latestValues.current;
+            current.reload(
                 search,
-                sortField,
-                sortDirection,
-                statusFilter,
-                publicationFilter,
-                accessTypeFilter,
+                current.sortField,
+                current.sortDirection,
+                current.statusFilter,
+                current.publicationFilter,
+                current.accessTypeFilter,
             );
         }, debounceMs);
 
         return () => window.clearTimeout(timeoutId);
-    }, [search]);
+    }, [search, debounceMs]);
 
     const handleSort = (field: EventSortField) => {
         const nextDirection: SortDirection =

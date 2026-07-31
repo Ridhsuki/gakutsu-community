@@ -13,7 +13,7 @@ import {
     ChevronRight,
     Clock3,
 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -85,14 +85,17 @@ export default function DateTimePickerField({
     const [open, setOpen] = useState(false);
 
     const selectedDate = useMemo(() => toDate(value), [value]);
+
     const initialViewDate = selectedDate ?? new Date();
     const [displayMonth, setDisplayMonth] = useState<Date>(initialViewDate);
 
-    useEffect(() => {
-        if (open) {
+    const handleOpenChange = (isOpen: boolean) => {
+        setOpen(isOpen);
+
+        if (isOpen) {
             setDisplayMonth(selectedDate ?? new Date());
         }
-    }, [open, selectedDate]);
+    };
 
     const selectedHour = selectedDate ? format(selectedDate, 'HH') : '09';
     const selectedMinute = selectedDate ? format(selectedDate, 'mm') : '00';
@@ -140,7 +143,7 @@ export default function DateTimePickerField({
     };
 
     return (
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover open={open} onOpenChange={handleOpenChange}>
             <PopoverTrigger asChild>
                 <Button
                     type="button"

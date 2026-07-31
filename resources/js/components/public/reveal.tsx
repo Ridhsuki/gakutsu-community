@@ -37,8 +37,6 @@ export default function Reveal({
         }
 
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            setIsVisible(true);
-
             return;
         }
 
