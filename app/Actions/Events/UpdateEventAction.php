@@ -15,8 +15,7 @@ class UpdateEventAction
     public function __construct(
         private readonly ProcessImageUploadAction $processImageUploadAction,
         private readonly GenerateUniqueSlugAction $generateUniqueSlugAction,
-    ) {
-    }
+    ) {}
 
     public function handle(UpdateEventRequest $request, Event $event): Event
     {

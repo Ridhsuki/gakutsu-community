@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRole;
 use App\Models\BlogPost;
 use App\Models\Event;
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,21 +20,21 @@ class DatabaseSeeder extends Seeder
             'name' => 'アドミニストレータ',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('password'),
-            'role' => \App\Enums\UserRole::Admin,
+            'role' => UserRole::Admin,
         ]);
 
         $mentor = User::factory()->create([
             'name' => 'Mentor User',
             'email' => 'mentor@gmail.com',
             'password' => bcrypt('password'),
-            'role' => \App\Enums\UserRole::Mentor,
+            'role' => UserRole::Mentor,
         ]);
 
         User::factory()->create([
             'name' => 'Member User',
             'email' => 'member@gmail.com',
             'password' => bcrypt('password'),
-            'role' => \App\Enums\UserRole::Member,
+            'role' => UserRole::Member,
         ]);
 
         // Generate User dummy

@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Enums\EventAccessType;
+use App\Enums\EventRegistrationQuestionType;
+use App\Enums\EventStatus;
+use App\Enums\UserRole;
 use App\Models\Event;
 use App\Models\EventRegistrationQuestion;
 use App\Models\User;
-use App\Enums\EventStatus;
-use App\Enums\EventAccessType;
-use App\Enums\EventRegistrationQuestionType;
-use App\Enums\UserRole;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -23,8 +23,9 @@ class EventSeeder extends Seeder
         $admin = User::where('role', UserRole::Admin)->first();
         $mentor = User::where('role', UserRole::Mentor)->first();
 
-        if (!$admin || !$mentor) {
+        if (! $admin || ! $mentor) {
             $this->command->error('Admin atau Mentor tidak ditemukan! Pastikan seeder User sudah dijalankan.');
+
             return;
         }
 
@@ -61,7 +62,7 @@ class EventSeeder extends Seeder
             'options' => [
                 'Pemula (Belum pernah / baru mulai)',
                 'Menengah (1-3 Tahun)',
-                'Mahir (> 3 Tahun)'
+                'Mahir (> 3 Tahun)',
             ],
         ]);
 
@@ -103,7 +104,6 @@ class EventSeeder extends Seeder
             'created_by' => $admin->id,
             'mentor_id' => $mentor->id,
         ]);
-
 
         $this->command->info('2 Event berhasil di-generate (Event 2 dibuat menggunakan WYSIWYG html, Completed, & Paid)!');
     }

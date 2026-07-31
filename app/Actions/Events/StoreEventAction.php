@@ -14,8 +14,7 @@ class StoreEventAction
     public function __construct(
         private readonly ProcessImageUploadAction $processImageUploadAction,
         private readonly GenerateUniqueSlugAction $generateUniqueSlugAction,
-    ) {
-    }
+    ) {}
 
     public function handle(StoreEventRequest $request): Event
     {

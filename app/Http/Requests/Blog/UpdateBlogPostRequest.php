@@ -12,7 +12,7 @@ class UpdateBlogPostRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        /** @var \App\Models\BlogPost|null $blog */
+        /** @var BlogPost|null $blog */
         $blog = $this->route('blog');
 
         return $blog && ($this->user()?->can('update', $blog) ?? false);
@@ -29,7 +29,7 @@ class UpdateBlogPostRequest extends FormRequest
 
     public function rules(): array
     {
-        /** @var \App\Models\BlogPost $blog */
+        /** @var BlogPost $blog */
         $blog = $this->route('blog');
 
         return [

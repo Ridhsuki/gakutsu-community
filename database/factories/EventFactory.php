@@ -5,20 +5,20 @@ namespace Database\Factories;
 use App\Enums\EventAccessType;
 use App\Enums\EventStatus;
 use App\Models\Event;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
+ * @extends Factory<Event>
  */
 class EventFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
-     * @var class-string<\Illuminate\Database\Eloquent\Model>
+     * @var class-string<Model>
      */
     protected $model = Event::class;
 
@@ -31,7 +31,6 @@ class EventFactory extends Factory
     {
         $title = $this->faker->sentence(mt_rand(4, 8));
 
-
         $startsAt = $this->faker->dateTimeBetween('now', '+3 months');
         $endsAt = Carbon::instance($startsAt)->addHours($this->faker->numberBetween(1, 4));
         $registrationClosesAt = Carbon::instance($startsAt)->subDays($this->faker->numberBetween(1, 5));
@@ -40,14 +39,14 @@ class EventFactory extends Factory
             'created_by' => 1,
             'mentor_id' => 2,
             'title' => rtrim($title, '.'),
-            'slug' => Str::slug($title) . '-' . Str::random(5),
+            'slug' => Str::slug($title).'-'.Str::random(5),
             'category' => $this->faker->randomElement([
                 'Cyber Security',
                 'UI/UX Design',
                 'Web Development',
                 'Data Science',
                 'Mobile Dev',
-                'DevOps'
+                'DevOps',
             ]),
             'status' => $this->faker->randomElement(EventStatus::cases()),
             'access_type' => $this->faker->randomElement(EventAccessType::cases()),
@@ -58,7 +57,7 @@ class EventFactory extends Factory
             'poster_image_path' => null,
             'starts_at' => $startsAt,
             'ends_at' => $endsAt,
-            'description' => '<p>' . implode('</p><p>', $this->faker->paragraphs(3)) . '</p>',
+            'description' => '<p>'.implode('</p><p>', $this->faker->paragraphs(3)).'</p>',
         ];
     }
 
@@ -67,7 +66,7 @@ class EventFactory extends Factory
      */
     public function draft(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_published' => false,
         ]);
     }
@@ -77,7 +76,7 @@ class EventFactory extends Factory
      */
     public function published(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'is_published' => true,
         ]);
     }
@@ -88,7 +87,8 @@ class EventFactory extends Factory
     public function upcoming(): static
     {
         $startsAt = now()->addDays(10);
-        return $this->state(fn(array $attributes) => [
+
+        return $this->state(fn (array $attributes) => [
             'status' => EventStatus::Upcoming,
             'starts_at' => $startsAt,
             'ends_at' => $startsAt->copy()->addHours(2),
@@ -102,7 +102,8 @@ class EventFactory extends Factory
     public function completed(): static
     {
         $startsAt = now()->subDays(10);
-        return $this->state(fn(array $attributes) => [
+
+        return $this->state(fn (array $attributes) => [
             'status' => EventStatus::Completed,
             'starts_at' => $startsAt,
             'ends_at' => $startsAt->copy()->addHours(2),
@@ -115,7 +116,7 @@ class EventFactory extends Factory
      */
     public function paid(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'access_type' => EventAccessType::Paid,
         ]);
     }
@@ -125,7 +126,7 @@ class EventFactory extends Factory
      */
     public function free(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'access_type' => EventAccessType::Free,
         ]);
     }

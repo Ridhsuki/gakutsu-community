@@ -4,6 +4,7 @@ namespace App\Actions\Media;
 
 use App\Enums\MediaImagePreset;
 use App\Support\Media\MediaPathGenerator;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Encoders\WebpEncoder;
@@ -14,14 +15,13 @@ class ProcessImageUploadAction
 {
     public function __construct(
         private readonly MediaPathGenerator $pathGenerator,
-    ) {
-    }
+    ) {}
 
     public function handle(UploadedFile $file, MediaImagePreset $preset): array
     {
         $config = config("media.presets.{$preset->value}");
 
-        if (!is_array($config)) {
+        if (! is_array($config)) {
             throw new InvalidArgumentException("Media preset [{$preset->value}] is not configured.");
         }
 
@@ -59,7 +59,7 @@ class ProcessImageUploadAction
 
         $encoded = $image->encode(new WebpEncoder(quality: $quality));
 
-        /** @var \Illuminate\Filesystem\FilesystemAdapter $storageDisk */
+        /** @var FilesystemAdapter $storageDisk */
         $storageDisk = Storage::disk($disk);
 
         $storageDisk->put($path, (string) $encoded);

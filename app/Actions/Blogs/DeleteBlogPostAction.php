@@ -10,8 +10,7 @@ class DeleteBlogPostAction
 {
     public function __construct(
         private readonly CleanupBlogContentImagesAction $cleanupBlogContentImagesAction,
-    ) {
-    }
+    ) {}
 
     public function handle(BlogPost $blog): void
     {

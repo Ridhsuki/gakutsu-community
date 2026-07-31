@@ -12,8 +12,7 @@ class StoreBlogPostAction
 {
     public function __construct(
         private readonly ProcessImageUploadAction $processImageUploadAction,
-    ) {
-    }
+    ) {}
 
     public function handle(StoreBlogPostRequest $request): BlogPost
     {

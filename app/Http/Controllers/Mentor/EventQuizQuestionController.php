@@ -8,9 +8,9 @@ use App\Http\Requests\EventQuiz\StoreEventQuizQuestionRequest;
 use App\Http\Requests\EventQuiz\UpdateEventQuizQuestionRequest;
 use App\Models\Event;
 use App\Models\EventQuizQuestion;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
 
 class EventQuizQuestionController extends Controller
 {

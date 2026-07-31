@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
+use App\Models\Event;
 use App\Models\EventQuizQuestion;
 use App\Models\User;
-use App\Models\Event;
 
 class EventQuizQuestionPolicy
 {

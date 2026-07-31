@@ -9,7 +9,7 @@ class EventRegistrationIndexRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        /** @var \App\Models\Event $event */
+        /** @var Event $event */
         $event = $this->route('event');
 
         return $this->user()?->can('viewRegistrations', $event) ?? false;

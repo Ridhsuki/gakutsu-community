@@ -7,7 +7,7 @@ use App\Models\User;
 
 class BlogPostPolicy
 {
-    public function before(User $user, string $ability): bool|null
+    public function before(User $user, string $ability): ?bool
     {
         if ($user->isAdmin()) {
             return true;

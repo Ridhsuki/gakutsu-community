@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Site;
 
 use App\Enums\EventStatus;
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
 use App\Models\Event;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Fortify\Features;
@@ -34,7 +34,7 @@ class HomeController extends Controller
             ->get();
 
         $stats = [
-            'members' => User::query()->where('role', \App\Enums\UserRole::Member)->count(),
+            'members' => User::query()->where('role', UserRole::Member)->count(),
             'mentors' => User::query()->where('role', 'mentor')->count(),
             'events' => Event::query()->published()->count(),
             'articles' => BlogPost::query()->published()->count(),

@@ -17,13 +17,13 @@ class StoreEventQuizAttemptAction
             ->where('user_id', $userId)
             ->first();
 
-        if (!$registration) {
+        if (! $registration) {
             throw ValidationException::withMessages([
                 'quiz' => 'You must register for the event before taking the quiz.',
             ]);
         }
 
-        if (!$event->quizIsAvailable()) {
+        if (! $event->quizIsAvailable()) {
             throw ValidationException::withMessages([
                 'quiz' => 'Quiz is not available for this event.',
             ]);
@@ -56,7 +56,7 @@ class StoreEventQuizAttemptAction
                 if ($question->type === EventQuizQuestionType::MultipleChoice) {
                     $option = $question->options->firstWhere('id', (int) $submitted);
 
-                    if (!$option) {
+                    if (! $option) {
                         throw ValidationException::withMessages([
                             "answers.{$question->id}" => 'Invalid selected option.',
                         ]);

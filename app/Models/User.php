@@ -58,7 +58,7 @@ class User extends Authenticatable
     {
         $allowed = ['name', 'email', 'role', 'created_at'];
 
-        if (!in_array($field, $allowed, true)) {
+        if (! in_array($field, $allowed, true)) {
             $field = 'created_at';
         }
 
