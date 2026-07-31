@@ -28,7 +28,7 @@ class BlogPostController extends Controller
         $sortDirection = $validated['sort_direction'] ?? 'desc';
 
         return Inertia::render('admin/blogs/index', [
-            'posts' => fn() => $getBlogPostIndexAction->handle(
+            'posts' => fn () => $getBlogPostIndexAction->handle(
                 search: $search,
                 sortField: $sortField,
                 sortDirection: $sortDirection,

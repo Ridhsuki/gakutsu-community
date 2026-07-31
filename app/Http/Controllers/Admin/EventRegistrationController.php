@@ -22,7 +22,7 @@ class EventRegistrationController extends Controller
 
         return Inertia::render('admin/events/registrations/index', [
             'event' => $event->load('mentor:id,name'),
-            'registrations' => fn() => $getEventRegistrationIndexAction->handle($event, $search),
+            'registrations' => fn () => $getEventRegistrationIndexAction->handle($event, $search),
             'filters' => [
                 'search' => $search,
             ],

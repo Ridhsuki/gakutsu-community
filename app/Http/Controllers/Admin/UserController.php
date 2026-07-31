@@ -20,7 +20,7 @@ class UserController extends Controller
         $sortDirection = $validated['sort_direction'] ?? 'desc';
 
         return Inertia::render('admin/users/index', [
-            'users' => fn() => User::query()
+            'users' => fn () => User::query()
                 ->select(User::indexColumns())
                 ->search($search)
                 ->applySort($sortField, $sortDirection)

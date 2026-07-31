@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Storage;
 class Event extends Model
 {
     use HasFactory;
+
     protected $appends = ['poster_image_url'];
 
     protected function casts(): array
@@ -51,8 +52,8 @@ class Event extends Model
     protected function posterImageUrl(): Attribute
     {
         return Attribute::make(
-            get: fn(): ?string => $this->poster_image_path
-            ? Storage::url('public/' . $this->poster_image_path)
+            get: fn (): ?string => $this->poster_image_path
+            ? Storage::url('public/'.$this->poster_image_path)
             : null,
         );
     }
@@ -134,7 +135,7 @@ class Event extends Model
     {
         $allowed = ['title', 'category', 'status', 'starts_at', 'created_at', 'mentor'];
 
-        if (!in_array($field, $allowed, true)) {
+        if (! in_array($field, $allowed, true)) {
             $field = 'starts_at';
         }
 
@@ -166,7 +167,7 @@ class Event extends Model
 
     public function registrationIsAvailable(): bool
     {
-        if (!$this->is_published) {
+        if (! $this->is_published) {
             return false;
         }
 
@@ -181,7 +182,7 @@ class Event extends Model
 
     public function quizIsAvailable(): bool
     {
-        if (!$this->is_published) {
+        if (! $this->is_published) {
             return false;
         }
 

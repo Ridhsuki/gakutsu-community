@@ -63,7 +63,7 @@ class EventQuizAttempt extends Model
 
         $max = (int) $this->answers()->sum('question_points_snapshot');
 
-        $allManualGraded = !$this->answers()
+        $allManualGraded = ! $this->answers()
             ->where('needs_manual_grading', true)
             ->whereNull('graded_at')
             ->exists();

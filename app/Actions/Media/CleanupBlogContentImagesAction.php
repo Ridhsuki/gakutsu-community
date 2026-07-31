@@ -3,6 +3,7 @@
 namespace App\Actions\Media;
 
 use App\Models\BlogPost;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
 
 class CleanupBlogContentImagesAction
@@ -12,7 +13,7 @@ class CleanupBlogContentImagesAction
      */
     public function extractPathsFromHtml(?string $html): array
     {
-        if (!is_string($html) || trim($html) === '') {
+        if (! is_string($html) || trim($html) === '') {
             return [];
         }
 
@@ -60,11 +61,11 @@ class CleanupBlogContentImagesAction
     {
         $parsedPath = parse_url($src, PHP_URL_PATH);
 
-        if (!is_string($parsedPath)) {
+        if (! is_string($parsedPath)) {
             return null;
         }
 
-        if (!str_starts_with($parsedPath, '/storage/media/blog/content/')) {
+        if (! str_starts_with($parsedPath, '/storage/media/blog/content/')) {
             return null;
         }
 
@@ -73,13 +74,13 @@ class CleanupBlogContentImagesAction
 
     private function deleteIfUnusedElsewhere(string $path, ?int $ignoreBlogId = null): void
     {
-        /** @var \Illuminate\Filesystem\FilesystemAdapter $publicDisk */
+        /** @var FilesystemAdapter $publicDisk */
         $publicDisk = Storage::disk('public');
 
         $publicUrl = $publicDisk->url($path);
 
         $query = BlogPost::query()
-            ->where('content', 'like', '%' . $publicUrl . '%');
+            ->where('content', 'like', '%'.$publicUrl.'%');
 
         if ($ignoreBlogId !== null) {
             $query->whereKeyNot($ignoreBlogId);

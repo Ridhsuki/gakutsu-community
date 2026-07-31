@@ -2,6 +2,4 @@
 
 namespace App\Http\Requests\EventQuiz;
 
-class UpdateEventQuizQuestionRequest extends StoreEventQuizQuestionRequest
-{
-}
+class UpdateEventQuizQuestionRequest extends StoreEventQuizQuestionRequest {}

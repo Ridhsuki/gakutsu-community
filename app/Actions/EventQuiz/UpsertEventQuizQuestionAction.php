@@ -12,7 +12,7 @@ class UpsertEventQuizQuestionAction
     public function handle(Event $event, array $data, ?EventQuizQuestion $question = null): EventQuizQuestion
     {
         return DB::transaction(function () use ($event, $data, $question) {
-            $question ??= new EventQuizQuestion();
+            $question ??= new EventQuizQuestion;
 
             $question->fill([
                 'event_id' => $event->id,

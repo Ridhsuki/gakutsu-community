@@ -99,7 +99,7 @@ Source: `storage/logs/recovery/SUMMARY.md` and individual log files. These files
 | ESLint         | `npm run lint:check`   | **Failed** | 179 errors, 2 warnings across ~45 files    |
 | Prettier       | `npm run format:check` | **Failed** | 92 files with formatting issues             |
 | TypeScript     | `npm run types:check`  | **Passed** | 0 errors. Baseline TypeScript errors resolved in P0-2. |
-| PHP Pint       | `composer lint:check`  | **Failed** | 67 style issues across 152 checked files    |
+| PHP Pint       | `composer lint:check`  | **Passed** | 0 style issues. Baseline Pint issues resolved in P0-5. |
 | Backend tests  | `php artisan test`     | **Passed** | 40 passed. Test infrastructure restored (RefreshDatabase and MySQL test DB configured). |
 | Frontend build | `npm run build`        | **Passed** | Production client build successful          |
 | SSR build      | `npm run build:ssr`    | **Passed** | Client + SSR build successful               |
@@ -144,17 +144,17 @@ Source: `storage/logs/recovery/01-eslint.log` (local, not tracked by Git)
 
 ### 2.3 PHP Pint Summary
 
-Source: `storage/logs/recovery/04-pint.log` (local, not tracked by Git)
+**Status:** Resolved. `composer lint:check` reports 0 issues across 152 files.
 
-67 style issues across 152 files. All are code-style (not behavioral):
+67 baseline style issues across 59 files were fixed automatically via Pint:
 
-- `single_line_empty_body` — empty constructor/method bodies (7 files)
-- `function_declaration` — function formatting (12 files)
-- `braces_position` — brace placement in migrations (6 files)
-- `fully_qualified_strict_types` — strict type formatting (10 files)
-- `ordered_imports` — import ordering (8 files)
-- `not_operator_with_successor_space` — `!` spacing (5 files)
-- `single_blank_line_at_eof` — missing trailing newlines (12 test files)
+- `single_line_empty_body` — empty constructor/method bodies
+- `function_declaration` — function formatting
+- `braces_position` — brace placement in migrations
+- `fully_qualified_strict_types` — strict type formatting
+- `ordered_imports` — import ordering
+- `not_operator_with_successor_space` — `!` spacing
+- `single_blank_line_at_eof` — missing trailing newlines in test files
 - Other: `nullable_type_declaration`, `concat_space`, `class_attributes_separation`, `no_unused_imports`, `new_with_parentheses`, `trailing_comma_in_multiline`, `single_quote`
 
 ### 2.4 Test Infrastructure Finding
@@ -257,7 +257,7 @@ No remaining code references to "YokPelajarin" were found in application source 
 | Member quiz flow not wired | Medium | Backend logic exists but routes are commented out |
 | 179 ESLint errors | Medium | Mostly auto-fixable but 6 behavioral issues need manual review |
 | 7 TypeScript errors | Resolved | `npm run types:check` passes with 0 errors |
-| 67 Pint style issues | Low | All mechanical, auto-fixable |
+| 67 Pint style issues | Resolved | `composer lint:check` passes with 0 issues |
 | SSR hydration risk | Medium | `set-state-in-effect` patterns with browser-only APIs could cause hydration mismatches |
 | No production database yet | Info | Development migration policy applies; migrations mutable |
 

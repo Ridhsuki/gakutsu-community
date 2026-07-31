@@ -33,7 +33,7 @@ class EventController extends Controller
         $accessType = $validated['access_type'] ?? null;
 
         return Inertia::render('admin/events/index', [
-            'events' => fn() => $getEventIndexAction->handle(
+            'events' => fn () => $getEventIndexAction->handle(
                 search: $search,
                 sortField: $sortField,
                 sortDirection: $sortDirection,
@@ -55,7 +55,7 @@ class EventController extends Controller
     public function create(): Response
     {
         return Inertia::render('admin/events/create', [
-            'mentors' => fn() => User::query()
+            'mentors' => fn () => User::query()
                 ->select(['id', 'name'])
                 ->where('role', 'mentor')
                 ->orderBy('name')
@@ -88,9 +88,9 @@ class EventController extends Controller
         return Inertia::render('admin/events/edit', [
             'event' => $event->load([
                 'mentor:id,name',
-                'registrationQuestions' => fn($query) => $query->ordered(),
+                'registrationQuestions' => fn ($query) => $query->ordered(),
             ]),
-            'mentors' => fn() => User::query()
+            'mentors' => fn () => User::query()
                 ->select(['id', 'name'])
                 ->where('role', 'mentor')
                 ->orderBy('name')

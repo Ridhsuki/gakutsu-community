@@ -6,10 +6,10 @@ use App\Enums\BlogPostStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
@@ -24,7 +24,9 @@ use Illuminate\Support\Facades\Storage;
 class BlogPost extends Model
 {
     use HasFactory;
+
     protected $appends = ['cover_image_url'];
+
     protected function casts(): array
     {
         return [
@@ -32,10 +34,11 @@ class BlogPost extends Model
             'published_at' => 'datetime',
         ];
     }
+
     protected function coverImageUrl(): Attribute
     {
         return Attribute::make(
-            get: fn(): ?string => $this->cover_image_path
+            get: fn (): ?string => $this->cover_image_path
             ? Storage::disk('public')->url($this->cover_image_path)
             : null,
         );
@@ -83,7 +86,7 @@ class BlogPost extends Model
     {
         $allowed = ['title', 'status', 'published_at', 'created_at', 'author'];
 
-        if (!in_array($field, $allowed, true)) {
+        if (! in_array($field, $allowed, true)) {
             $field = 'created_at';
         }
 

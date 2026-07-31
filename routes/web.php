@@ -1,35 +1,29 @@
 <?php
 
-use App\Http\Controllers\Event\EventQuizController;
-use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
-
-// Controllers
-use App\Http\Controllers\Blog\BlogEditorImageController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BlogPostController as AdminBlogPostController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
-use App\Http\Controllers\Admin\EventRegistrationController as AdminEventRegistrationController;
-use App\Http\Controllers\Admin\EventRegistrationQuestionController as AdminEventRegistrationQuestionController;
-
-use App\Http\Controllers\Mentor\BlogPostController as MentorBlogPostController;
-use App\Http\Controllers\Mentor\EventController as MentorEventController;
-use App\Http\Controllers\Mentor\EventRegistrationController as MentorEventRegistrationController;
-use App\Http\Controllers\Mentor\EventRegistrationQuestionController as MentorEventRegistrationQuestionController;
-
-use App\Http\Controllers\Site\HomeController;
-use App\Http\Controllers\Site\BlogController as SiteBlogController;
-use App\Http\Controllers\Site\EventController as SiteEventController;
-use App\Http\Controllers\Event\EventRegistrationController;
-
-// Middleware
-use App\Http\Middleware\EnsureUserIsAdmin;
-use App\Http\Middleware\EnsureUserIsMentor;
-
+// Controllers
 use App\Http\Controllers\Admin\EventQuizAttemptController as AdminEventQuizAttemptController;
 use App\Http\Controllers\Admin\EventQuizQuestionController as AdminEventQuizQuestionController;
+use App\Http\Controllers\Admin\EventRegistrationController as AdminEventRegistrationController;
+use App\Http\Controllers\Admin\EventRegistrationQuestionController as AdminEventRegistrationQuestionController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Blog\BlogEditorImageController;
+use App\Http\Controllers\Event\EventQuizController;
+use App\Http\Controllers\Event\EventRegistrationController;
+use App\Http\Controllers\Mentor\BlogPostController as MentorBlogPostController;
+use App\Http\Controllers\Mentor\EventController as MentorEventController;
 use App\Http\Controllers\Mentor\EventQuizAttemptController as MentorEventQuizAttemptController;
 use App\Http\Controllers\Mentor\EventQuizQuestionController as MentorEventQuizQuestionController;
+use App\Http\Controllers\Mentor\EventRegistrationController as MentorEventRegistrationController;
+use App\Http\Controllers\Mentor\EventRegistrationQuestionController as MentorEventRegistrationQuestionController;
+// Middleware
+use App\Http\Controllers\Site\BlogController as SiteBlogController;
+use App\Http\Controllers\Site\EventController as SiteEventController;
+use App\Http\Controllers\Site\HomeController;
+use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Http\Middleware\EnsureUserIsMentor;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,7 +49,7 @@ Route::prefix('events')->name('events.')->group(function () {
 */
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/dashboard', fn() => inertia('dashboard'))->name('dashboard');
+    Route::get('/dashboard', fn () => inertia('dashboard'))->name('dashboard');
 
     Route::post('editor/blog-images', [BlogEditorImageController::class, 'store'])
         ->name('editor.blog-images.store');
@@ -198,4 +192,4 @@ Route::prefix('mentor')
         });
     });
 
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';

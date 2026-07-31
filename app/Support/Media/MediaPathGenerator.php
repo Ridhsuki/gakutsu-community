@@ -11,6 +11,6 @@ class MediaPathGenerator
         $baseDirectory = trim($baseDirectory, '/');
         $extension = ltrim($extension, '.');
 
-        return $baseDirectory . '/' . now()->format('Y/m') . '/' . Str::uuid() . '.' . $extension;
+        return $baseDirectory.'/'.now()->format('Y/m').'/'.Str::uuid().'.'.$extension;
     }
 }

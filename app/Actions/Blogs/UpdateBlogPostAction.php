@@ -15,8 +15,7 @@ class UpdateBlogPostAction
     public function __construct(
         private readonly ProcessImageUploadAction $processImageUploadAction,
         private readonly CleanupBlogContentImagesAction $cleanupBlogContentImagesAction,
-    ) {
-    }
+    ) {}
 
     public function handle(UpdateBlogPostRequest $request, BlogPost $blog): BlogPost
     {

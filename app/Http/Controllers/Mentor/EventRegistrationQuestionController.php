@@ -27,7 +27,7 @@ class EventRegistrationQuestionController extends Controller
 
         return Inertia::render('mentor/events/questions/index', [
             'event' => $event->load('mentor:id,name'),
-            'questions' => fn() => $action->handle($event, $search),
+            'questions' => fn () => $action->handle($event, $search),
             'filters' => [
                 'search' => $search,
             ],

@@ -12,7 +12,7 @@ class EnsureUserIsMentor
     {
         $user = $request->user();
 
-        if (!$user || !$user->isMentor()) {
+        if (! $user || ! $user->isMentor()) {
             abort(403);
         }
 

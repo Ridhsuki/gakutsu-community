@@ -12,7 +12,7 @@ class GetEventRegistrationDetailAction
             'event:id,title,slug,mentor_id',
             'event.mentor:id,name',
             'user:id,name,email',
-            'answers' => fn($query) => $query
+            'answers' => fn ($query) => $query
                 ->with('question:id,label,type')
                 ->orderBy('id'),
         ])->loadCount('answers');

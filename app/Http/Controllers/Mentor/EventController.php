@@ -32,7 +32,7 @@ class EventController extends Controller
         $accessType = $validated['access_type'] ?? null;
 
         return Inertia::render('mentor/events/index', [
-            'events' => fn() => $getEventIndexAction->handle(
+            'events' => fn () => $getEventIndexAction->handle(
                 search: $search,
                 sortField: $sortField,
                 sortDirection: $sortDirection,
@@ -86,7 +86,7 @@ class EventController extends Controller
         return Inertia::render('mentor/events/edit', [
             'event' => $event->load([
                 'mentor:id,name',
-                'registrationQuestions' => fn($query) => $query->ordered(),
+                'registrationQuestions' => fn ($query) => $query->ordered(),
             ]),
         ]);
     }
