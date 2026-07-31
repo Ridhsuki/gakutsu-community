@@ -72,8 +72,12 @@ export default function Welcome(props: PageProps) {
             window.sessionStorage.getItem(WELCOME_ANIMATION_KEY) === '1';
 
         if (!hasPlayed) {
-            setPlayHeroEntry(true);
-            window.sessionStorage.setItem(WELCOME_ANIMATION_KEY, '1');
+            const frameId = window.requestAnimationFrame(() => {
+                setPlayHeroEntry(true);
+                window.sessionStorage.setItem(WELCOME_ANIMATION_KEY, '1');
+            });
+
+            return () => window.cancelAnimationFrame(frameId);
         }
     }, []);
 

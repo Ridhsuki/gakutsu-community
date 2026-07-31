@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface BlogPostCoverInputProps {
     value: File | null;
@@ -12,6 +12,8 @@ export default function BlogPostCoverInput({
     currentImagePath = null,
 }: BlogPostCoverInputProps) {
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const objectUrlRef = useRef<string | null>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const currentImageUrl = useMemo(() => {
         if (!currentImagePath) {
@@ -21,18 +23,45 @@ export default function BlogPostCoverInput({
         return `/storage/${currentImagePath}`;
     }, [currentImagePath]);
 
-    useEffect(() => {
-        if (!value) {
-            setPreviewUrl(null);
+    const displayedImageUrl = value ? previewUrl : currentImageUrl;
 
-            return;
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0] ?? null;
+        onChange(file);
+
+        if (objectUrlRef.current) {
+            URL.revokeObjectURL(objectUrlRef.current);
+            objectUrlRef.current = null;
         }
 
-        const objectUrl = URL.createObjectURL(value);
-        setPreviewUrl(objectUrl);
+        if (file) {
+            const url = URL.createObjectURL(file);
+            objectUrlRef.current = url;
+            setPreviewUrl(url);
+        } else {
+            setPreviewUrl(null);
+        }
+    };
 
-        return () => URL.revokeObjectURL(objectUrl);
+    useEffect(() => {
+        if (!value && objectUrlRef.current) {
+            URL.revokeObjectURL(objectUrlRef.current);
+            objectUrlRef.current = null;
+
+            if (inputRef.current) {
+                inputRef.current.value = '';
+            }
+        }
     }, [value]);
+
+    useEffect(() => {
+        return () => {
+            if (objectUrlRef.current) {
+                URL.revokeObjectURL(objectUrlRef.current);
+                objectUrlRef.current = null;
+            }
+        };
+    }, []);
 
     return (
         <div className="space-y-3">
@@ -44,18 +73,19 @@ export default function BlogPostCoverInput({
                     Cover Image
                 </label>
                 <input
+                    ref={inputRef}
                     id="cover_image"
                     type="file"
                     accept="image/png,image/jpeg,image/jpg,image/webp"
-                    onChange={(e) => onChange(e.target.files?.[0] ?? null)}
+                    onChange={handleChange}
                     className="block w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground file:mr-3 file:rounded-md file:border-0 file:bg-muted file:px-3 file:py-1.5 file:text-sm"
                 />
             </div>
 
-            {(previewUrl || currentImageUrl) && (
+            {displayedImageUrl && (
                 <div className="overflow-hidden rounded-md border border-border">
                     <img
-                        src={previewUrl || currentImageUrl || ''}
+                        src={displayedImageUrl}
                         alt="Cover preview"
                         className="h-48 w-full object-cover"
                     />
