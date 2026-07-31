@@ -1,7 +1,6 @@
-import type { SyntheticEvent } from 'react';
-import { useState } from 'react';
 import { router, useForm } from '@inertiajs/react';
-import useIndexFilters from '@/hooks/use-index-filters';
+import { useState } from 'react';
+import type { SyntheticEvent } from 'react';
 import { EVENT_ALLOWED_SORT_FIELDS } from '@/features/events/constants';
 import {
     getDefaultCreateEventForm,
@@ -14,6 +13,7 @@ import type {
     EventItem,
     EventSortField,
 } from '@/features/events/types';
+import useIndexFilters from '@/hooks/use-index-filters';
 import type { IndexFilters } from '@/types/filters';
 
 interface UseEventManagementOptions {
@@ -100,7 +100,9 @@ export default function useEventManagement({
     const handleEditSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!selectedEvent) return;
+        if (!selectedEvent) {
+return;
+}
 
         editForm.put(`${endpoint}/${selectedEvent.id}`, {
             preserveScroll: true,
@@ -110,7 +112,9 @@ export default function useEventManagement({
     };
 
     const handleDelete = () => {
-        if (!selectedEvent) return;
+        if (!selectedEvent) {
+return;
+}
 
         setIsDeleting(true);
 

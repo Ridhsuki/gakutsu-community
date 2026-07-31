@@ -1,6 +1,8 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { useState } from 'react';
 import { Eye, FileCheck2 } from 'lucide-react';
+import { useState } from 'react';
+import ContextBackButton from '@/components/navigation/context-back-button';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -10,10 +12,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import ContextBackButton from '@/components/navigation/context-back-button';
-import { appendFrom } from '@/lib/navigation';
 import type { EventQuizAttemptItem, QuizEventSummary } from '@/features/quizzes/types';
+import { appendFrom } from '@/lib/navigation';
 
 export default function QuizAttemptsPage({
     event,

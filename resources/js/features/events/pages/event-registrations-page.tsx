@@ -3,8 +3,8 @@ import IndexToolbar from '@/components/data-table/index-toolbar';
 import PaginationBar from '@/components/data-table/pagination-bar';
 import ContextBackButton from '@/components/navigation/context-back-button';
 import EventRegistrationTable from '@/features/events/components/event-registration-table';
-import useIndexFilters from '@/hooks/use-index-filters';
 import type { EventItem, EventRegistrationItem } from '@/features/events/types';
+import useIndexFilters from '@/hooks/use-index-filters';
 import type { PaginatedResponse } from '@/types/pagination';
 
 interface EventRegistrationsPageProps {

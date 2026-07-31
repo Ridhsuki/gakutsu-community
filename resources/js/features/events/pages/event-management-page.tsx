@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { useState } from 'react';
 import { Plus } from 'lucide-react';
+import { useState } from 'react';
 import IndexToolbar from '@/components/data-table/index-toolbar';
 import PaginationBar from '@/components/data-table/pagination-bar';
 import { Button } from '@/components/ui/button';
@@ -81,7 +81,9 @@ export default function EventManagementPage({
     };
 
     const handleDelete = () => {
-        if (!selectedEvent) return;
+        if (!selectedEvent) {
+return;
+}
 
         setIsDeleting(true);
 

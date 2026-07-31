@@ -1,4 +1,4 @@
-import { PageProps } from '@inertiajs/core';
+import type { PageProps } from '@inertiajs/core';
 export interface FlashMessages {
     success?: string | null;
     error?: string | null;

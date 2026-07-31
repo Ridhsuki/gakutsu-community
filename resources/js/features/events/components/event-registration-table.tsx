@@ -1,9 +1,9 @@
-import { Eye } from 'lucide-react';
 import { Link, usePage } from '@inertiajs/react';
+import { Eye } from 'lucide-react';
 import EmptyStateRow from '@/components/data-table/empty-state-row';
 import { Button } from '@/components/ui/button';
-import { appendFrom } from '@/lib/navigation';
 import type { EventRegistrationItem } from '@/features/events/types';
+import { appendFrom } from '@/lib/navigation';
 
 interface EventRegistrationTableProps {
     registrations: EventRegistrationItem[];
@@ -13,7 +13,9 @@ interface EventRegistrationTableProps {
 function formatDate(value: string) {
     const date = new Date(value);
 
-    if (Number.isNaN(date.getTime())) return '-';
+    if (Number.isNaN(date.getTime())) {
+return '-';
+}
 
     return date.toLocaleDateString('id-ID', {
         day: '2-digit',

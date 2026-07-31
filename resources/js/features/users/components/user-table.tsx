@@ -1,10 +1,10 @@
-import { Button } from '@/components/ui/button';
-import SortableHeader from '@/components/data-table/sortable-header';
-import EmptyStateRow from '@/components/data-table/empty-state-row';
-import UserRoleBadge from '@/features/users/components/user-role-badge';
-import type { SortDirection } from '@/types/filters';
-import type { User, UserSortField } from '@/features/users/types';
 import { Edit, Trash2, Users } from 'lucide-react';
+import EmptyStateRow from '@/components/data-table/empty-state-row';
+import SortableHeader from '@/components/data-table/sortable-header';
+import { Button } from '@/components/ui/button';
+import UserRoleBadge from '@/features/users/components/user-role-badge';
+import type { User, UserSortField } from '@/features/users/types';
+import type { SortDirection } from '@/types/filters';
 
 interface UserTableProps {
     users: User[];

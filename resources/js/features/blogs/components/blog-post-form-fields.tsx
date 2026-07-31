@@ -8,8 +8,8 @@ import {
 } from '@/components/ui/select';
 import BlogPostCoverInput from '@/features/blogs/components/blog-post-cover-input';
 import BlogPostEditor from '@/features/blogs/components/blog-post-editor';
-import type { BlogPost } from '@/features/blogs/types';
 import type { BlogPostFormLike } from '@/features/blogs/form-types';
+import type { BlogPost } from '@/features/blogs/types';
 import type {
     CreateBlogPostForm,
     EditBlogPostForm,

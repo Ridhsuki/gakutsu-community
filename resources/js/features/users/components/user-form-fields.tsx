@@ -6,12 +6,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import type { UserFormLike } from '@/features/users/form-types';
 import type {
     CreateUserForm,
     EditUserForm,
     UserRole,
 } from '@/features/users/types';
-import type { UserFormLike } from '@/features/users/form-types';
 
 type UserFormData = CreateUserForm | EditUserForm;
 

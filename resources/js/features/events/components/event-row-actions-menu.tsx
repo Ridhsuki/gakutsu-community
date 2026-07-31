@@ -9,8 +9,8 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import EventQuizShortcuts from '@/features/events/components/event-quiz-shortcuts';
-import { appendFrom } from '@/lib/navigation';
 import type { EventItem } from '@/features/events/types';
+import { appendFrom } from '@/lib/navigation';
 
 interface EventRowActionsMenuProps {
     event: EventItem;

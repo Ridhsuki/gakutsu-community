@@ -1,11 +1,11 @@
-import { Head, router } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import { useState } from 'react';
-import BlogPublicCard from '@/components/public/blog-public-card';
-import PublicLayout from '@/layouts/public-layout';
 import PaginationBar from '@/components/data-table/pagination-bar';
-import { Input } from '@/components/ui/input';
-import type { PaginatedResponse } from '@/types/pagination';
+import BlogPublicCard from '@/components/public/blog-public-card';
 import SeoHead from '@/components/public/seo-head';
+import { Input } from '@/components/ui/input';
+import PublicLayout from '@/layouts/public-layout';
+import type { PaginatedResponse } from '@/types/pagination';
 
 interface BlogPostItem {
     id: number;

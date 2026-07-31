@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { ArrowRight, CalendarDays, GraduationCap, ShieldCheck, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import BlogPublicCard from '@/components/public/blog-public-card';
@@ -55,12 +55,12 @@ const valueProps = [
 const WELCOME_ANIMATION_KEY = 'welcome-entry-played';
 
 export default function Welcome(props: PageProps) {
-    const { auth } = usePage<PageProps>().props;
-    const isLoggedIn = Boolean(auth?.user);
     const [playHeroEntry, setPlayHeroEntry] = useState(false);
 
     useEffect(() => {
-        if (typeof window === 'undefined') return;
+        if (typeof window === 'undefined') {
+return;
+}
 
         const hasPlayed = window.sessionStorage.getItem(WELCOME_ANIMATION_KEY) === '1';
 

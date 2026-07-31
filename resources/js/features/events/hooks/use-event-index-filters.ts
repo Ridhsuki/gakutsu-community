@@ -95,6 +95,7 @@ export default function useEventIndexFilters({
     useEffect(() => {
         if (isFirstSearchRender.current) {
             isFirstSearchRender.current = false;
+
             return;
         }
 

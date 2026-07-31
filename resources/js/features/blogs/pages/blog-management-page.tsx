@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
-import PaginationBar from '@/components/data-table/pagination-bar';
 import IndexToolbar from '@/components/data-table/index-toolbar';
+import PaginationBar from '@/components/data-table/pagination-bar';
 import { Button } from '@/components/ui/button';
 import BlogPostCollectionView from '@/features/blogs/components/blog-post-collection-view';
 import BlogPostCreateDialog from '@/features/blogs/components/blog-post-create-dialog';

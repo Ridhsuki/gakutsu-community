@@ -1,10 +1,11 @@
 import { Head, router, useForm } from '@inertiajs/react';
-import { useMemo, useState } from 'react';
 import { Plus, Save, Trash2, Pencil, ListChecks } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import ContextBackButton from '@/components/navigation/context-back-button';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
 import {
     Select,
     SelectContent,
@@ -12,8 +13,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import ContextBackButton from '@/components/navigation/context-back-button';
+import { Textarea } from '@/components/ui/textarea';
 import EventQuizQuestionDeleteDialog from '@/features/quizzes/components/event-quiz-question-delete-dialog';
 import type {
     EventQuizQuestionItem,
@@ -96,6 +96,7 @@ export default function QuizQuestionManagementPage({
                 preserveScroll: true,
                 onSuccess: resetForm,
             });
+
             return;
         }
 

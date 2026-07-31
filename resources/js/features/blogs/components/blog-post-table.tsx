@@ -1,3 +1,4 @@
+import { FileText } from 'lucide-react';
 import EmptyStateRow from '@/components/data-table/empty-state-row';
 import SortableHeader from '@/components/data-table/sortable-header';
 import BlogPostCoverThumbnail from '@/features/blogs/components/blog-post-cover-thumbnail';
@@ -6,7 +7,6 @@ import BlogPostStatusBadge from '@/features/blogs/components/blog-post-status-ba
 import { formatBlogPostDate } from '@/features/blogs/lib/blog-post-formatters';
 import type { BlogPost, BlogPostSortField } from '@/features/blogs/types';
 import type { SortDirection } from '@/types/filters';
-import { FileText } from 'lucide-react';
 
 interface BlogPostTableProps {
     posts: BlogPost[];

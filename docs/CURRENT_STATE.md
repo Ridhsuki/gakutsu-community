@@ -96,7 +96,7 @@ Source: `storage/logs/recovery/SUMMARY.md` and individual log files. These files
 
 | Check          | Command                | Status   | Details                                      |
 | -------------- | ---------------------- | -------- | -------------------------------------------- |
-| ESLint         | `npm run lint:check`   | **Failed** | 179 errors, 2 warnings across ~45 files    |
+| ESLint         | `npm run lint:check`   | **Failed** | 5 errors, 2 warnings across 7 files. Mechanical issues resolved in P0-3; only P0-4 behavioral findings remain. |
 | Prettier       | `npm run format:check` | **Failed** | 92 files with formatting issues             |
 | TypeScript     | `npm run types:check`  | **Passed** | 0 errors. Baseline TypeScript errors resolved in P0-2. |
 | PHP Pint       | `composer lint:check`  | **Passed** | 0 style issues. Baseline Pint issues resolved in P0-5. |
@@ -106,27 +106,26 @@ Source: `storage/logs/recovery/SUMMARY.md` and individual log files. These files
 
 ### 2.1 ESLint Classification
 
-Source: `storage/logs/recovery/01-eslint.log` (local, not tracked by Git)
+**Mechanical issues resolved in P0-3:**
+- `import/order` — incorrect import ordering (~50+ instances resolved)
+- `curly` — missing braces around `if` statements (~30+ instances resolved)
+- `@stylistic/padding-line-between-statements` — missing blank lines (~25+ instances resolved)
+- `import/consistent-type-specifier-style` — inline vs top-level type imports (~5 instances resolved)
+- `@typescript-eslint/no-unused-vars` — unused variables (`Head`, `event`, `isLoggedIn`, `usePage`) (6 instances resolved)
+- `@typescript-eslint/no-empty-object-type` — empty interfaces in `features/events/types.ts` (2 instances resolved via type aliases)
 
-**Mechanical issues (auto-fixable, ~166 reported):**
-- `import/order` — incorrect import ordering (~50+ instances)
-- `curly` — missing braces around `if` statements (~30+ instances)
-- `@stylistic/padding-line-between-statements` — missing blank lines (~25+ instances)
-- `import/consistent-type-specifier-style` — inline vs top-level type imports (~5 instances)
-- `@typescript-eslint/no-unused-vars` — unused variables (`Head`, `event`) (~3 instances)
-- `@typescript-eslint/no-empty-object-type` — empty interfaces in `features/events/types.ts` (2 instances)
-
-**Behavioral issues requiring manual review:**
-- `react-hooks/set-state-in-effect` — setState inside useEffect (4 files):
-  - `components/forms/date-time-picker-field.tsx:87` — `setDisplayMonth` in effect
-  - `components/public/reveal.tsx:43` — `setIsVisible` in effect (prefers-reduced-motion)
+**Behavioral issues remaining for P0-4 manual review:**
+- `react-hooks/set-state-in-effect` — setState inside useEffect (5 files, 5 errors):
+  - `components/forms/date-time-picker-field.tsx:91` — `setDisplayMonth` in effect
+  - `components/public/reveal.tsx:47` — `setIsVisible` in effect (prefers-reduced-motion)
   - `features/blogs/components/blog-editor-link-dialog.tsx:29` — `setUrl` sync from prop
-  - `features/blogs/components/blog-post-cover-input.tsx:24` — `setPreviewUrl` from prop
-- `react-hooks/exhaustive-deps` — incomplete effect dependency arrays (2 files):
-  - `features/events/hooks/use-event-index-filters.ts:113`
-  - `hooks/use-index-filters.ts:75`
+  - `features/blogs/components/blog-post-cover-input.tsx:26` — `setPreviewUrl` from prop
+  - `pages/welcome.tsx:68` — `setPlayHeroEntry` in effect
+- `react-hooks/exhaustive-deps` — incomplete effect dependency arrays (2 files, 2 warnings):
+  - `features/events/hooks/use-event-index-filters.ts:114`
+  - `hooks/use-index-filters.ts:76`
 
-> **Risk:** The `set-state-in-effect` instances in `reveal.tsx` and `date-time-picker-field.tsx` may cause hydration mismatches with SSR if they depend on browser-only state (`window`, `matchMedia`). The prop-syncing patterns in blog components may cause unnecessary re-renders but are unlikely to be hydration issues.
+> **Risk:** The `set-state-in-effect` instances in `reveal.tsx`, `welcome.tsx`, and `date-time-picker-field.tsx` may cause hydration mismatches with SSR if they depend on browser-only state (`window`, `matchMedia`, `sessionStorage`). The prop-syncing patterns in blog components may cause unnecessary re-renders but are unlikely to be hydration issues.
 
 ### 2.2 TypeScript Errors
 
@@ -255,7 +254,7 @@ No remaining code references to "YokPelajarin" were found in application source 
 | Test infrastructure broken | Resolved | `RefreshDatabase` restored; tests run on MySQL testing DB |
 | No business-feature tests | High | Zero tests for events, registration, quizzes, blogs, authorization |
 | Member quiz flow not wired | Medium | Backend logic exists but routes are commented out |
-| 179 ESLint errors | Medium | Mostly auto-fixable but 6 behavioral issues need manual review |
+| 5 ESLint errors, 2 warnings | Medium | Mechanical findings resolved in P0-3; 7 behavioral findings (5 errors, 2 warnings) remain for P0-4 manual review |
 | 7 TypeScript errors | Resolved | `npm run types:check` passes with 0 errors |
 | 67 Pint style issues | Resolved | `composer lint:check` passes with 0 issues |
 | SSR hydration risk | Medium | `set-state-in-effect` patterns with browser-only APIs could cause hydration mismatches |

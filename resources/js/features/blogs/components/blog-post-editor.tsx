@@ -1,11 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { EditorContent, useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
+import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
-import Image from '@tiptap/extension-image';
-import { Button } from '@/components/ui/button';
-import BlogEditorLinkDialog from '@/features/blogs/components/blog-editor-link-dialog';
+import { EditorContent, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 import {
     Bold,
     Heading1,
@@ -19,6 +16,9 @@ import {
     Redo2,
     Undo2,
 } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import BlogEditorLinkDialog from '@/features/blogs/components/blog-editor-link-dialog';
 
 interface BlogPostEditorProps {
     value: string;
@@ -69,7 +69,9 @@ export default function BlogPostEditor({
     });
 
     useEffect(() => {
-        if (!editor) return;
+        if (!editor) {
+return;
+}
 
         const current = editor.getHTML();
 
@@ -79,7 +81,9 @@ export default function BlogPostEditor({
     }, [editor, value]);
 
     const openLinkDialog = () => {
-        if (!editor) return;
+        if (!editor) {
+return;
+}
 
         const previousUrl = editor.getAttributes('link').href || '';
         setCurrentLink(previousUrl);
@@ -87,10 +91,13 @@ export default function BlogPostEditor({
     };
 
     const handleSaveLink = (url: string) => {
-        if (!editor) return;
+        if (!editor) {
+return;
+}
 
         if (url === '') {
             editor.chain().focus().extendMarkRange('link').unsetLink().run();
+
             return;
         }
 
@@ -98,7 +105,9 @@ export default function BlogPostEditor({
     };
 
     const handleRemoveLink = () => {
-        if (!editor) return;
+        if (!editor) {
+return;
+}
 
         editor.chain().focus().extendMarkRange('link').unsetLink().run();
     };
@@ -108,6 +117,7 @@ export default function BlogPostEditor({
 
         if (!file || !editor || !onUploadImage) {
             event.target.value = '';
+
             return;
         }
 

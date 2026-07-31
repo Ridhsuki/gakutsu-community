@@ -1,9 +1,7 @@
 import { Link, useForm } from '@inertiajs/react';
-import PublicLayout from '@/layouts/public-layout';
+import SeoHead from '@/components/public/seo-head';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import SeoHead from '@/components/public/seo-head';
 import {
     Select,
     SelectContent,
@@ -11,6 +9,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import PublicLayout from '@/layouts/public-layout';
 
 type EventQuestion = {
     id: number;
@@ -43,6 +43,7 @@ export default function EventRegister({
 }) {
     const initialAnswers = questions.reduce<Record<string, string>>((carry, item) => {
         carry[String(item.id)] = '';
+
         return carry;
     }, {});
 
