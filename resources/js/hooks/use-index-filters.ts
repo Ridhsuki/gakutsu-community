@@ -64,6 +64,7 @@ export default function useIndexFilters<TSortField extends string>(
     useEffect(() => {
         if (isFirstSearchRender.current) {
             isFirstSearchRender.current = false;
+
             return;
         }
 
@@ -78,7 +79,9 @@ export default function useIndexFilters<TSortField extends string>(
         nextSortField: TSortField,
         nextSortDirection: SortDirection,
     ) => {
-        if (!allowedSortFields.includes(nextSortField)) return;
+        if (!allowedSortFields.includes(nextSortField)) {
+return;
+}
 
         setSortField(nextSortField);
         setSortDirection(nextSortDirection);
@@ -86,7 +89,9 @@ export default function useIndexFilters<TSortField extends string>(
     };
 
     const setSortFieldAndReload = (nextSortField: TSortField) => {
-        if (!allowedSortFields.includes(nextSortField)) return;
+        if (!allowedSortFields.includes(nextSortField)) {
+return;
+}
 
         setSortField(nextSortField);
         reload(search, nextSortField, sortDirection);
@@ -104,7 +109,9 @@ export default function useIndexFilters<TSortField extends string>(
     };
 
     const handleSort = (field: TSortField) => {
-        if (!allowedSortFields.includes(field)) return;
+        if (!allowedSortFields.includes(field)) {
+return;
+}
 
         const nextDirection: SortDirection =
             sortField === field && sortDirection === 'asc' ? 'desc' : 'asc';

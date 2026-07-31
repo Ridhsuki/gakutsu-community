@@ -1,8 +1,5 @@
 import type { SyntheticEvent } from 'react';
 import { Button } from '@/components/ui/button';
-import UserFormFields from '@/features/users/components/user-form-fields';
-import type { UserFormLike } from '@/features/users/form-types';
-import type { CreateUserForm } from '@/features/users/types';
 import {
     Dialog,
     DialogContent,
@@ -10,6 +7,9 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
+import UserFormFields from '@/features/users/components/user-form-fields';
+import type { UserFormLike } from '@/features/users/form-types';
+import type { CreateUserForm } from '@/features/users/types';
 
 interface UserCreateDialogProps {
     open: boolean;

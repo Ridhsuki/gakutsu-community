@@ -1,4 +1,5 @@
 import { router } from '@inertiajs/react';
+import { CalendarDays, Users } from 'lucide-react';
 import EmptyStateRow from '@/components/data-table/empty-state-row';
 import SortableHeader from '@/components/data-table/sortable-header';
 import EventAccessBadge from '@/features/events/components/event-access-badge';
@@ -8,7 +9,6 @@ import EventRowActionsMenu from '@/features/events/components/event-row-actions-
 import EventStatusBadge from '@/features/events/components/event-status-badge';
 import type { EventItem, EventSortField } from '@/features/events/types';
 import type { SortDirection } from '@/types/filters';
-import { CalendarDays, Users } from 'lucide-react';
 
 interface EventTableProps {
     events: EventItem[];
@@ -23,9 +23,16 @@ interface EventTableProps {
 }
 
 function formatDate(value: string | null) {
-    if (!value) return '-';
+    if (!value) {
+return '-';
+}
+
     const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return '-';
+
+    if (Number.isNaN(date.getTime())) {
+return '-';
+}
+
     return date.toLocaleDateString('id-ID', {
         day: '2-digit', month: 'short', year: 'numeric',
     });

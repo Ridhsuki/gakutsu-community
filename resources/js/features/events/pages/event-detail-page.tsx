@@ -1,20 +1,24 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import { ClipboardList, Edit, Users } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import ContextBackButton from '@/components/navigation/context-back-button';
 import RenderRichText from '@/components/rich-text/render-rich-text';
+import { Button } from '@/components/ui/button';
 import EventPosterThumbnail from '@/features/events/components/event-poster-thumbnail';
 import EventQuizShortcuts from '@/features/events/components/event-quiz-shortcuts';
 import EventStatusBadge from '@/features/events/components/event-status-badge';
-import { appendFrom } from '@/lib/navigation';
 import type { EventItem } from '@/features/events/types';
+import { appendFrom } from '@/lib/navigation';
 
 function formatDate(value: string | null) {
-    if (!value) return '-';
+    if (!value) {
+return '-';
+}
 
     const date = new Date(value);
 
-    if (Number.isNaN(date.getTime())) return '-';
+    if (Number.isNaN(date.getTime())) {
+return '-';
+}
 
     return date.toLocaleDateString('id-ID', {
         day: '2-digit',

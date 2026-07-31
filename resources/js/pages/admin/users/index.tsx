@@ -1,17 +1,18 @@
-import type { SyntheticEvent } from 'react';
-import { useState } from 'react';
 import { Head, router, useForm } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import type { PaginatedResponse } from '@/types/pagination';
-import type { IndexFilters } from '@/types/filters';
-import PaginationBar from '@/components/data-table/pagination-bar';
-import IndexToolbar from '@/components/data-table/index-toolbar';
-import useIndexFilters from '@/hooks/use-index-filters';
 import { Plus } from 'lucide-react';
-import UserTable from '@/features/users/components/user-table';
+import { useState } from 'react';
+import type { SyntheticEvent } from 'react';
+import IndexToolbar from '@/components/data-table/index-toolbar';
+import PaginationBar from '@/components/data-table/pagination-bar';
+import { Button } from '@/components/ui/button';
 import UserCreateDialog from '@/features/users/components/user-create-dialog';
-import UserEditDialog from '@/features/users/components/user-edit-dialog';
 import UserDeleteDialog from '@/features/users/components/user-delete-dialog';
+import UserEditDialog from '@/features/users/components/user-edit-dialog';
+import UserTable from '@/features/users/components/user-table';
+import {
+    USERS_INDEX_URL,
+    USER_ALLOWED_SORT_FIELDS,
+} from '@/features/users/constants';
 import {
     getDefaultCreateUserForm,
     getDefaultEditUserForm,
@@ -23,10 +24,9 @@ import type {
     CreateUserForm,
     EditUserForm,
 } from '@/features/users/types';
-import {
-    USERS_INDEX_URL,
-    USER_ALLOWED_SORT_FIELDS,
-} from '@/features/users/constants';
+import useIndexFilters from '@/hooks/use-index-filters';
+import type { IndexFilters } from '@/types/filters';
+import type { PaginatedResponse } from '@/types/pagination';
 
 interface PageProps {
     users: PaginatedResponse<User>;
@@ -102,7 +102,9 @@ export default function UserIndex({ users, filters }: PageProps) {
     const handleEditSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!selectedUser) return;
+        if (!selectedUser) {
+return;
+}
 
         editForm.put(`${USERS_INDEX_URL}/${selectedUser.id}`, {
             preserveScroll: true,
@@ -113,7 +115,9 @@ export default function UserIndex({ users, filters }: PageProps) {
     };
 
     const handleDelete = () => {
-        if (!selectedUser) return;
+        if (!selectedUser) {
+return;
+}
 
         setIsDeleting(true);
 

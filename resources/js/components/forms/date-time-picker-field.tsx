@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from 'react';
 import {
     addMonths,
     format,
@@ -14,6 +13,7 @@ import {
     ChevronRight,
     Clock3,
 } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -48,7 +48,9 @@ const MONTHS = [
 ];
 
 function toDate(value: string) {
-    if (!value) return undefined;
+    if (!value) {
+return undefined;
+}
 
     const parsed = new Date(value);
 
@@ -56,7 +58,9 @@ function toDate(value: string) {
 }
 
 function toDateTimeLocalString(date: Date | undefined) {
-    if (!date) return '';
+    if (!date) {
+return '';
+}
 
     const yyyy = date.getFullYear();
     const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -93,11 +97,14 @@ export default function DateTimePickerField({
 
     const yearOptions = useMemo(() => {
         const baseYear = getYear(displayMonth);
+
         return Array.from({ length: 16 }, (_, i) => baseYear - 5 + i);
     }, [displayMonth]);
 
     const updateDatePart = (date?: Date) => {
-        if (!date) return;
+        if (!date) {
+return;
+}
 
         const base = selectedDate ? new Date(selectedDate) : new Date();
 

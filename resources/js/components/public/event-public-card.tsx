@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { CalendarDays, User2 } from 'lucide-react';
-import EventStatusBadge from '@/features/events/components/event-status-badge';
 import EventPosterThumbnail from '@/features/events/components/event-poster-thumbnail';
+import EventStatusBadge from '@/features/events/components/event-status-badge';
 
 type EventCardItem = {
     id: number;
@@ -18,7 +18,10 @@ type EventCardItem = {
 
 function formatDate(value: string) {
     const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return '-';
+
+    if (Number.isNaN(date.getTime())) {
+return '-';
+}
 
     return date.toLocaleDateString('id-ID', {
         day: '2-digit',

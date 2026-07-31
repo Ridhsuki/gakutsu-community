@@ -1,12 +1,11 @@
 import { Head } from '@inertiajs/react';
 import { FileSearch } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import ContextBackButton from '@/components/navigation/context-back-button';
+import { Badge } from '@/components/ui/badge';
 import QuizManualGradeCard from '@/features/quizzes/components/quiz-manual-grade-card';
 import type { EventQuizAttemptItem, QuizEventSummary } from '@/features/quizzes/types';
 
 export default function QuizAttemptDetailPage({
-    event,
     attempt,
     backHref,
     gradeBaseHref,

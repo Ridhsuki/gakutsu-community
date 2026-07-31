@@ -1,8 +1,8 @@
-import { Head, Link } from '@inertiajs/react';
-import RenderRichText from '@/components/rich-text/render-rich-text';
+import { Link } from '@inertiajs/react';
 import BlogPublicCard from '@/components/public/blog-public-card';
-import PublicLayout from '@/layouts/public-layout';
 import SeoHead from '@/components/public/seo-head';
+import RenderRichText from '@/components/rich-text/render-rich-text';
+import PublicLayout from '@/layouts/public-layout';
 
 interface PostItem {
     id: number;

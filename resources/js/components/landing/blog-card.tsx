@@ -1,5 +1,5 @@
-import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Clock } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 export interface BlogPost {
     id: number;

@@ -1,7 +1,6 @@
-import type { SyntheticEvent } from 'react';
-import { useState } from 'react';
 import { router, useForm } from '@inertiajs/react';
-import useIndexFilters from '@/hooks/use-index-filters';
+import { useState } from 'react';
+import type { SyntheticEvent } from 'react';
 import { BLOG_ALLOWED_SORT_FIELDS } from '@/features/blogs/constants';
 import {
     getDefaultCreateBlogPostForm,
@@ -15,6 +14,7 @@ import type {
     CreateBlogPostForm,
     EditBlogPostForm,
 } from '@/features/blogs/types';
+import useIndexFilters from '@/hooks/use-index-filters';
 import type { IndexFilters } from '@/types/filters';
 
 interface UseBlogManagementOptions {
@@ -106,7 +106,9 @@ export default function useBlogManagement({
     const handleEditSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!selectedPost) return;
+        if (!selectedPost) {
+return;
+}
 
         editForm.put(`${endpoint}/${selectedPost.id}`, {
             preserveScroll: true,
@@ -118,7 +120,9 @@ export default function useBlogManagement({
     };
 
     const handleDelete = () => {
-        if (!selectedPost) return;
+        if (!selectedPost) {
+return;
+}
 
         setIsDeleting(true);
 
@@ -136,6 +140,7 @@ export default function useBlogManagement({
     const handleCreateOpenChange = (open: boolean) => {
         if (open) {
             setIsCreateOpen(true);
+
             return;
         }
 
@@ -145,6 +150,7 @@ export default function useBlogManagement({
     const handleEditOpenChange = (open: boolean) => {
         if (open) {
             setIsEditOpen(true);
+
             return;
         }
 
@@ -154,6 +160,7 @@ export default function useBlogManagement({
     const handleDeleteOpenChange = (open: boolean) => {
         if (open) {
             setIsDeleteOpen(true);
+
             return;
         }
 

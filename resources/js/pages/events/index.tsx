@@ -1,9 +1,8 @@
-import { Head } from '@inertiajs/react';
-import EventPublicCard from '@/components/public/event-public-card';
-import PublicLayout from '@/layouts/public-layout';
 import PaginationBar from '@/components/data-table/pagination-bar';
-import type { PaginatedResponse } from '@/types/pagination';
+import EventPublicCard from '@/components/public/event-public-card';
 import SeoHead from '@/components/public/seo-head';
+import PublicLayout from '@/layouts/public-layout';
+import type { PaginatedResponse } from '@/types/pagination';
 
 type EventItem = {
     id: number;

@@ -1,7 +1,6 @@
+import { router, useForm } from '@inertiajs/react';
 import type { SyntheticEvent } from 'react';
 import { useState } from 'react';
-import { router, useForm } from '@inertiajs/react';
-import useIndexFilters from '@/hooks/use-index-filters';
 import {
     getDefaultCreateEventRegistrationQuestionForm,
     getDefaultEditEventRegistrationQuestionForm,
@@ -12,6 +11,7 @@ import type {
     EditEventRegistrationQuestionForm,
     EventRegistrationQuestionItem,
 } from '@/features/events/types';
+import useIndexFilters from '@/hooks/use-index-filters';
 
 interface UseEventRegistrationQuestionManagementOptions {
     endpoint: string;
@@ -83,7 +83,9 @@ export default function useEventRegistrationQuestionManagement({
     const handleEditSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!selectedQuestion) return;
+        if (!selectedQuestion) {
+return;
+}
 
         editForm.put(`${endpoint}/${selectedQuestion.id}`, {
             preserveScroll: true,
@@ -95,7 +97,9 @@ export default function useEventRegistrationQuestionManagement({
     };
 
     const handleDelete = () => {
-        if (!selectedQuestion) return;
+        if (!selectedQuestion) {
+return;
+}
 
         router.delete(`${endpoint}/${selectedQuestion.id}`, {
             preserveScroll: true,
@@ -130,11 +134,17 @@ export default function useEventRegistrationQuestionManagement({
         handleCreateOpenChange: (open: boolean) => setIsCreateOpen(open),
         handleEditOpenChange: (open: boolean) => {
             setIsEditOpen(open);
-            if (!open) setSelectedQuestion(null);
+
+            if (!open) {
+setSelectedQuestion(null);
+}
         },
         handleDeleteOpenChange: (open: boolean) => {
             setIsDeleteOpen(open);
-            if (!open) setSelectedQuestion(null);
+
+            if (!open) {
+setSelectedQuestion(null);
+}
         },
     };
 }

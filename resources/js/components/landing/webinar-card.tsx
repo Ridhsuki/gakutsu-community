@@ -1,5 +1,5 @@
-import { Badge } from '@/components/ui/badge';
 import { CalendarDays, Clock, User } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 export interface WebinarItem {
     id: number;

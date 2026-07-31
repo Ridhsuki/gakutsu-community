@@ -1,7 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react';
+import FlashToasterListener from '@/components/feedback/flash-toaster-listener';
 import SiteFooter from '@/components/public/site-footer';
 import SiteHeader from '@/components/public/site-header';
-import FlashToasterListener from '@/components/feedback/flash-toaster-listener';
 
 export default function PublicLayout({
     children,

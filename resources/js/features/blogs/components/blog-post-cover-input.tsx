@@ -14,7 +14,9 @@ export default function BlogPostCoverInput({
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     const currentImageUrl = useMemo(() => {
-        if (!currentImagePath) return null;
+        if (!currentImagePath) {
+return null;
+}
 
         return `/storage/${currentImagePath}`;
     }, [currentImagePath]);
@@ -22,6 +24,7 @@ export default function BlogPostCoverInput({
     useEffect(() => {
         if (!value) {
             setPreviewUrl(null);
+
             return;
         }
 

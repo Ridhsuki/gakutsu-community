@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
-import { cn } from '@/lib/utils';
 import { cleanPaginationLabel } from '@/lib/pagination';
+import { cn } from '@/lib/utils';
 import type { PaginationLink } from '@/types/pagination';
 
 interface PaginationBarProps {
@@ -14,6 +14,7 @@ interface PaginationBarProps {
 
 function isNavigationLabel(label: string) {
     const normalized = cleanPaginationLabel(label).toLowerCase();
+
     return normalized.includes('previous') || normalized.includes('next');
 }
 
@@ -25,7 +26,9 @@ export default function PaginationBar({
     lastPage,
     only = [],
 }: PaginationBarProps) {
-    if (lastPage <= 1) return null;
+    if (lastPage <= 1) {
+return null;
+}
 
     const previousLink = links.find(
         (link) => cleanPaginationLabel(link.label).toLowerCase().includes('previous')
@@ -39,6 +42,7 @@ export default function PaginationBar({
 
     const activePageLink = pageLinks.find((link) => {
         const label = cleanPaginationLabel(link.label);
+
         return link.active && !Number.isNaN(Number(label));
     });
 

@@ -1,10 +1,10 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { CalendarDays, CircleHelp, LockKeyhole, User2 } from 'lucide-react';
-import PublicLayout from '@/layouts/public-layout';
+import SeoHead from '@/components/public/seo-head';
+import RenderRichText from '@/components/rich-text/render-rich-text';
 import EventPosterThumbnail from '@/features/events/components/event-poster-thumbnail';
 import EventStatusBadge from '@/features/events/components/event-status-badge';
-import RenderRichText from '@/components/rich-text/render-rich-text';
-import SeoHead from '@/components/public/seo-head';
+import PublicLayout from '@/layouts/public-layout';
 
 type PageAuth = {
     auth?: {

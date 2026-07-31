@@ -112,7 +112,7 @@ export interface CreateEventForm {
     poster_image: File | null;
 }
 
-export interface EditEventForm extends CreateEventForm {}
+export type EditEventForm = CreateEventForm;
 
 export interface CreateEventRegistrationQuestionForm {
     label: string;
@@ -125,5 +125,4 @@ export interface CreateEventRegistrationQuestionForm {
     sort_order: string;
 }
 
-export interface EditEventRegistrationQuestionForm
-    extends CreateEventRegistrationQuestionForm {}
+export type EditEventRegistrationQuestionForm = CreateEventRegistrationQuestionForm;
