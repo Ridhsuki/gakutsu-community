@@ -1,10 +1,9 @@
 # Current State — Gakutsu Community
 
-**Baseline commit:** `db94b40`
-**Branch:** `chore/project-recovery`
-**Tag:** `recovery-baseline-2026-07-30`
-**Audit date:** 2026-07-30
-**Total commits:** 60
+**Recovery baseline:** `db94b40`
+**Baseline tag:** `recovery-baseline-2026-07-30`
+**Current branch:** `main`
+**Last updated:** 2026-08-01
 
 ---
 
@@ -100,7 +99,7 @@ Source: `storage/logs/recovery/SUMMARY.md` and individual log files. These files
 | Prettier       | `npm run format:check` | **Passed** | 0 formatting issues. Resolved in P0-6.       |
 | TypeScript     | `npm run types:check`  | **Passed** | 0 errors. Baseline TypeScript errors resolved in P0-2. |
 | PHP Pint       | `composer lint:check`  | **Passed** | 0 style issues. Baseline Pint issues resolved in P0-5. |
-| Backend tests  | `php artisan test`     | **Passed** | 40 passed. Test infrastructure restored (RefreshDatabase and MySQL test DB configured). |
+| Backend tests | `./vendor/bin/pest --compact` | **Passed** | 40 tests passed, 136 assertions. RefreshDatabase runs against the isolated MySQL testing database. |
 | Frontend build | `npm run build`        | **Passed** | Production client build successful          |
 | SSR build      | `npm run build:ssr`    | **Passed** | Client + SSR build successful               |
 | GitHub Actions | `.github/workflows/quality.yml` | **Passed** | Frontend and backend quality gates pass on pull requests and main |
@@ -223,7 +222,7 @@ The registration controllers check authorization in some cases but there is no d
 
 ### 4.4 HomeController Uses Inline FQN
 
-[HomeController](../app/Http/Controllers/Site/HomeController.php) uses `\App\Enums\UserRole::Member` inline instead of importing the class. This is a Pint style issue, not a bug.
+[HomeController](../app/Http/Controllers/Site/HomeController.php) uses `\App\Enums\UserRole::Member` inline. This passes the current Pint configuration but is a minor code-consistency opportunity, not a functional defect.
 
 ### 4.5 composer.json Package Name Is Generic
 
@@ -233,9 +232,10 @@ The registration controllers check authorization in some cases but there is no d
 
 ## 5. Stale Branding
 
-The repository GitHub name is `Ridhsuki/yokpelajarin`. The `composer.json` name is `laravel/react-starter-kit`. Neither reflects the current "Gakutsu" branding.
+The repository has been renamed to `Ridhsuki/gakutsu-community`.
 
-No remaining code references to "YokPelajarin" were found in application source files beyond the repository name.
+The Composer package name remains `laravel/react-starter-kit` and should be
+renamed separately when production identity is finalized.
 
 ---
 
