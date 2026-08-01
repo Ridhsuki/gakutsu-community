@@ -103,6 +103,7 @@ Source: `storage/logs/recovery/SUMMARY.md` and individual log files. These files
 | Backend tests  | `php artisan test`     | **Passed** | 40 passed. Test infrastructure restored (RefreshDatabase and MySQL test DB configured). |
 | Frontend build | `npm run build`        | **Passed** | Production client build successful          |
 | SSR build      | `npm run build:ssr`    | **Passed** | Client + SSR build successful               |
+| GitHub Actions | `.github/workflows/quality.yml` | **Passed** | Frontend and backend quality gates pass on pull requests and main |
 
 ### 2.1 ESLint Classification
 
@@ -156,6 +157,23 @@ Source: `storage/logs/recovery/SUMMARY.md` and individual log files. These files
 - **Client build:** Passes. Vite successfully bundles the application.
 - **SSR build:** Passes. Both client and server bundles produced.
 - **Warning:** A successful Vite build does not validate TypeScript, ESLint, test correctness, or runtime behavior.
+
+### 2.6 Automated Quality Gates
+
+The repository now runs two parallel GitHub Actions jobs:
+
+- Frontend Quality: ESLint, TypeScript, Prettier, client build, and SSR build.
+- Backend Quality: PHP Pint and Pest using an isolated MySQL testing database.
+
+Wayfinder definitions are generated explicitly with form variants before
+frontend static analysis. Backend tests disable Vite manifest resolution
+through the shared test base class.
+
+Remote baseline:
+
+- Frontend Quality: Passed
+- Backend Quality: Passed
+- Pest: 40 tests, 136 assertions
 
 ---
 
