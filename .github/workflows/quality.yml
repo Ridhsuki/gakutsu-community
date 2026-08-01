@@ -1,0 +1,124 @@
+name: Quality Gates
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend-quality:
+    name: Frontend Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      APP_KEY: base64:LcfH6/m1K0qE/G3T5O8xT/d2S+4mB+aW/wQhN0yM16k=
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@a42e73e16d831796463b22b8d70a3efcad74e074 # 2.32.0
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Wayfinder files
+        run: php artisan wayfinder:generate --with-form --no-interaction
+
+      - name: Run ESLint
+        run: npm run lint:check -- --max-warnings=0
+
+      - name: Run TypeScript check
+        run: npm run types:check
+
+      - name: Run Prettier check
+        run: npm run format:check
+
+      - name: Run Client and SSR build
+        run: npm run build:ssr
+
+  backend-quality:
+    name: Backend Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ci_password
+          MYSQL_DATABASE: db_gakutsu_testing
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -uroot -pci_password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      APP_ENV: testing
+      APP_DEBUG: false
+      APP_KEY: base64:LcfH6/m1K0qE/G3T5O8xT/d2S+4mB+aW/wQhN0yM16k=
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: db_gakutsu_testing
+      DB_USERNAME: root
+      DB_PASSWORD: ci_password
+      CACHE_STORE: array
+      SESSION_DRIVER: array
+      QUEUE_CONNECTION: sync
+      MAIL_MAILER: array
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@a42e73e16d831796463b22b8d70a3efcad74e074 # 2.32.0
+        with:
+          php-version: '8.4'
+          extensions: pdo_mysql, bcmath
+          coverage: none
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Run Pint check
+        run: composer lint:check
+
+      - name: Run Pest tests
+        run: ./vendor/bin/pest --compact
