@@ -272,7 +272,15 @@ renamed separately when production identity is finalized.
 
 ---
 
-## 8. Unknowns Requiring Runtime Verification
+## 8. SEO Status
+
+- Repository SEO audit completed (see `docs/SEO_AUDIT.md`).
+- Implementation has not started.
+- Production Search Console and field-data verification remain pending.
+
+---
+
+## 9. Unknowns Requiring Runtime Verification
 
 - Whether poster image upload and processing works end-to-end (Intervention Image integration)
 - Whether the rich text editor image upload pipeline functions correctly
