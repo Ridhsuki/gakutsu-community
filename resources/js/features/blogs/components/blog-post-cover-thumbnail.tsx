@@ -7,6 +7,8 @@ interface BlogPostCoverThumbnailProps {
     alt: string;
     className?: string;
     imageClassName?: string;
+    loading?: 'eager' | 'lazy';
+    decoding?: 'async' | 'sync' | 'auto';
 }
 
 export default function BlogPostCoverThumbnail({
@@ -14,6 +16,8 @@ export default function BlogPostCoverThumbnail({
     alt,
     className,
     imageClassName,
+    loading = 'lazy',
+    decoding = 'async',
 }: BlogPostCoverThumbnailProps) {
     const [hasError, setHasError] = useState(false);
 
@@ -30,8 +34,8 @@ export default function BlogPostCoverThumbnail({
                 <img
                     src={src ?? undefined}
                     alt={alt}
-                    loading="lazy"
-                    decoding="async"
+                    loading={loading}
+                    decoding={decoding}
                     onError={() => setHasError(true)}
                     className={cn('h-full w-full object-cover', imageClassName)}
                 />

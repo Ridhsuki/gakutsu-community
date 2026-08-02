@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react';
 import BlogPublicCard from '@/components/public/blog-public-card';
 import SeoHead from '@/components/public/seo-head';
 import RenderRichText from '@/components/rich-text/render-rich-text';
+import BlogPostCoverThumbnail from '@/features/blogs/components/blog-post-cover-thumbnail';
 import PublicLayout from '@/layouts/public-layout';
 
 interface PostItem {
@@ -66,15 +67,15 @@ export default function BlogShow({
                     </div>
                 </div>
 
-                <div className="mt-8 overflow-hidden rounded-3xl border border-border bg-card">
-                    {post.cover_image_url ? (
-                        <img
-                            src={post.cover_image_url}
-                            alt={post.title}
-                            className="h-auto max-h-[420px] w-full object-cover"
-                        />
-                    ) : null}
-                </div>
+                {post.cover_image_url ? (
+                    <BlogPostCoverThumbnail
+                        src={post.cover_image_url}
+                        alt={post.title}
+                        className="mt-8 aspect-[16/9] max-h-[420px] w-full rounded-3xl"
+                        imageClassName="max-h-[420px] object-cover"
+                        loading="eager"
+                    />
+                ) : null}
 
                 <div className="mt-8 rounded-3xl border border-border bg-card p-6 shadow-sm">
                     <RenderRichText html={post.content} />

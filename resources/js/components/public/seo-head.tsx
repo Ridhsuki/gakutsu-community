@@ -114,32 +114,32 @@ export default function SeoHead({
             ) : null}
 
             {absoluteImageUrl ? (
-                <>
-                    <meta
-                        head-key="og:image"
-                        property="og:image"
-                        content={absoluteImageUrl}
-                    />
-                    <meta
-                        head-key="twitter:image"
-                        name="twitter:image"
-                        content={absoluteImageUrl}
-                    />
-                    {imageAlt ? (
-                        <>
-                            <meta
-                                head-key="og:image:alt"
-                                property="og:image:alt"
-                                content={imageAlt}
-                            />
-                            <meta
-                                head-key="twitter:image:alt"
-                                name="twitter:image:alt"
-                                content={imageAlt}
-                            />
-                        </>
-                    ) : null}
-                </>
+                <meta
+                    head-key="og:image"
+                    property="og:image"
+                    content={absoluteImageUrl}
+                />
+            ) : null}
+            {absoluteImageUrl ? (
+                <meta
+                    head-key="twitter:image"
+                    name="twitter:image"
+                    content={absoluteImageUrl}
+                />
+            ) : null}
+            {absoluteImageUrl && imageAlt ? (
+                <meta
+                    head-key="og:image:alt"
+                    property="og:image:alt"
+                    content={imageAlt}
+                />
+            ) : null}
+            {absoluteImageUrl && imageAlt ? (
+                <meta
+                    head-key="twitter:image:alt"
+                    name="twitter:image:alt"
+                    content={imageAlt}
+                />
             ) : null}
         </Head>
     );

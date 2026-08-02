@@ -278,6 +278,9 @@ renamed separately when production identity is finalized.
 - Indexability metadata implementation completed locally (Phase 1).
 - Brand set to Gakutsu for SEO metadata.
 - Production deployment and Search Console validation pending.
+- Phase 2 detail-image optimization completed: hero images on event and blog detail pages use `loading="eager"`, while listing images remain `loading="lazy"`.
+- Browser runtime regression resolved.
+- Measured production Core Web Vitals remain pending.
 
 ---
 
