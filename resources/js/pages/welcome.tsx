@@ -84,8 +84,8 @@ export default function Welcome(props: PageProps) {
     return (
         <PublicLayout canRegister={props.canRegister}>
             <SeoHead
-                title="Yok Pelajarin"
-                description="Komunitas belajar IT dan Cyber Security dengan webinar, event, dan artikel teknis yang relevan untuk member, mahasiswa, dan profesional."
+                title="Gakutsu"
+                description="Komunitas belajar IT dan Cyber Security dari Gakutsu dengan webinar, event, dan artikel teknis yang relevan untuk member, mahasiswa, dan profesional."
             />
 
             <section className="border-b border-border/60 bg-gradient-to-b from-primary/10 via-background to-background">

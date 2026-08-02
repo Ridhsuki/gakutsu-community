@@ -66,7 +66,8 @@ export default function EventRegister({
         <PublicLayout>
             <SeoHead
                 title={`Daftar Event - ${event.title}`}
-                description={`Jawab pertanyaan registrasi dan daftar ke event ${event.title} di Yok Pelajarin.`}
+                description={`Jawab pertanyaan registrasi dan daftar ke event ${event.title} di Gakutsu.`}
+                robots="noindex, follow"
             />
 
             <div className="mx-auto max-w-4xl px-4 py-12">

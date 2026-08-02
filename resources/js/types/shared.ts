@@ -7,6 +7,13 @@ export interface FlashMessages {
     status?: string | null;
 }
 
+export interface SeoMetadata {
+    siteName: string;
+    canonicalUrl: string | null;
+    robots: string;
+    baseUrl?: string | null;
+}
+
 export interface SharedPageProps extends PageProps {
     name?: string;
     sidebarOpen?: boolean;
@@ -18,4 +25,5 @@ export interface SharedPageProps extends PageProps {
             email?: string;
         } | null;
     };
+    seo?: SeoMetadata;
 }

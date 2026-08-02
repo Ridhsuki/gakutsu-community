@@ -43,7 +43,7 @@ export default function BlogsIndex({
         <PublicLayout>
             <SeoHead
                 title="Blog"
-                description="Baca artikel terbaru tentang IT, cyber security, pengembangan karier, dan insight komunitas Yok Pelajarin."
+                description="Baca artikel terbaru tentang IT, cyber security, pengembangan karier, dan insight komunitas Gakutsu."
             />
 
             <div className="mx-auto max-w-7xl px-4 py-12">

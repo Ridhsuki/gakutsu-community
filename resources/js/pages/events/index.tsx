@@ -28,7 +28,7 @@ export default function EventsIndex({
         <PublicLayout>
             <SeoHead
                 title="Events"
-                description="Jelajahi webinar dan event komunitas IT dan Cyber Security dari Yok Pelajarin, termasuk event mendatang dan arsip kegiatan."
+                description="Jelajahi webinar dan event komunitas IT dan Cyber Security dari Gakutsu, termasuk event mendatang dan arsip kegiatan."
             />
 
             <div className="mx-auto max-w-7xl px-4 py-12">

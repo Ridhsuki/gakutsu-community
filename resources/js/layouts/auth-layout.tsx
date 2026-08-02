@@ -1,4 +1,5 @@
 import FlashToasterListener from '@/components/feedback/flash-toaster-listener';
+import SeoHead from '@/components/public/seo-head';
 import AuthLayoutTemplate from '@/layouts/auth/auth-simple-layout';
 
 export default function AuthLayout({
@@ -12,6 +13,11 @@ export default function AuthLayout({
 }) {
     return (
         <AuthLayoutTemplate title={title} description={description}>
+            <SeoHead
+                title={title}
+                description={description}
+                robots="noindex, follow"
+            />
             <FlashToasterListener />
             {children}
         </AuthLayoutTemplate>
