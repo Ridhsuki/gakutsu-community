@@ -275,8 +275,9 @@ renamed separately when production identity is finalized.
 ## 8. SEO Status
 
 - Repository SEO audit completed (see `docs/SEO_AUDIT.md`).
-- Implementation has not started.
-- Production Search Console and field-data verification remain pending.
+- Indexability metadata implementation completed locally (Phase 1).
+- Brand set to Gakutsu for SEO metadata.
+- Production deployment and Search Console validation pending.
 
 ---
 
