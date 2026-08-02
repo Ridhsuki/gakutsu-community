@@ -7,6 +7,8 @@ interface EventPosterThumbnailProps {
     alt: string;
     className?: string;
     imageClassName?: string;
+    loading?: 'eager' | 'lazy';
+    decoding?: 'async' | 'sync' | 'auto';
 }
 
 export default function EventPosterThumbnail({
@@ -14,6 +16,8 @@ export default function EventPosterThumbnail({
     alt,
     className,
     imageClassName,
+    loading = 'lazy',
+    decoding = 'async',
 }: EventPosterThumbnailProps) {
     const [hasError, setHasError] = useState(false);
 
@@ -30,8 +34,8 @@ export default function EventPosterThumbnail({
                 <img
                     src={src ?? undefined}
                     alt={alt}
-                    loading="lazy"
-                    decoding="async"
+                    loading={loading}
+                    decoding={decoding}
                     onError={() => setHasError(true)}
                     className={cn(
                         'h-full w-full object-contain',

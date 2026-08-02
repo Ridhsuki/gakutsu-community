@@ -80,6 +80,7 @@ export default function EventShow({
                             src={event.poster_image_url ?? null}
                             alt={`Poster ${event.title}`}
                             className="aspect-[4/3] w-full rounded-3xl"
+                            loading="eager"
                         />
 
                         <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
