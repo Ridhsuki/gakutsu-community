@@ -280,6 +280,9 @@ renamed separately when production identity is finalized.
 - Phase 2 detail-image optimization completed: hero images on event and blog detail pages use `loading="eager"`, while listing images remain `loading="lazy"`.
 - Browser runtime regression resolved.
 - Phase 3 sitemap and environment-aware robots implementation completed locally.
+- Public rich-text detail SSR verified: Node SSR rendering for blog and event detail pages is fully functional using `isomorphic-dompurify`, resolving the SSR crash.
+- Private `meeting_url` removed from unauthorized public page payloads (`HomeController`, `Site\EventController`, and `Event::indexColumns()`).
+- Actual meeting-link authorization behavior preserved (`meetingUrl` top-level prop accessible only to authorized registered members and staff).
 - Search indexing remains disabled by default unless `SEO_INDEXING_ENABLED=true`.
 - Production deployment, live sitemap validation, and Search Console submission remain pending.
 - Measured production Core Web Vitals remain pending.
