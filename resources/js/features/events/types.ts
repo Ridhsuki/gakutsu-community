@@ -1,12 +1,7 @@
 export type EventStatus = 'upcoming' | 'cancelled' | 'completed';
 export type EventAccessType = 'free' | 'paid';
 export type EventSortField =
-    | 'title'
-    | 'category'
-    | 'status'
-    | 'starts_at'
-    | 'created_at'
-    | 'mentor';
+    'title' | 'category' | 'status' | 'starts_at' | 'created_at' | 'mentor';
 
 export type EventManagementViewMode = 'table' | 'cards';
 

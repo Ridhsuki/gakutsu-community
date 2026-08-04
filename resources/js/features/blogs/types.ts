@@ -1,11 +1,7 @@
 export type BlogPostStatus = 'draft' | 'published';
 
 export type BlogPostSortField =
-    | 'title'
-    | 'status'
-    | 'published_at'
-    | 'created_at'
-    | 'author';
+    'title' | 'status' | 'published_at' | 'created_at' | 'author';
 
 export type BlogManagementViewMode = 'table' | 'cards';
 
