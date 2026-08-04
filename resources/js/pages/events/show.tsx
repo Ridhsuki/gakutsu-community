@@ -23,7 +23,6 @@ type EventItem = {
     description: string;
     starts_at: string;
     status: 'upcoming' | 'completed' | 'cancelled';
-    meeting_url?: string | null;
     poster_image_url?: string | null;
     mentor?: {
         name: string;
@@ -34,11 +33,13 @@ export default function EventShow({
     event,
     alreadyRegistered,
     canViewMeetingLink,
+    meetingUrl,
     questionCount,
 }: {
     event: EventItem;
     alreadyRegistered: boolean;
     canViewMeetingLink: boolean;
+    meetingUrl?: string | null;
     questionCount: number;
 }) {
     const { props } = usePage<PageAuth>();
@@ -142,9 +143,9 @@ export default function EventShow({
                                     </Link>
                                 )}
 
-                                {canViewMeetingLink && event.meeting_url ? (
+                                {canViewMeetingLink && meetingUrl ? (
                                     <a
-                                        href={event.meeting_url}
+                                        href={meetingUrl}
                                         target="_blank"
                                         rel="noreferrer"
                                         className="inline-flex h-11 items-center justify-center rounded-xl border border-border px-5 text-sm font-medium"

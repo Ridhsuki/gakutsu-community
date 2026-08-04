@@ -58,9 +58,10 @@ class EventController extends Controller
         );
 
         return Inertia::render('events/show', [
-            'event' => $event->load('mentor:id,name'),
+            'event' => $event->load('mentor:id,name')->toPublicArray(),
             'alreadyRegistered' => $alreadyRegistered,
             'canViewMeetingLink' => $canViewMeetingLink,
+            'meetingUrl' => $canViewMeetingLink ? $event->meeting_url : null,
             'questionCount' => $event->registrationQuestions()->active()->count(),
         ]);
     }
@@ -73,9 +74,11 @@ class EventController extends Controller
             ->where('user_id', auth()->id())
             ->exists();
 
+        $publicEvent = $event->load('mentor:id,name')->toPublicArray();
+
         if ($alreadyRegistered) {
             return Inertia::render('events/register', [
-                'event' => $event->load('mentor:id,name'),
+                'event' => $publicEvent,
                 'questions' => [],
                 'alreadyRegistered' => true,
             ]);
@@ -87,7 +90,7 @@ class EventController extends Controller
             ->get();
 
         return Inertia::render('events/register', [
-            'event' => $event->load('mentor:id,name'),
+            'event' => $publicEvent,
             'questions' => $questions,
             'alreadyRegistered' => false,
         ]);

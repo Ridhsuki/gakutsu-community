@@ -72,12 +72,33 @@ class Event extends Model
             'is_published',
             'registration_closes_at',
             'meeting_provider',
-            'meeting_url',
             'poster_image_path',
             'starts_at',
             'ends_at',
             'description',
             'created_at',
+        ];
+    }
+
+    public function toPublicArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'category' => $this->category,
+            'description' => $this->description,
+            'status' => $this->status,
+            'access_type' => $this->access_type,
+            'is_published' => $this->is_published,
+            'registration_closes_at' => $this->registration_closes_at?->toISOString(),
+            'starts_at' => $this->starts_at?->toISOString(),
+            'ends_at' => $this->ends_at?->toISOString(),
+            'poster_image_url' => $this->poster_image_url,
+            'mentor' => $this->relationLoaded('mentor') && $this->mentor ? [
+                'id' => $this->mentor->id,
+                'name' => $this->mentor->name,
+            ] : null,
         ];
     }
 
