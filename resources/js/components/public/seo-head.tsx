@@ -1,4 +1,5 @@
 import { Head, usePage } from '@inertiajs/react';
+import { safeJsonLdStringify } from '@/lib/structured-data';
 import type { SharedPageProps } from '@/types/shared';
 
 type SeoHeadProps = {
@@ -9,6 +10,7 @@ type SeoHeadProps = {
     type?: 'website' | 'article';
     canonical?: string | null;
     robots?: string | null;
+    jsonLdGraph?: Array<Record<string, unknown>> | null;
 };
 
 export default function SeoHead({
@@ -19,6 +21,7 @@ export default function SeoHead({
     type = 'website',
     canonical,
     robots,
+    jsonLdGraph = null,
 }: SeoHeadProps) {
     const page = usePage<SharedPageProps>();
     const sharedSeo = page.props.seo;
@@ -49,6 +52,18 @@ export default function SeoHead({
             absoluteImageUrl = image;
         }
     }
+
+    const shouldRenderJsonLd =
+        robotsDirective === 'index, follow' &&
+        Boolean(canonicalUrl) &&
+        Boolean(jsonLdGraph && jsonLdGraph.length > 0);
+
+    const jsonLdPayload = shouldRenderJsonLd
+        ? {
+              '@context': 'https://schema.org',
+              '@graph': jsonLdGraph,
+          }
+        : null;
 
     return (
         <Head>
@@ -139,6 +154,16 @@ export default function SeoHead({
                     head-key="twitter:image:alt"
                     name="twitter:image:alt"
                     content={imageAlt}
+                />
+            ) : null}
+
+            {jsonLdPayload ? (
+                <script
+                    head-key="structured-data"
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: safeJsonLdStringify(jsonLdPayload),
+                    }}
                 />
             ) : null}
         </Head>
