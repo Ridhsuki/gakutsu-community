@@ -69,27 +69,7 @@ class SeoPolicy
      */
     public function getBaseUrl(): ?string
     {
-        $appUrl = (string) config('app.url', '');
-
-        if ($appUrl === '' || ! Str::startsWith($appUrl, ['http://', 'https://'])) {
-            return null;
-        }
-
-        if (filter_var($appUrl, FILTER_VALIDATE_URL) === false) {
-            return null;
-        }
-
-        $parsed = parse_url($appUrl);
-        if (! isset($parsed['scheme'], $parsed['host'])) {
-            return null;
-        }
-
-        $scheme = strtolower($parsed['scheme']);
-        $host = $parsed['host'];
-        $port = isset($parsed['port']) ? ':'.$parsed['port'] : '';
-        $path = isset($parsed['path']) ? rtrim($parsed['path'], '/') : '';
-
-        return "{$scheme}://{$host}{$port}{$path}";
+        return SiteUrl::getBaseUrl();
     }
 
     /**
@@ -97,6 +77,10 @@ class SeoPolicy
      */
     public function resolveRobotsPolicy(Request $request, ?string $routeName, string $path): string
     {
+        if (! (bool) config('seo.indexing_enabled', false)) {
+            return 'noindex, nofollow';
+        }
+
         if ($this->isPrivateRoute($request, $routeName, $path)) {
             return 'noindex, nofollow';
         }

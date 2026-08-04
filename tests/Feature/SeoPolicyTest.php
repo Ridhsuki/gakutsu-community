@@ -6,7 +6,10 @@ use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('1. home returns index/follow and clean home canonical', function () {
-    config(['app.url' => 'https://gakutsu.net']);
+    config([
+        'app.url' => 'https://gakutsu.net',
+        'seo.indexing_enabled' => true,
+    ]);
 
     $response = $this->get(route('home'));
 
@@ -20,7 +23,10 @@ test('1. home returns index/follow and clean home canonical', function () {
 });
 
 test('2. public detail routes produce an absolute canonical', function () {
-    config(['app.url' => 'https://gakutsu.net']);
+    config([
+        'app.url' => 'https://gakutsu.net',
+        'seo.indexing_enabled' => true,
+    ]);
 
     $user = User::factory()->create();
     $event = Event::factory()->published()->upcoming()->create([
@@ -50,7 +56,10 @@ test('2. public detail routes produce an absolute canonical', function () {
 });
 
 test('3. pure pagination preserves the page parameter in a self-canonical', function () {
-    config(['app.url' => 'https://gakutsu.net']);
+    config([
+        'app.url' => 'https://gakutsu.net',
+        'seo.indexing_enabled' => true,
+    ]);
 
     $this->get(route('blogs.index', ['page' => 2]))
         ->assertOk()
@@ -70,7 +79,10 @@ test('3. pure pagination preserves the page parameter in a self-canonical', func
 });
 
 test('4. first-page pagination removes the redundant page=1 parameter', function () {
-    config(['app.url' => 'https://gakutsu.net']);
+    config([
+        'app.url' => 'https://gakutsu.net',
+        'seo.indexing_enabled' => true,
+    ]);
 
     $this->get(route('blogs.index', ['page' => 1]))
         ->assertOk()
@@ -90,7 +102,10 @@ test('4. first-page pagination removes the redundant page=1 parameter', function
 });
 
 test('5. search/filter/sort variants return noindex/follow and no conflicting canonical', function () {
-    config(['app.url' => 'https://gakutsu.net']);
+    config([
+        'app.url' => 'https://gakutsu.net',
+        'seo.indexing_enabled' => true,
+    ]);
 
     $this->get(route('blogs.index', ['search' => 'cyber']))
         ->assertOk()
@@ -110,7 +125,10 @@ test('5. search/filter/sort variants return noindex/follow and no conflicting ca
 });
 
 test('6. event registration returns noindex/follow', function () {
-    config(['app.url' => 'https://gakutsu.net']);
+    config([
+        'app.url' => 'https://gakutsu.net',
+        'seo.indexing_enabled' => true,
+    ]);
 
     $user = User::factory()->create();
     $event = Event::factory()->published()->upcoming()->create([
@@ -129,7 +147,10 @@ test('6. event registration returns noindex/follow', function () {
 });
 
 test('7. auth routes return noindex/follow', function () {
-    config(['app.url' => 'https://gakutsu.net']);
+    config([
+        'app.url' => 'https://gakutsu.net',
+        'seo.indexing_enabled' => true,
+    ]);
 
     $this->get(route('login'))
         ->assertOk()
@@ -149,7 +170,10 @@ test('7. auth routes return noindex/follow', function () {
 });
 
 test('8. admin, mentor, and settings routes return noindex/nofollow', function () {
-    config(['app.url' => 'https://gakutsu.net']);
+    config([
+        'app.url' => 'https://gakutsu.net',
+        'seo.indexing_enabled' => true,
+    ]);
 
     $admin = User::factory()->create(['role' => 'admin']);
     $mentor = User::factory()->create(['role' => 'mentor']);
@@ -192,7 +216,10 @@ test('8. admin, mentor, and settings routes return noindex/nofollow', function (
 });
 
 test('9. canonical origin comes from config(app.url)', function () {
-    config(['app.url' => 'https://custom-origin.com']);
+    config([
+        'app.url' => 'https://custom-origin.com',
+        'seo.indexing_enabled' => true,
+    ]);
 
     $this->get(route('home'))
         ->assertOk()
@@ -208,7 +235,10 @@ test('9. canonical origin comes from config(app.url)', function () {
 });
 
 test('10. malformed or unexpected query parameters do not become indexable canonicals', function () {
-    config(['app.url' => 'https://gakutsu.net']);
+    config([
+        'app.url' => 'https://gakutsu.net',
+        'seo.indexing_enabled' => true,
+    ]);
 
     $this->get(route('blogs.index', ['unknown_param' => 123]))
         ->assertOk()
@@ -237,6 +267,44 @@ test('10. malformed or unexpected query parameters do not become indexable canon
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('seo.robots', 'index, follow')
+            ->where('seo.canonicalUrl', null)
+        );
+});
+
+test('11. indexing-disabled public SeoPolicy returns noindex, nofollow and no canonical', function () {
+    config([
+        'app.url' => 'https://gakutsu.net',
+        'seo.indexing_enabled' => false,
+    ]);
+
+    $user = User::factory()->create();
+    $event = Event::factory()->published()->upcoming()->create([
+        'created_by' => $user->id,
+        'mentor_id' => $user->id,
+    ]);
+    $blog = BlogPost::factory()->create([
+        'status' => 'published',
+        'author_id' => $user->id,
+    ]);
+
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('seo.robots', 'noindex, nofollow')
+            ->where('seo.canonicalUrl', null)
+        );
+
+    $this->get(route('events.show', $event))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('seo.robots', 'noindex, nofollow')
+            ->where('seo.canonicalUrl', null)
+        );
+
+    $this->get(route('blogs.show', $blog))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('seo.robots', 'noindex, nofollow')
             ->where('seo.canonicalUrl', null)
         );
 });

@@ -277,9 +277,11 @@ renamed separately when production identity is finalized.
 - Repository SEO audit completed (see `docs/SEO_AUDIT.md`).
 - Indexability metadata implementation completed locally (Phase 1).
 - Brand set to Gakutsu for SEO metadata.
-- Production deployment and Search Console validation pending.
 - Phase 2 detail-image optimization completed: hero images on event and blog detail pages use `loading="eager"`, while listing images remain `loading="lazy"`.
 - Browser runtime regression resolved.
+- Phase 3 sitemap and environment-aware robots implementation completed locally.
+- Search indexing remains disabled by default unless `SEO_INDEXING_ENABLED=true`.
+- Production deployment, live sitemap validation, and Search Console submission remain pending.
 - Measured production Core Web Vitals remain pending.
 
 ---

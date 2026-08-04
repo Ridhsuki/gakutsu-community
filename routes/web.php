@@ -18,6 +18,8 @@ use App\Http\Controllers\Mentor\EventQuizQuestionController as MentorEventQuizQu
 use App\Http\Controllers\Mentor\EventRegistrationController as MentorEventRegistrationController;
 use App\Http\Controllers\Mentor\EventRegistrationQuestionController as MentorEventRegistrationQuestionController;
 // Middleware
+use App\Http\Controllers\Seo\RobotsController;
+use App\Http\Controllers\Seo\SitemapController;
 use App\Http\Controllers\Site\BlogController as SiteBlogController;
 use App\Http\Controllers\Site\EventController as SiteEventController;
 use App\Http\Controllers\Site\HomeController;
@@ -30,6 +32,9 @@ use Illuminate\Support\Facades\Route;
 | Public Routes
 |--------------------------------------------------------------------------
 */
+Route::get('robots.txt', RobotsController::class)->name('seo.robots');
+Route::get('sitemap.xml', SitemapController::class)->name('seo.sitemap');
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('blogs')->name('blogs.')->group(function () {
