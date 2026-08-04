@@ -63,6 +63,9 @@ jobs:
       - name: Run Prettier check
         run: npm run format:check
 
+      - name: Run Frontend unit tests
+        run: npm run test:unit
+
       - name: Run Client and SSR build
         run: npm run build:ssr
 

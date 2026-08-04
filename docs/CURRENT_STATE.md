@@ -290,6 +290,8 @@ renamed separately when production identity is finalized.
   - `BreadcrumbList` schema deferred because matching visible breadcrumb navigation UI is not implemented;
   - Structured data gated on `SEO_INDEXING_ENABLED=true`, `robots: index, follow`, and valid canonical URL;
   - Single script tag per page with safe JSON serialization escaping HTML-sensitive characters (`<`, `>`, `&`, `\u2028`, `\u2029`, `</script`).
+- Frontend structured-data unit-test baseline completed:
+  - Serialization, image URL normalization, date logic, and schema identity consistency are now covered with automated Vitest unit tests.
 - Search indexing remains disabled by default unless `SEO_INDEXING_ENABLED=true`.
 - Production post-deployment validation pending:
   - `BlogPosting`: Google Rich Results Test plus URL Inspection;
