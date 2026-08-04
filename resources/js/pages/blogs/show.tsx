@@ -1,9 +1,11 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import BlogPublicCard from '@/components/public/blog-public-card';
 import SeoHead from '@/components/public/seo-head';
 import RenderRichText from '@/components/rich-text/render-rich-text';
 import BlogPostCoverThumbnail from '@/features/blogs/components/blog-post-cover-thumbnail';
 import PublicLayout from '@/layouts/public-layout';
+import { createBlogPostingSchema } from '@/lib/structured-data';
+import type { SharedPageProps } from '@/types/shared';
 
 interface PostItem {
     id: number;
@@ -12,6 +14,7 @@ interface PostItem {
     content: string;
     cover_image_url?: string | null;
     published_at?: string | null;
+    updated_at?: string | null;
     author?: {
         name: string;
     } | null;
@@ -24,15 +27,41 @@ export default function BlogShow({
     post: PostItem;
     relatedPosts: PostItem[];
 }) {
+    const { props: pageProps } = usePage<SharedPageProps>();
+    const sharedSeo = pageProps.seo;
+    const canonicalUrl = sharedSeo?.canonicalUrl;
+    const baseUrl = sharedSeo?.baseUrl;
+    const siteName = sharedSeo?.siteName || 'Gakutsu';
+
+    const description = String(post.content ?? '')
+        .replace(/<[^>]*>/g, '')
+        .slice(0, 155);
+
+    const blogGraph =
+        canonicalUrl && baseUrl
+            ? [
+                  createBlogPostingSchema({
+                      canonicalUrl,
+                      baseUrl,
+                      siteName,
+                      title: post.title,
+                      description,
+                      publishedAt: post.published_at,
+                      updatedAt: post.updated_at,
+                      authorName: post.author?.name,
+                      coverImageUrl: post.cover_image_url,
+                  }),
+              ]
+            : null;
+
     return (
         <PublicLayout>
             <SeoHead
                 title={post.title}
-                description={String(post.content ?? '')
-                    .replace(/<[^>]*>/g, '')
-                    .slice(0, 155)}
+                description={description}
                 image={post.cover_image_url ?? null}
                 type="article"
+                jsonLdGraph={blogGraph}
             />
 
             <div className="mx-auto max-w-5xl px-4 py-12">
