@@ -1,0 +1,1 @@
+function e(e,t){let[n,r=``]=t.split(`?`),i=new URLSearchParams(r),a=n+(r?`?${r}`:``);return i.set(`from`,a),`${e}${e.includes(`?`)?`&`:`?`}${i.toString()}`}function t(e,t){let[,n=``]=e.split(`?`),r=new URLSearchParams(n).get(`from`);return!r||!r.startsWith(`/`)?t:r}export{t as n,e as t};
