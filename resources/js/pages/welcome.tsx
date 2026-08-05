@@ -150,7 +150,7 @@ export default function Welcome(props: PageProps) {
                         >
                             <p className="text-base leading-7 text-muted-foreground sm:text-lg">
                                 We share, discuss, and sometimes host small
-                                webinars. Yok Pelajarin is a casual community
+                                webinars. Gakutsu is a casual community
                                 built for learning and growing together.
                             </p>
                         </Reveal>
@@ -229,7 +229,7 @@ export default function Welcome(props: PageProps) {
                     blur={10}
                 >
                     <p className="text-sm font-medium text-primary">
-                        Kenapa Yok Pelajarin
+                        Kenapa Gakutsu
                     </p>
                     <h2 className="text-3xl font-semibold tracking-tight">
                         Platform publik yang lebih rapi dan fokus
