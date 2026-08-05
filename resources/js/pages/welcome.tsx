@@ -150,8 +150,8 @@ export default function Welcome(props: PageProps) {
                         >
                             <p className="text-base leading-7 text-muted-foreground sm:text-lg">
                                 We share, discuss, and sometimes host small
-                                webinars. Gakutsu is a casual community
-                                built for learning and growing together.
+                                webinars. Gakutsu is a casual community built
+                                for learning and growing together.
                             </p>
                         </Reveal>
 
