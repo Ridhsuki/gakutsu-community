@@ -1,1 +1,0 @@
-import{n as e,t}from"./jsx-runtime-BjIQ8I6N.js";import{r as n,t as r}from"./blog-management-page-Swl2RUlo.js";var i=e(),a=t();function o(e){let t=(0,i.c)(2),o;return t[0]===e?o=t[1]:(o=(0,a.jsx)(r,{...e,endpoint:n,headTitle:`My Blog Posts`,title:`My Blog Posts`,description:`Manage your own draft and published blog posts.`}),t[0]=e,t[1]=o),o}export{o as default};
