@@ -21,6 +21,13 @@ export interface BlogPostingSchemaInput {
     coverImageUrl?: string | null;
 }
 
+export interface BreadcrumbItemInput {
+    name: string;
+    url: string;
+    href?: string;
+    current?: boolean;
+}
+
 /**
  * Safely stringifies structured data JSON to be embedded inside an HTML script tag.
  * Escapes script-terminating and HTML-sensitive characters (<, >, &, U+2028, U+2029).
@@ -209,4 +216,118 @@ export function createBlogPostingSchema(input: BlogPostingSchemaInput) {
     }
 
     return node;
+}
+
+/**
+ * Extracts the root-relative path (pathname + search + hash) from an absolute HTTP/HTTPS URL
+ * for same-origin Inertia navigation while preserving subdirectory deployments.
+ */
+export function toInertiaHref(
+    absoluteUrl: string | null | undefined,
+): string | null {
+    if (!absoluteUrl || typeof absoluteUrl !== 'string') {
+        return null;
+    }
+
+    const trimmed = absoluteUrl.trim();
+
+    if (!trimmed || !/^https?:\/\//i.test(trimmed)) {
+        return null;
+    }
+
+    try {
+        const parsed = new URL(trimmed);
+
+        if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+            return null;
+        }
+
+        return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * Constructs a BreadcrumbList schema node.
+ * Requires a non-empty array of valid items and a valid absolute canonical current URL.
+ * Preserves item names exactly after trimming surrounding whitespace.
+ */
+export function createBreadcrumbListSchema(
+    items: BreadcrumbItemInput[],
+    canonicalCurrentUrl: string,
+): Record<string, unknown> | null {
+    if (!canonicalCurrentUrl || typeof canonicalCurrentUrl !== 'string') {
+        return null;
+    }
+
+    const trimmedCanonical = canonicalCurrentUrl.trim();
+
+    if (!trimmedCanonical || !/^https?:\/\//i.test(trimmedCanonical)) {
+        return null;
+    }
+
+    try {
+        const parsedCanonical = new URL(trimmedCanonical);
+
+        if (
+            parsedCanonical.protocol !== 'http:' &&
+            parsedCanonical.protocol !== 'https:'
+        ) {
+            return null;
+        }
+    } catch {
+        return null;
+    }
+
+    if (!Array.isArray(items) || items.length === 0) {
+        return null;
+    }
+
+    const itemListElement: Array<Record<string, unknown>> = [];
+
+    for (let i = 0; i < items.length; i += 1) {
+        const item = items[i];
+
+        if (!item || typeof item !== 'object') {
+            return null;
+        }
+
+        if (typeof item.name !== 'string' || typeof item.url !== 'string') {
+            return null;
+        }
+
+        const trimmedName = item.name.trim();
+        const trimmedUrl = item.url.trim();
+
+        if (!trimmedName || !trimmedUrl || !/^https?:\/\//i.test(trimmedUrl)) {
+            return null;
+        }
+
+        try {
+            const parsedUrl = new URL(trimmedUrl);
+
+            if (
+                parsedUrl.protocol !== 'http:' &&
+                parsedUrl.protocol !== 'https:'
+            ) {
+                return null;
+            }
+        } catch {
+            return null;
+        }
+
+        itemListElement.push({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: trimmedName,
+            item: trimmedUrl,
+        });
+    }
+
+    return {
+        '@type': 'BreadcrumbList',
+        '@id': `${trimmedCanonical}#breadcrumb`,
+        itemListElement,
+    };
 }

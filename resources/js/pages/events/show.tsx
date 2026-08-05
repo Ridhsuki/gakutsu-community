@@ -1,12 +1,18 @@
 import { Link, usePage } from '@inertiajs/react';
 import { CalendarDays, CircleHelp, LockKeyhole, User2 } from 'lucide-react';
+import PublicBreadcrumbs from '@/components/public/public-breadcrumbs';
 import SeoHead from '@/components/public/seo-head';
 import RenderRichText from '@/components/rich-text/render-rich-text';
 import EventPosterThumbnail from '@/features/events/components/event-poster-thumbnail';
 import EventStatusBadge from '@/features/events/components/event-status-badge';
 import PublicLayout from '@/layouts/public-layout';
+import {
+    createBreadcrumbListSchema,
+    toInertiaHref,
+} from '@/lib/structured-data';
+import type { SharedPageProps } from '@/types/shared';
 
-type PageAuth = {
+type PageAuth = SharedPageProps & {
     auth?: {
         user?: {
             id: number;
@@ -45,6 +51,41 @@ export default function EventShow({
     const { props } = usePage<PageAuth>();
     const isLoggedIn = Boolean(props.auth?.user);
 
+    const sharedSeo = props.seo;
+    const canonicalUrl = sharedSeo?.canonicalUrl;
+    const baseUrl = sharedSeo?.baseUrl;
+
+    const cleanBaseUrl = baseUrl ? baseUrl.replace(/\/+$/, '') : '';
+
+    const breadcrumbItems =
+        canonicalUrl && baseUrl
+            ? [
+                  {
+                      name: 'Home',
+                      href: toInertiaHref(`${cleanBaseUrl}/`) ?? '/',
+                      url: `${cleanBaseUrl}/`,
+                  },
+                  {
+                      name: 'Events',
+                      href:
+                          toInertiaHref(`${cleanBaseUrl}/events`) ?? '/events',
+                      url: `${cleanBaseUrl}/events`,
+                  },
+                  {
+                      name: event.title,
+                      url: canonicalUrl,
+                      current: true,
+                  },
+              ]
+            : [];
+
+    const breadcrumbSchema =
+        canonicalUrl && breadcrumbItems.length > 0
+            ? createBreadcrumbListSchema(breadcrumbItems, canonicalUrl)
+            : null;
+
+    const eventGraph = breadcrumbSchema ? [breadcrumbSchema] : null;
+
     return (
         <PublicLayout>
             <SeoHead
@@ -53,15 +94,11 @@ export default function EventShow({
                     .replace(/<[^>]*>/g, '')
                     .slice(0, 155)}
                 image={event.poster_image_url ?? null}
+                jsonLdGraph={eventGraph}
             />
 
             <div className="mx-auto max-w-6xl px-4 py-12">
-                <Link
-                    href="/events"
-                    className="inline-flex text-sm font-medium text-primary"
-                >
-                    ← Kembali ke events
-                </Link>
+                <PublicBreadcrumbs items={breadcrumbItems} />
 
                 <div className="mt-6 grid gap-10 lg:grid-cols-[1.15fr_0.85fr]">
                     <div className="space-y-6">

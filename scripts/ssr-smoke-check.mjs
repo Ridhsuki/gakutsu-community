@@ -30,6 +30,12 @@ const testCases = [
             version: '1',
         },
         expectedText: 'Rich text blog title',
+        expectedMarkers: [
+            'aria-label="Breadcrumb"',
+            'aria-current="page"',
+            'href="/"',
+            'href="/blogs"',
+        ],
     },
     {
         name: 'events/show',
@@ -64,6 +70,12 @@ const testCases = [
             version: '1',
         },
         expectedText: 'event description',
+        expectedMarkers: [
+            'aria-label="Breadcrumb"',
+            'aria-current="page"',
+            'href="/"',
+            'href="/events"',
+        ],
     },
 ];
 
@@ -95,6 +107,21 @@ async function runSmokeCheck() {
                 failed = true;
 
                 continue;
+            }
+
+            if (tc.expectedMarkers) {
+                for (const marker of tc.expectedMarkers) {
+                    if (!result.body.includes(marker)) {
+                        console.error(
+                            `[SSR Smoke] FAILED: ${tc.name} body missing expected marker "${marker}".`,
+                        );
+                        console.error(
+                            `Body snippet: ${result.body.slice(0, 300)}`,
+                        );
+
+                        failed = true;
+                    }
+                }
             }
 
             console.log(

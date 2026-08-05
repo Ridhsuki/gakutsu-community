@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\BlogPost;
+use App\Models\Event;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -194,5 +195,30 @@ test('8. blog detail page handles timestamp variations for factual dateModified'
         ->assertInertia(fn (Assert $page) => $page
             ->where('post.published_at', $blogEarlier->published_at->toISOString())
             ->where('post.updated_at', $blogEarlier->updated_at->toISOString())
+        );
+});
+
+test('9. event detail page returns complete event props required for BreadcrumbList graph', function () {
+    config([
+        'app.url' => 'https://gakutsu.net',
+        'seo.indexing_enabled' => true,
+    ]);
+
+    $user = User::factory()->create(['name' => 'Alice Mentor']);
+    $event = Event::factory()->published()->upcoming()->create([
+        'title' => 'Webinar Hacking Basics',
+        'created_by' => $user->id,
+        'mentor_id' => $user->id,
+    ]);
+
+    $response = $this->get(route('events.show', $event));
+
+    $response->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('events/show')
+            ->where('seo.robots', 'index, follow')
+            ->where('seo.canonicalUrl', 'https://gakutsu.net/events/'.$event->slug)
+            ->where('seo.baseUrl', 'https://gakutsu.net')
+            ->where('event.title', 'Webinar Hacking Basics')
         );
 });
