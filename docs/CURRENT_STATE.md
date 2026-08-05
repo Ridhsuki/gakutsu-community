@@ -283,18 +283,14 @@ renamed separately when production identity is finalized.
 - Public rich-text detail SSR verified: Node SSR rendering for blog and event detail pages is fully functional using `isomorphic-dompurify`, resolving the SSR crash.
 - Private `meeting_url` removed from unauthorized public page payloads (`HomeController`, `Site\EventController`, and `Event::indexColumns()`).
 - Actual meeting-link authorization behavior preserved (`meetingUrl` top-level prop accessible only to authorized registered members and staff).
-- Phase 4A structured-data foundation completed locally:
-  - `WebSite` and `Organization` structured data implemented on Home (`/`);
-  - `BlogPosting` structured data implemented on published public Blog Detail pages (`/blogs/{slug}`);
-  - `Event` schema deferred pending a physical venue/location data model and product decision;
-  - `BreadcrumbList` schema deferred because matching visible breadcrumb navigation UI is not implemented;
-  - Structured data gated on `SEO_INDEXING_ENABLED=true`, `robots: index, follow`, and valid canonical URL;
-  - Single script tag per page with safe JSON serialization escaping HTML-sensitive characters (`<`, `>`, `&`, `\u2028`, `\u2029`, `</script`).
-- Frontend structured-data unit-test baseline completed:
-  - Serialization, image URL normalization, date logic, and schema identity consistency are now covered with automated Vitest unit tests.
+- Phase 4C visible breadcrumb navigation and BreadcrumbList JSON-LD completed locally:
+  - Accessible visible breadcrumbs (`PublicBreadcrumbs`) implemented on public blog (`/blogs/{slug}`) and event (`/events/{slug}`) detail pages (`Home > Blogs > {title}` and `Home > Events > {title}`);
+  - Matching `BreadcrumbList` JSON-LD schema generated using a single page-level item definition for both visible UI and structured data;
+  - `Event` schema remains explicitly deferred;
+  - Production validation remains pending.
 - Search indexing remains disabled by default unless `SEO_INDEXING_ENABLED=true`.
 - Production post-deployment validation pending:
-  - `BlogPosting`: Google Rich Results Test plus URL Inspection;
+  - `BlogPosting` and `BreadcrumbList`: Google Rich Results Test plus URL Inspection;
   - `WebSite` site name: Schema Markup Validator plus URL Inspection (site name markup not supported by Rich Results Test);
   - `Organization`: Schema Markup Validator and Search Console validation;
   - Production deployment, live sitemap validation, and Search Console submission remain pending.

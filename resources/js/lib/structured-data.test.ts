@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
     createBlogPostingSchema,
+    createBreadcrumbListSchema,
     createOrganizationSchema,
     createWebSiteSchema,
     formatIsoDate,
     normalizeImageUrl,
     safeJsonLdStringify,
+    toInertiaHref,
 } from '@/lib/structured-data';
 
 describe('safeJsonLdStringify', () => {
@@ -569,5 +571,280 @@ describe('Schema Semantics & Property Guardrails', () => {
         expect(websiteJson).not.toContain('meeting_url');
         expect(orgJson).not.toContain('meeting_url');
         expect(blogJson).not.toContain('meeting_url');
+    });
+});
+
+describe('createBreadcrumbListSchema', () => {
+    const canonicalUrl = 'https://gakutsu.net/blogs/cyber-security';
+
+    it('1. returns node with @type BreadcrumbList', () => {
+        const items = [
+            { name: 'Home', url: 'https://gakutsu.net/' },
+            { name: 'Blogs', url: 'https://gakutsu.net/blogs' },
+            { name: 'Cyber Security', url: canonicalUrl },
+        ];
+        const result = createBreadcrumbListSchema(items, canonicalUrl);
+
+        expect(result).not.toBeNull();
+        expect(result?.['@type']).toBe('BreadcrumbList');
+    });
+
+    it('2. sets @id using canonicalCurrentUrl + #breadcrumb', () => {
+        const items = [
+            { name: 'Home', url: 'https://gakutsu.net/' },
+            { name: 'Events', url: 'https://gakutsu.net/events' },
+            { name: 'Webinar', url: 'https://gakutsu.net/events/webinar' },
+        ];
+        const result = createBreadcrumbListSchema(
+            items,
+            'https://gakutsu.net/events/webinar',
+        );
+
+        expect(result?.['@id']).toBe(
+            'https://gakutsu.net/events/webinar#breadcrumb',
+        );
+    });
+
+    it('3. starts ListItem positions at 1 and keeps them consecutive', () => {
+        const items = [
+            { name: 'Home', url: 'https://gakutsu.net/' },
+            { name: 'Blogs', url: 'https://gakutsu.net/blogs' },
+            { name: 'Detail', url: canonicalUrl },
+        ];
+        const result = createBreadcrumbListSchema(items, canonicalUrl);
+        const list = result?.itemListElement as Array<Record<string, unknown>>;
+
+        expect(list).toHaveLength(3);
+        expect(list[0].position).toBe(1);
+        expect(list[1].position).toBe(2);
+        expect(list[2].position).toBe(3);
+    });
+
+    it('4. preserves item names and URLs in supplied order', () => {
+        const items = [
+            { name: 'Home', url: 'https://gakutsu.net/' },
+            { name: 'Blogs', url: 'https://gakutsu.net/blogs' },
+            { name: 'Title', url: canonicalUrl },
+        ];
+        const result = createBreadcrumbListSchema(items, canonicalUrl);
+        const list = result?.itemListElement as Array<Record<string, unknown>>;
+
+        expect(list[0].name).toBe('Home');
+        expect(list[0].item).toBe('https://gakutsu.net/');
+        expect(list[1].name).toBe('Blogs');
+        expect(list[1].item).toBe('https://gakutsu.net/blogs');
+        expect(list[2].name).toBe('Title');
+        expect(list[2].item).toBe(canonicalUrl);
+    });
+
+    it('5. constructs valid blog breadcrumb structure (Home, Blogs, title)', () => {
+        const baseUrl = 'https://gakutsu.net';
+        const cleanBase = baseUrl.replace(/\/+$/, '');
+        const postTitle = 'Belajar Hacking Basics';
+        const postCanonical = `${cleanBase}/blogs/belajar-hacking-basics`;
+        const items = [
+            { name: 'Home', url: `${cleanBase}/` },
+            { name: 'Blogs', url: `${cleanBase}/blogs` },
+            { name: postTitle, url: postCanonical },
+        ];
+
+        const schema = createBreadcrumbListSchema(items, postCanonical);
+
+        expect(schema).not.toBeNull();
+        expect(schema?.['@id']).toBe(`${postCanonical}#breadcrumb`);
+        const elements = schema?.itemListElement as Array<
+            Record<string, unknown>
+        >;
+
+        expect(elements[0].name).toBe('Home');
+        expect(elements[1].name).toBe('Blogs');
+        expect(elements[2].name).toBe(postTitle);
+    });
+
+    it('6. constructs valid event breadcrumb structure (Home, Events, title)', () => {
+        const baseUrl = 'https://gakutsu.net';
+        const cleanBase = baseUrl.replace(/\/+$/, '');
+        const eventTitle = 'Webinar Cyber Security 2026';
+        const eventCanonical = `${cleanBase}/events/webinar-cyber-security-2026`;
+        const items = [
+            { name: 'Home', url: `${cleanBase}/` },
+            { name: 'Events', url: `${cleanBase}/events` },
+            { name: eventTitle, url: eventCanonical },
+        ];
+
+        const schema = createBreadcrumbListSchema(items, eventCanonical);
+
+        expect(schema).not.toBeNull();
+        expect(schema?.['@id']).toBe(`${eventCanonical}#breadcrumb`);
+        const elements = schema?.itemListElement as Array<
+            Record<string, unknown>
+        >;
+
+        expect(elements[0].name).toBe('Home');
+        expect(elements[1].name).toBe('Events');
+        expect(elements[2].name).toBe(eventTitle);
+    });
+
+    it('7. preserves APP_URL subdirectory paths without dropping subpath', () => {
+        const baseUrl = 'https://example.com/gakutsu';
+        const cleanBase = baseUrl.replace(/\/+$/, '');
+        const homeUrl = `${cleanBase}/`;
+        const blogsUrl = `${cleanBase}/blogs`;
+        const itemCanonical = `${cleanBase}/blogs/subpath-test`;
+
+        const items = [
+            { name: 'Home', url: homeUrl },
+            { name: 'Blogs', url: blogsUrl },
+            { name: 'Subpath Test', url: itemCanonical },
+        ];
+
+        const schema = createBreadcrumbListSchema(items, itemCanonical);
+        const elements = schema?.itemListElement as Array<
+            Record<string, unknown>
+        >;
+
+        expect(elements[0].item).toBe('https://example.com/gakutsu/');
+        expect(elements[1].item).toBe('https://example.com/gakutsu/blogs');
+        expect(elements[2].item).toBe(
+            'https://example.com/gakutsu/blogs/subpath-test',
+        );
+    });
+
+    it('8. preserves names with <, >, &, quotes, and Unicode exactly', () => {
+        const specialTitle = 'Security <Test> & "Analysis" — 🇮🇩';
+        const items = [
+            { name: 'Home', url: 'https://gakutsu.net/' },
+            { name: specialTitle, url: canonicalUrl },
+        ];
+        const result = createBreadcrumbListSchema(items, canonicalUrl);
+        const list = result?.itemListElement as Array<Record<string, unknown>>;
+
+        expect(list[1].name).toBe(specialTitle);
+    });
+
+    it('9. safely round-trips hostile-title breadcrumb through safeJsonLdStringify', () => {
+        const hostileTitle = '</script><script>alert(1)</script>';
+        const items = [
+            { name: 'Home', url: 'https://gakutsu.net/' },
+            { name: hostileTitle, url: canonicalUrl },
+        ];
+        const schema = createBreadcrumbListSchema(items, canonicalUrl);
+        const jsonString = safeJsonLdStringify({
+            '@context': 'https://schema.org',
+            '@graph': [schema],
+        });
+
+        expect(jsonString).not.toContain('</script>');
+        expect(jsonString).not.toContain('<script>');
+
+        const parsed = JSON.parse(jsonString);
+        const list = parsed['@graph'][0].itemListElement;
+
+        expect(list[1].name).toBe(hostileTitle);
+    });
+
+    it('10. returns null when canonicalCurrentUrl is missing or invalid', () => {
+        const items = [
+            { name: 'Home', url: 'https://gakutsu.net/' },
+            { name: 'Blogs', url: 'https://gakutsu.net/blogs' },
+        ];
+
+        // @ts-expect-error testing missing canonicalCurrentUrl
+        expect(createBreadcrumbListSchema(items, undefined)).toBeNull();
+        expect(createBreadcrumbListSchema(items, '')).toBeNull();
+        expect(createBreadcrumbListSchema(items, 'invalid-url')).toBeNull();
+        expect(
+            createBreadcrumbListSchema(items, 'javascript:alert(1)'),
+        ).toBeNull();
+    });
+
+    it('11. returns null when item array is empty or not an array', () => {
+        expect(createBreadcrumbListSchema([], canonicalUrl)).toBeNull();
+        // @ts-expect-error testing invalid items
+        expect(createBreadcrumbListSchema(null, canonicalUrl)).toBeNull();
+    });
+
+    it('12. returns null when any item has an empty or whitespace name', () => {
+        const itemsWithEmptyName = [
+            { name: 'Home', url: 'https://gakutsu.net/' },
+            { name: '  ', url: 'https://gakutsu.net/blogs' },
+        ];
+
+        expect(
+            createBreadcrumbListSchema(itemsWithEmptyName, canonicalUrl),
+        ).toBeNull();
+    });
+
+    it('13. returns null when any item URL is invalid', () => {
+        const itemsWithInvalidUrl = [
+            { name: 'Home', url: 'https://gakutsu.net/' },
+            { name: 'Blogs', url: '/blogs' },
+        ];
+
+        expect(
+            createBreadcrumbListSchema(itemsWithInvalidUrl, canonicalUrl),
+        ).toBeNull();
+    });
+
+    it('14. does not include top-level @context inside BreadcrumbList node', () => {
+        const items = [
+            { name: 'Home', url: 'https://gakutsu.net/' },
+            { name: 'Blogs', url: 'https://gakutsu.net/blogs' },
+        ];
+        const result = createBreadcrumbListSchema(items, canonicalUrl);
+
+        expect(result).not.toHaveProperty('@context');
+    });
+
+    it('15. does not introduce any Event schema in event breadcrumb graph', () => {
+        const eventCanonical = 'https://gakutsu.net/events/cyber-webinar';
+        const items = [
+            { name: 'Home', url: 'https://gakutsu.net/' },
+            { name: 'Events', url: 'https://gakutsu.net/events' },
+            { name: 'Cyber Webinar', url: eventCanonical },
+        ];
+        const breadcrumb = createBreadcrumbListSchema(items, eventCanonical);
+        const eventGraph = [breadcrumb].filter(
+            (node): node is Record<string, unknown> => node !== null,
+        );
+
+        const serialized = JSON.stringify(eventGraph);
+
+        expect(serialized).not.toContain('"@type":"Event"');
+        expect(serialized).not.toContain('OnlineEvent');
+        expect(serialized).not.toContain('meeting_url');
+        expect(serialized).not.toContain('meetingUrl');
+    });
+});
+
+describe('toInertiaHref', () => {
+    it('1. extracts pathname from absolute root URL', () => {
+        expect(toInertiaHref('https://gakutsu.net/blogs')).toBe('/blogs');
+        expect(toInertiaHref('https://gakutsu.net/events')).toBe('/events');
+        expect(toInertiaHref('https://gakutsu.net/')).toBe('/');
+    });
+
+    it('2. preserves subdirectory deployment subpaths', () => {
+        expect(toInertiaHref('https://example.com/gakutsu/blogs')).toBe(
+            '/gakutsu/blogs',
+        );
+        expect(toInertiaHref('https://example.com/gakutsu/events')).toBe(
+            '/gakutsu/events',
+        );
+        expect(toInertiaHref('https://example.com/gakutsu/')).toBe('/gakutsu/');
+    });
+
+    it('3. preserves query parameters and hashes', () => {
+        expect(
+            toInertiaHref('https://gakutsu.net/events?sort=date#upcoming'),
+        ).toBe('/events?sort=date#upcoming');
+    });
+
+    it('4. returns null for invalid or non-HTTP/HTTPS URLs', () => {
+        expect(toInertiaHref('javascript:alert(1)')).toBeNull();
+        expect(toInertiaHref('invalid-url')).toBeNull();
+        expect(toInertiaHref('')).toBeNull();
+        expect(toInertiaHref(null)).toBeNull();
+        expect(toInertiaHref(undefined)).toBeNull();
     });
 });
