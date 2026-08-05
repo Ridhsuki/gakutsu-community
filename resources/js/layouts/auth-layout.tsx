@@ -13,11 +13,7 @@ export default function AuthLayout({
 }) {
     return (
         <AuthLayoutTemplate title={title} description={description}>
-            <SeoHead
-                title={title}
-                description={description}
-                robots="noindex, follow"
-            />
+            <SeoHead />
             <FlashToasterListener />
             {children}
         </AuthLayoutTemplate>

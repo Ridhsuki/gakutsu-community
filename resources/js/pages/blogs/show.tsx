@@ -5,11 +5,7 @@ import SeoHead from '@/components/public/seo-head';
 import RenderRichText from '@/components/rich-text/render-rich-text';
 import BlogPostCoverThumbnail from '@/features/blogs/components/blog-post-cover-thumbnail';
 import PublicLayout from '@/layouts/public-layout';
-import {
-    createBlogPostingSchema,
-    createBreadcrumbListSchema,
-    toInertiaHref,
-} from '@/lib/structured-data';
+import { toInertiaHref } from '@/lib/structured-data';
 import type { SharedPageProps } from '@/types/shared';
 
 interface PostItem {
@@ -36,7 +32,6 @@ export default function BlogShow({
     const sharedSeo = pageProps.seo;
     const canonicalUrl = sharedSeo?.canonicalUrl;
     const baseUrl = sharedSeo?.baseUrl;
-    const siteName = sharedSeo?.siteName || 'Gakutsu';
 
     const cleanBaseUrl = baseUrl ? baseUrl.replace(/\/+$/, '') : '';
 
@@ -61,45 +56,9 @@ export default function BlogShow({
               ]
             : [];
 
-    const description = String(post.content ?? '')
-        .replace(/<[^>]*>/g, '')
-        .slice(0, 155);
-
-    const blogPostingSchema =
-        canonicalUrl && baseUrl
-            ? createBlogPostingSchema({
-                  canonicalUrl,
-                  baseUrl,
-                  siteName,
-                  title: post.title,
-                  description,
-                  publishedAt: post.published_at,
-                  updatedAt: post.updated_at,
-                  authorName: post.author?.name,
-                  coverImageUrl: post.cover_image_url,
-              })
-            : null;
-
-    const breadcrumbSchema =
-        canonicalUrl && breadcrumbItems.length > 0
-            ? createBreadcrumbListSchema(breadcrumbItems, canonicalUrl)
-            : null;
-
-    const graphNodes = [blogPostingSchema, breadcrumbSchema].filter(
-        (node): node is Record<string, unknown> => node !== null,
-    );
-
-    const blogGraph = graphNodes.length > 0 ? graphNodes : null;
-
     return (
         <PublicLayout>
-            <SeoHead
-                title={post.title}
-                description={description}
-                image={post.cover_image_url ?? null}
-                type="article"
-                jsonLdGraph={blogGraph}
-            />
+            <SeoHead />
 
             <div className="mx-auto max-w-5xl px-4 py-12">
                 <PublicBreadcrumbs items={breadcrumbItems} />

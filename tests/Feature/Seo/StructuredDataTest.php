@@ -3,6 +3,8 @@
 use App\Models\BlogPost;
 use App\Models\Event;
 use App\Models\User;
+use App\Support\SeoPolicy;
+use Illuminate\Http\Request;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('1. home returns expected shared seo props for structured data composition', function () {
@@ -20,6 +22,9 @@ test('1. home returns expected shared seo props for structured data composition'
             ->where('seo.canonicalUrl', 'https://gakutsu.net/')
             ->where('seo.baseUrl', 'https://gakutsu.net')
             ->where('seo.siteName', 'Gakutsu')
+            ->where('seo.title', 'Gakutsu')
+            ->where('seo.jsonLd.@context', 'https://schema.org')
+            ->has('seo.jsonLd.@graph', 2)
         );
 });
 
@@ -48,6 +53,11 @@ test('2. blog detail page returns complete post props required for BlogPosting g
             ->where('seo.robots', 'index, follow')
             ->where('seo.canonicalUrl', 'https://gakutsu.net/blogs/'.$blog->slug)
             ->where('seo.baseUrl', 'https://gakutsu.net')
+            ->where('seo.title', 'Understanding Cyber Security - Gakutsu')
+            ->where('seo.type', 'article')
+            ->where('seo.image', 'https://gakutsu.net/storage/blog-covers/cyber.jpg')
+            ->where('seo.jsonLd.@context', 'https://schema.org')
+            ->has('seo.jsonLd.@graph', 2)
             ->where('post.title', 'Understanding Cyber Security')
             ->where('post.author.name', 'Alice Mentor')
             ->where('post.published_at', $blog->published_at->toISOString())
@@ -103,6 +113,7 @@ test('5. noindex routes or search queries return null canonical and noindex robo
             ->component('blogs/index')
             ->where('seo.robots', 'noindex, follow')
             ->where('seo.canonicalUrl', null)
+            ->where('seo.jsonLd', null)
         );
 
     $this->get(route('login'))
@@ -111,6 +122,7 @@ test('5. noindex routes or search queries return null canonical and noindex robo
             ->component('auth/login')
             ->where('seo.robots', 'noindex, follow')
             ->where('seo.canonicalUrl', null)
+            ->where('seo.jsonLd', null)
         );
 });
 
@@ -131,6 +143,7 @@ test('6. SEO_INDEXING_ENABLED=false returns noindex, nofollow and null canonical
         ->assertInertia(fn (Assert $page) => $page
             ->where('seo.robots', 'noindex, nofollow')
             ->where('seo.canonicalUrl', null)
+            ->where('seo.jsonLd', null)
         );
 
     $this->get(route('blogs.show', $blog))
@@ -138,6 +151,7 @@ test('6. SEO_INDEXING_ENABLED=false returns noindex, nofollow and null canonical
         ->assertInertia(fn (Assert $page) => $page
             ->where('seo.robots', 'noindex, nofollow')
             ->where('seo.canonicalUrl', null)
+            ->where('seo.jsonLd', null)
         );
 });
 
@@ -180,6 +194,8 @@ test('8. blog detail page handles timestamp variations for factual dateModified'
         ->assertInertia(fn (Assert $page) => $page
             ->where('post.published_at', $blogEqual->published_at->toISOString())
             ->where('post.updated_at', $blogEqual->updated_at->toISOString())
+            ->where('seo.jsonLd.@graph.0.datePublished', $blogEqual->published_at->setTimezone('UTC')->toIso8601ZuluString())
+            ->where('seo.jsonLd.@graph.0.dateModified', $blogEqual->updated_at->setTimezone('UTC')->toIso8601ZuluString())
         );
 
     // Updated_at earlier than published_at
@@ -195,6 +211,8 @@ test('8. blog detail page handles timestamp variations for factual dateModified'
         ->assertInertia(fn (Assert $page) => $page
             ->where('post.published_at', $blogEarlier->published_at->toISOString())
             ->where('post.updated_at', $blogEarlier->updated_at->toISOString())
+            ->where('seo.jsonLd.@graph.0.datePublished', $blogEarlier->published_at->setTimezone('UTC')->toIso8601ZuluString())
+            ->missing('seo.jsonLd.@graph.0.dateModified')
         );
 });
 
@@ -219,6 +237,83 @@ test('9. event detail page returns complete event props required for BreadcrumbL
             ->where('seo.robots', 'index, follow')
             ->where('seo.canonicalUrl', 'https://gakutsu.net/events/'.$event->slug)
             ->where('seo.baseUrl', 'https://gakutsu.net')
+            ->where('seo.title', 'Webinar Hacking Basics - Gakutsu')
+            ->where('seo.jsonLd.@context', 'https://schema.org')
+            ->has('seo.jsonLd.@graph', 1)
             ->where('event.title', 'Webinar Hacking Basics')
+        );
+});
+
+test('10. SeoPolicy is resolved at most once per request', function () {
+    config([
+        'app.url' => 'https://gakutsu.net',
+        'seo.indexing_enabled' => true,
+    ]);
+
+    $resolveCount = 0;
+    $policy = new class($resolveCount) extends SeoPolicy
+    {
+        public function __construct(public int &$count) {}
+
+        public function resolve(Request $request): array
+        {
+            $this->count++;
+
+            return parent::resolve($request);
+        }
+    };
+
+    $this->app->instance(SeoPolicy::class, $policy);
+
+    $this->get(route('login'))->assertOk();
+    expect($resolveCount)->toBe(1);
+
+    $resolveCount = 0;
+    $this->get(route('home'))->assertOk();
+    expect($resolveCount)->toBe(1);
+
+    $resolveCount = 0;
+    $user = User::factory()->create();
+    $blog = BlogPost::factory()->create([
+        'status' => 'published',
+        'author_id' => $user->id,
+    ]);
+
+    $this->get(route('blogs.show', $blog))->assertOk();
+    expect($resolveCount)->toBe(1);
+});
+
+test('11. public index and registration routes return exact accepted copy and titles', function () {
+    config([
+        'app.url' => 'https://gakutsu.net',
+        'seo.indexing_enabled' => true,
+    ]);
+
+    $this->get(route('blogs.index'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('seo.title', 'Blog - Gakutsu')
+            ->where('seo.description', 'Baca artikel terbaru tentang IT, cyber security, pengembangan karier, dan insight komunitas Gakutsu.')
+        );
+
+    $this->get(route('events.index'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('seo.title', 'Events - Gakutsu')
+            ->where('seo.description', 'Jelajahi webinar dan event komunitas IT dan Cyber Security dari Gakutsu, termasuk event mendatang dan arsip kegiatan.')
+        );
+
+    $user = User::factory()->create();
+    $event = Event::factory()->published()->upcoming()->create([
+        'title' => 'Webinar Cyber Hacking',
+        'created_by' => $user->id,
+        'mentor_id' => $user->id,
+    ]);
+
+    $this->actingAs($user)->get(route('events.register', $event))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('seo.title', 'Daftar Event - Webinar Cyber Hacking - Gakutsu')
+            ->where('seo.description', 'Jawab pertanyaan registrasi dan daftar ke event Webinar Cyber Hacking di Gakutsu.')
         );
 });

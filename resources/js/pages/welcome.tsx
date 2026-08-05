@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import {
     ArrowRight,
     CalendarDays,
@@ -12,11 +12,6 @@ import EventPublicCard from '@/components/public/event-public-card';
 import Reveal from '@/components/public/reveal';
 import SeoHead from '@/components/public/seo-head';
 import PublicLayout from '@/layouts/public-layout';
-import {
-    createOrganizationSchema,
-    createWebSiteSchema,
-} from '@/lib/structured-data';
-import type { SharedPageProps } from '@/types/shared';
 
 type PageProps = {
     canRegister: boolean;
@@ -67,25 +62,6 @@ const WELCOME_ANIMATION_KEY = 'welcome-entry-played';
 
 export default function Welcome(props: PageProps) {
     const [playHeroEntry, setPlayHeroEntry] = useState(false);
-    const { props: pageProps } = usePage<SharedPageProps>();
-    const sharedSeo = pageProps.seo;
-    const canonicalHomeUrl =
-        sharedSeo?.canonicalUrl || sharedSeo?.baseUrl || '';
-    const siteName = sharedSeo?.siteName || 'Gakutsu';
-
-    const homeDescription =
-        'Komunitas belajar IT dan Cyber Security dari Gakutsu dengan webinar, event, dan artikel teknis yang relevan untuk member, mahasiswa, dan profesional.';
-
-    const homeGraph = canonicalHomeUrl
-        ? [
-              createWebSiteSchema({ canonicalHomeUrl, siteName }),
-              createOrganizationSchema({
-                  canonicalHomeUrl,
-                  siteName,
-                  description: homeDescription,
-              }),
-          ]
-        : null;
 
     useEffect(() => {
         if (typeof window === 'undefined') {
@@ -107,11 +83,7 @@ export default function Welcome(props: PageProps) {
 
     return (
         <PublicLayout canRegister={props.canRegister}>
-            <SeoHead
-                title="Gakutsu"
-                description={homeDescription}
-                jsonLdGraph={homeGraph}
-            />
+            <SeoHead />
 
             <section className="border-b border-border/60 bg-gradient-to-b from-primary/10 via-background to-background">
                 <div className="mx-auto max-w-7xl px-4 py-16 lg:py-24">

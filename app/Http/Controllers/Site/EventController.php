@@ -5,12 +5,17 @@ namespace App\Http\Controllers\Site;
 use App\Enums\EventStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Support\SeoMetadata;
+use App\Support\SeoPolicy;
+use App\Support\StructuredData;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class EventController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $upcomingEvents = Event::query()
             ->select(Event::indexColumns())
@@ -33,10 +38,14 @@ class EventController extends Controller
         return Inertia::render('events/index', [
             'upcomingEvents' => $upcomingEvents,
             'archivedEvents' => $archivedEvents,
+            'seo' => SeoMetadata::build($request, [
+                'title' => 'Events',
+                'description' => 'Jelajahi webinar dan event komunitas IT dan Cyber Security dari Gakutsu, termasuk event mendatang dan arsip kegiatan.',
+            ]),
         ]);
     }
 
-    public function show(Event $event): Response
+    public function show(Request $request, Event $event): Response
     {
         abort_unless($event->is_published, 404);
 
@@ -57,16 +66,43 @@ class EventController extends Controller
             $alreadyRegistered || $isStaffViewer
         );
 
+        $policyData = app(SeoPolicy::class)->resolve($request);
+        $canonicalUrl = $policyData['canonicalUrl'];
+        $baseUrl = $policyData['baseUrl'] ?? (string) config('app.url', 'https://gakutsu.net');
+
+        $description = Str::limit(strip_tags($event->description ?? ''), 155, '');
+
+        $graph = null;
+        if ($canonicalUrl !== null && $baseUrl !== null) {
+            $cleanBaseUrl = rtrim($baseUrl, '/');
+            $breadcrumbItems = [
+                ['name' => 'Home', 'url' => "{$cleanBaseUrl}/"],
+                ['name' => 'Events', 'url' => "{$cleanBaseUrl}/events"],
+                ['name' => $event->title, 'url' => $canonicalUrl],
+            ];
+
+            $breadcrumb = StructuredData::createBreadcrumbListSchema($breadcrumbItems, $canonicalUrl);
+            if ($breadcrumb !== null) {
+                $graph = [$breadcrumb];
+            }
+        }
+
         return Inertia::render('events/show', [
             'event' => $event->load('mentor:id,name')->toPublicArray(),
             'alreadyRegistered' => $alreadyRegistered,
             'canViewMeetingLink' => $canViewMeetingLink,
             'meetingUrl' => $canViewMeetingLink ? $event->meeting_url : null,
             'questionCount' => $event->registrationQuestions()->active()->count(),
+            'seo' => SeoMetadata::build($request, [
+                'title' => $event->title,
+                'description' => $description,
+                'image' => $event->poster_image_url,
+                'jsonLdGraph' => $graph,
+            ], $policyData),
         ]);
     }
 
-    public function register(Event $event): Response
+    public function register(Request $request, Event $event): Response
     {
         abort_unless($event->registrationIsAvailable(), 404);
 
@@ -76,11 +112,17 @@ class EventController extends Controller
 
         $publicEvent = $event->load('mentor:id,name')->toPublicArray();
 
+        $seo = SeoMetadata::build($request, [
+            'title' => "Daftar Event - {$event->title}",
+            'description' => "Jawab pertanyaan registrasi dan daftar ke event {$event->title} di Gakutsu.",
+        ]);
+
         if ($alreadyRegistered) {
             return Inertia::render('events/register', [
                 'event' => $publicEvent,
                 'questions' => [],
                 'alreadyRegistered' => true,
+                'seo' => $seo,
             ]);
         }
 
@@ -93,6 +135,7 @@ class EventController extends Controller
             'event' => $publicEvent,
             'questions' => $questions,
             'alreadyRegistered' => false,
+            'seo' => $seo,
         ]);
     }
 }
