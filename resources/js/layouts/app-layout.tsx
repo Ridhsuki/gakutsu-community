@@ -12,7 +12,7 @@ export default function AppLayout({
 }) {
     return (
         <AppLayoutTemplate breadcrumbs={breadcrumbs}>
-            <SeoHead robots="noindex, nofollow" />
+            <SeoHead />
             <FlashToasterListener />
             {children}
         </AppLayoutTemplate>

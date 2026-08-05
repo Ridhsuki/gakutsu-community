@@ -26,10 +26,7 @@ export default function EventsIndex({
 }) {
     return (
         <PublicLayout>
-            <SeoHead
-                title="Events"
-                description="Jelajahi webinar dan event komunitas IT dan Cyber Security dari Gakutsu, termasuk event mendatang dan arsip kegiatan."
-            />
+            <SeoHead />
 
             <div className="mx-auto max-w-7xl px-4 py-12">
                 <div className="mb-10 space-y-2">

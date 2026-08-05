@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Support\SeoPolicy;
+use App\Support\SeoMetadata;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -37,7 +37,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name', 'Gakutsu'),
-            'seo' => app(SeoPolicy::class)->resolve($request),
+            'seo' => fn () => SeoMetadata::buildDefault($request),
             'auth' => [
                 'user' => $request->user(),
             ],

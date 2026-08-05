@@ -6,10 +6,7 @@ import RenderRichText from '@/components/rich-text/render-rich-text';
 import EventPosterThumbnail from '@/features/events/components/event-poster-thumbnail';
 import EventStatusBadge from '@/features/events/components/event-status-badge';
 import PublicLayout from '@/layouts/public-layout';
-import {
-    createBreadcrumbListSchema,
-    toInertiaHref,
-} from '@/lib/structured-data';
+import { toInertiaHref } from '@/lib/structured-data';
 import type { SharedPageProps } from '@/types/shared';
 
 type PageAuth = SharedPageProps & {
@@ -79,23 +76,9 @@ export default function EventShow({
               ]
             : [];
 
-    const breadcrumbSchema =
-        canonicalUrl && breadcrumbItems.length > 0
-            ? createBreadcrumbListSchema(breadcrumbItems, canonicalUrl)
-            : null;
-
-    const eventGraph = breadcrumbSchema ? [breadcrumbSchema] : null;
-
     return (
         <PublicLayout>
-            <SeoHead
-                title={event.title}
-                description={String(event.description ?? '')
-                    .replace(/<[^>]*>/g, '')
-                    .slice(0, 155)}
-                image={event.poster_image_url ?? null}
-                jsonLdGraph={eventGraph}
-            />
+            <SeoHead />
 
             <div className="mx-auto max-w-6xl px-4 py-12">
                 <PublicBreadcrumbs items={breadcrumbItems} />

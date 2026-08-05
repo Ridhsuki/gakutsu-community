@@ -7,11 +7,23 @@ export interface FlashMessages {
     status?: string | null;
 }
 
+export interface StructuredDataDocument {
+    '@context': string;
+    '@graph': Array<Record<string, unknown>>;
+}
+
 export interface SeoMetadata {
     siteName: string;
+    title: string;
+    description: string | null;
+    robots: 'index, follow' | 'noindex, follow' | 'noindex, nofollow';
     canonicalUrl: string | null;
-    robots: string;
-    baseUrl?: string | null;
+    baseUrl: string;
+    type: 'website' | 'article';
+    image: string | null;
+    imageAlt: string | null;
+    twitterCard: 'summary' | 'summary_large_image';
+    jsonLd: StructuredDataDocument | null;
 }
 
 export interface SharedPageProps extends PageProps {
