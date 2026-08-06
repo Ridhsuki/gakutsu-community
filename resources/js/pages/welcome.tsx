@@ -8,15 +8,17 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import BlogPublicCard from '@/components/public/blog-public-card';
+import type { HomeBlogItem } from '@/components/public/blog-public-card';
 import EventPublicCard from '@/components/public/event-public-card';
+import type { HomeEventItem } from '@/components/public/event-public-card';
 import Reveal from '@/components/public/reveal';
 import SeoHead from '@/components/public/seo-head';
 import PublicLayout from '@/layouts/public-layout';
 
 type PageProps = {
     canRegister: boolean;
-    featuredEvents: Array<any>;
-    latestBlogs: Array<any>;
+    featuredEvents: Array<HomeEventItem>;
+    latestBlogs: Array<HomeBlogItem>;
     stats: {
         members: number;
         mentors: number;
@@ -262,7 +264,7 @@ export default function Welcome(props: PageProps) {
                 <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                     {props.featuredEvents.map((event, index) => (
                         <Reveal
-                            key={event.id}
+                            key={event.slug}
                             delay={index * 80}
                             duration={760}
                             distance={22}
@@ -298,21 +300,13 @@ export default function Welcome(props: PageProps) {
                 <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                     {props.latestBlogs.map((post, index) => (
                         <Reveal
-                            key={post.id}
+                            key={post.slug}
                             delay={index * 80}
                             duration={760}
                             distance={22}
                             blur={12}
                         >
-                            <BlogPublicCard
-                                post={{
-                                    ...post,
-                                    excerpt:
-                                        String(post.content ?? '')
-                                            .replace(/<[^>]*>/g, '')
-                                            .slice(0, 140) + '...',
-                                }}
-                            />
+                            <BlogPublicCard post={post} />
                         </Reveal>
                     ))}
                 </div>

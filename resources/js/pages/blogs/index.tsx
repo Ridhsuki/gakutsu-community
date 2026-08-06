@@ -12,9 +12,9 @@ interface BlogPostItem {
     title: string;
     slug: string;
     content: string;
-    cover_image_url?: string | null;
-    published_at?: string | null;
-    author?: {
+    cover_image_url: string | null;
+    published_at: string | null;
+    author: {
         name: string;
     } | null;
 }

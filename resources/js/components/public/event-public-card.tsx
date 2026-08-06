@@ -2,21 +2,27 @@ import { Link } from '@inertiajs/react';
 import { CalendarDays, User2 } from 'lucide-react';
 import EventPosterThumbnail from '@/features/events/components/event-poster-thumbnail';
 import EventStatusBadge from '@/features/events/components/event-status-badge';
+import type { EventStatus } from '@/features/events/types';
 
-type EventCardItem = {
-    id: number;
+export interface HomeEventItem {
     title: string;
     slug: string;
     category: string;
-    starts_at: string;
-    status: 'upcoming' | 'completed' | 'cancelled';
-    poster_image_url?: string | null;
-    mentor?: {
+    starts_at: string | null;
+    status: EventStatus;
+    poster_image_url: string | null;
+    mentor: {
         name: string;
     } | null;
-};
+}
 
-function formatDate(value: string) {
+export type EventCardItem = HomeEventItem;
+
+function formatDate(value: string | null | undefined) {
+    if (!value) {
+        return '-';
+    }
+
     const date = new Date(value);
 
     if (Number.isNaN(date.getTime())) {

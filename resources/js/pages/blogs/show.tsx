@@ -13,10 +13,10 @@ interface PostItem {
     title: string;
     slug: string;
     content: string;
-    cover_image_url?: string | null;
-    published_at?: string | null;
+    cover_image_url: string | null;
+    published_at: string | null;
     updated_at?: string | null;
-    author?: {
+    author: {
         name: string;
     } | null;
 }
