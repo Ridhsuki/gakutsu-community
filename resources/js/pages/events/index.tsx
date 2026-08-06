@@ -11,8 +11,8 @@ type EventItem = {
     category: string;
     starts_at: string;
     status: 'upcoming' | 'completed' | 'cancelled';
-    poster_image_url?: string | null;
-    mentor?: {
+    poster_image_url: string | null;
+    mentor: {
         name: string;
     } | null;
 };

@@ -2,17 +2,18 @@ import { Link } from '@inertiajs/react';
 import { Clock3, User2 } from 'lucide-react';
 import BlogPostCoverThumbnail from '@/features/blogs/components/blog-post-cover-thumbnail';
 
-type BlogCardItem = {
-    id: number;
+export interface HomeBlogItem {
     title: string;
     slug: string;
-    cover_image_url?: string | null;
     excerpt: string;
-    published_at?: string | null;
-    author?: {
+    cover_image_url: string | null;
+    published_at: string | null;
+    author: {
         name: string;
     } | null;
-};
+}
+
+export type BlogCardItem = HomeBlogItem;
 
 function formatDate(value: string | null | undefined) {
     if (!value) {
