@@ -7,11 +7,24 @@ use App\Models\BlogPost;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 
 uses(RefreshDatabase::class);
 
 test('home page payload contains exact shape and excludes internal/sensitive fields', function () {
+    Storage::fake('public');
+
+    Storage::disk('public')->put(
+        'covers/test-cover.jpg',
+        'test cover',
+    );
+
+    Storage::disk('public')->put(
+        'posters/test-poster.jpg',
+        'test poster',
+    );
+
     $author = User::factory()->create(['name' => 'Author Person', 'role' => UserRole::Mentor]);
     $mentor = User::factory()->create(['name' => 'Mentor Person', 'role' => UserRole::Mentor]);
 
@@ -47,6 +60,14 @@ test('home page payload contains exact shape and excludes internal/sensitive fie
         ->component('welcome')
         ->has('latestBlogs', 1)
         ->has('featuredEvents', 1)
+        ->where(
+            'latestBlogs.0.cover_image_url',
+            Storage::disk('public')->url('covers/test-cover.jpg'),
+        )
+        ->where(
+            'featuredEvents.0.poster_image_url',
+            Storage::disk('public')->url('posters/test-poster.jpg'),
+        )
     );
 
     $props = $response->original->getData()['page']['props'];
@@ -112,11 +133,10 @@ test('home page payload contains exact shape and excludes internal/sensitive fie
     }
 
     $rawContent = $response->getContent();
-    expect($rawContent)->not()->toContain('https://meet.example.test/private-secret-token');
-    expect($rawContent)->not()->toContain('"cover_image_path":');
-    expect($rawContent)->not()->toContain('"poster_image_path":');
-    expect($rawContent)->toContain('/storage/covers/test-cover.jpg');
-    expect($rawContent)->toContain('/storage/posters/test-poster.jpg');
+    expect($rawContent)
+        ->not->toContain('https://meet.example.test/private-secret-token')
+        ->not->toContain('"cover_image_path":')
+        ->not->toContain('"poster_image_path":');
 });
 
 test('home page respects publication boundaries, ordering, and limits', function () {
