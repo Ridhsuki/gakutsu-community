@@ -1,6 +1,6 @@
 # Architecture & Design — Gakutsu Community
 
-This document describes the **current implemented architecture**, not an imagined rewrite. Sections labeled *Intended Design* describe planned behavior not yet implemented.
+This document describes the **current implemented architecture**, not an imagined rewrite. Sections labeled _Intended Design_ describe planned behavior not yet implemented.
 
 ---
 
@@ -12,24 +12,27 @@ Browser → Vite (dev) / Nginx (prod)
        → Global Middleware (CSRF, sessions, cookies, Inertia, appearance)
        → Route Matching (web.php, settings.php)
        → Role Middleware (EnsureUserIsAdmin / EnsureUserIsMentor)
-       → Controller (with Form Request validation)
-       → Policy Authorization (via $this->authorize())
-       → Action Class (domain logic)
-       → Inertia::render() with props
-       → React Page Component (SSR + client hydration)
+       → Controller (Form Request validation + policy authorization)
+       → SeoPolicy resolves indexability/robots/canonical policy
+       → SeoMetadata builds normalized metadata document
+       → StructuredData builds approved JSON-LD
+       → Blade (app.blade.php) renders initial SEO head fallback (when production SSR disabled)
+       → Inertia::render() sends page payload
+       → React hydrates CSR body
+       → SeoHead component consumes normalized SEO document during Inertia client navigation
 ```
 
 ### Middleware Stack
 
 Registered in [../bootstrap/app.php](../bootstrap/app.php):
 
-| Middleware                         | Scope        | Purpose                          |
-| ---------------------------------- | ------------ | -------------------------------- |
-| `HandleAppearance`                 | Web (global) | Injects appearance cookie into Inertia shared data |
+| Middleware                         | Scope        | Purpose                                                                     |
+| ---------------------------------- | ------------ | --------------------------------------------------------------------------- |
+| `HandleAppearance`                 | Web (global) | Injects appearance cookie into Inertia shared data                          |
 | `HandleInertiaRequests`            | Web (global) | Shares auth user, flash messages, and appearance with all Inertia responses |
-| `AddLinkHeadersForPreloadedAssets` | Web (global) | HTTP/2 preload hints             |
-| `EnsureUserIsAdmin`               | Route group  | 403 if user is not admin         |
-| `EnsureUserIsMentor`              | Route group  | 403 if user is not mentor        |
+| `AddLinkHeadersForPreloadedAssets` | Web (global) | HTTP/2 preload hints                                                        |
+| `EnsureUserIsAdmin`                | Route group  | 403 if user is not admin                                                    |
+| `EnsureUserIsMentor`               | Route group  | 403 if user is not mentor                                                   |
 
 ---
 
@@ -39,23 +42,23 @@ Defined in [../routes/web.php](../routes/web.php) and [../routes/settings.php](.
 
 ### Public Routes (unauthenticated)
 
-| Route             | Controller                    | Purpose              |
-| ----------------- | ----------------------------- | -------------------- |
-| `GET /`           | `Site\HomeController::index`  | Landing page         |
-| `GET /blogs`      | `Site\BlogController::index`  | Blog listing         |
-| `GET /blogs/{slug}` | `Site\BlogController::show` | Blog detail          |
-| `GET /events`     | `Site\EventController::index` | Event listing        |
-| `GET /events/{slug}` | `Site\EventController::show` | Event detail      |
+| Route                | Controller                    | Purpose       |
+| -------------------- | ----------------------------- | ------------- |
+| `GET /`              | `Site\HomeController::index`  | Landing page  |
+| `GET /blogs`         | `Site\BlogController::index`  | Blog listing  |
+| `GET /blogs/{slug}`  | `Site\BlogController::show`   | Blog detail   |
+| `GET /events`        | `Site\EventController::index` | Event listing |
+| `GET /events/{slug}` | `Site\EventController::show`  | Event detail  |
 
 ### Authenticated Routes
 
-| Route                                    | Controller                              | Purpose              |
-| ---------------------------------------- | --------------------------------------- | -------------------- |
-| `GET /dashboard`                         | Inline closure                          | Member dashboard     |
-| `GET /events/{slug}/register`            | `Site\EventController::register`        | Registration form    |
-| `POST /events/{event}/registrations`     | `Event\EventRegistrationController::store` | Submit registration |
-| `POST /editor/blog-images`               | `Blog\BlogEditorImageController::store` | Editor image upload  |
-| Settings routes                          | `Settings\ProfileController`, `SecurityController` | Profile, password, appearance |
+| Route                                | Controller                                         | Purpose                       |
+| ------------------------------------ | -------------------------------------------------- | ----------------------------- |
+| `GET /dashboard`                     | Inline closure                                     | Member dashboard              |
+| `GET /events/{slug}/register`        | `Site\EventController::register`                   | Registration form             |
+| `POST /events/{event}/registrations` | `Event\EventRegistrationController::store`         | Submit registration           |
+| `POST /editor/blog-images`           | `Blog\BlogEditorImageController::store`            | Editor image upload           |
+| Settings routes                      | `Settings\ProfileController`, `SecurityController` | Profile, password, appearance |
 
 ### Admin Routes (`/admin/*`, requires `EnsureUserIsAdmin`)
 
@@ -81,12 +84,12 @@ These are the member quiz access routes. The controller exists but returns `abor
 
 ### Policies
 
-| Policy                   | Model              | Key behavior                                    |
-| ------------------------ | ------------------- | ----------------------------------------------- |
-| `EventPolicy`            | `Event`             | `before()` grants admin full access; mentor checks `mentor_id === user->id` |
-| `BlogPostPolicy`         | `BlogPost`          | Same pattern: admin override + mentor ownership via `author_id` |
-| `EventQuizAttemptPolicy` | `EventQuizAttempt`  | Admin or mentor-of-event can view/grade; user can view own attempt |
-| `EventQuizQuestionPolicy`| `EventQuizQuestion` | Admin or mentor-of-event can CRUD                |
+| Policy                    | Model               | Key behavior                                                                |
+| ------------------------- | ------------------- | --------------------------------------------------------------------------- |
+| `EventPolicy`             | `Event`             | `before()` grants admin full access; mentor checks `mentor_id === user->id` |
+| `BlogPostPolicy`          | `BlogPost`          | Same pattern: admin override + mentor ownership via `author_id`             |
+| `EventQuizAttemptPolicy`  | `EventQuizAttempt`  | Admin or mentor-of-event can view/grade; user can view own attempt          |
+| `EventQuizQuestionPolicy` | `EventQuizQuestion` | Admin or mentor-of-event can CRUD                                           |
 
 ### Middleware Authorization
 
@@ -210,30 +213,30 @@ erDiagram
 
 ### Models Summary
 
-| Model                      | Key Fields                                                            | Relationships |
-| -------------------------- | --------------------------------------------------------------------- | ------------- |
-| `User`                     | name, email, password, role (enum)                                    | events, blogs, registrations, quiz attempts |
-| `Event`                    | title, slug, category, status, access_type, is_published, starts_at, ends_at, mentor_id, created_by, poster_image_path, meeting_url | mentor, creator, registrations, registrationQuestions, quizQuestions, quizAttempts |
-| `EventRegistration`        | event_id, user_id, name_snapshot, email_snapshot, registered_at       | event, user, answers |
-| `EventRegistrationQuestion`| event_id, label, type, options (JSON), is_required, is_active, sort_order | event, answers |
-| `EventRegistrationAnswer`  | registration_id, question_id, question_label_snapshot, answer_value   | registration, question |
-| `EventQuizQuestion`        | event_id, type, prompt, points, is_active, sort_order, explanation    | event, options |
-| `EventQuizOption`          | question_id, option_text, is_correct, sort_order                      | question |
-| `EventQuizAttempt`         | event_id, registration_id, user_id, status, auto_score, manual_score, total_score, max_score, submitted_at, graded_at | event, registration, user, answers |
-| `EventQuizAnswer`          | attempt_id, question_id, option_id, *_snapshot fields, answer_text, needs_manual_grading, is_correct, awarded_score, feedback, graded_by, graded_at | attempt, question, option, grader |
-| `BlogPost`                 | author_id, title, slug, status, cover_image_path, content, published_at | author |
+| Model                       | Key Fields                                                                                                                                          | Relationships                                                                      |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `User`                      | name, email, password, role (enum)                                                                                                                  | events, blogs, registrations, quiz attempts                                        |
+| `Event`                     | title, slug, category, status, access_type, is_published, starts_at, ends_at, mentor_id, created_by, poster_image_path, meeting_url                 | mentor, creator, registrations, registrationQuestions, quizQuestions, quizAttempts |
+| `EventRegistration`         | event_id, user_id, name_snapshot, email_snapshot, registered_at                                                                                     | event, user, answers                                                               |
+| `EventRegistrationQuestion` | event_id, label, type, options (JSON), is_required, is_active, sort_order                                                                           | event, answers                                                                     |
+| `EventRegistrationAnswer`   | registration_id, question_id, question_label_snapshot, answer_value                                                                                 | registration, question                                                             |
+| `EventQuizQuestion`         | event_id, type, prompt, points, is_active, sort_order, explanation                                                                                  | event, options                                                                     |
+| `EventQuizOption`           | question_id, option_text, is_correct, sort_order                                                                                                    | question                                                                           |
+| `EventQuizAttempt`          | event_id, registration_id, user_id, status, auto_score, manual_score, total_score, max_score, submitted_at, graded_at                               | event, registration, user, answers                                                 |
+| `EventQuizAnswer`           | attempt_id, question_id, option_id, *_snapshot fields, answer_text, needs_manual_grading, is_correct, awarded_score, feedback, graded_by, graded_at | attempt, question, option, grader                                                  |
+| `BlogPost`                  | author_id, title, slug, status, cover_image_path, content, published_at                                                                             | author                                                                             |
 
 ### Enums
 
-| Enum                            | Values                                |
-| ------------------------------- | ------------------------------------- |
-| `UserRole`                      | Admin, Mentor, Member                 |
-| `EventStatus`                   | Upcoming, Cancelled, Completed        |
-| `EventAccessType`               | Free, Paid                            |
-| `EventQuizQuestionType`         | MultipleChoice, ShortText             |
-| `EventQuizAttemptStatus`        | Submitted, Graded                     |
-| `EventRegistrationQuestionType` | ShortText, LongText, Select           |
-| `BlogPostStatus`                | Draft, Published                      |
+| Enum                            | Values                                           |
+| ------------------------------- | ------------------------------------------------ |
+| `UserRole`                      | Admin, Mentor, Member                            |
+| `EventStatus`                   | Upcoming, Cancelled, Completed                   |
+| `EventAccessType`               | Free, Paid                                       |
+| `EventQuizQuestionType`         | MultipleChoice, ShortText                        |
+| `EventQuizAttemptStatus`        | Submitted, Graded                                |
+| `EventRegistrationQuestionType` | ShortText, LongText, Select                      |
+| `BlogPostStatus`                | Draft, Published                                 |
 | `MediaImagePreset`              | BlogCover, BlogContent, EventCover, ProfilePhoto |
 
 ---
@@ -311,19 +314,22 @@ Feature logic is organized by domain in `resources/js/features/`:
 
 ### Layouts
 
-| Layout          | Used By                      | Features                  |
-| --------------- | ---------------------------- | ------------------------- |
-| `app-layout`    | Admin, Mentor, Dashboard     | Sidebar navigation, breadcrumbs |
-| `auth-layout`   | Login, Register, etc.        | Centered card             |
-| `public-layout` | Events, Blogs, Registration  | Top navigation, footer    |
+| Layout          | Used By                     | Features                        |
+| --------------- | --------------------------- | ------------------------------- |
+| `app-layout`    | Admin, Mentor, Dashboard    | Sidebar navigation, breadcrumbs |
+| `auth-layout`   | Login, Register, etc.       | Centered card                   |
+| `public-layout` | Events, Blogs, Registration | Top navigation, footer          |
 
 ### Wayfinder Integration
 
 Laravel Wayfinder auto-generates TypeScript route functions. The Vite plugin is configured with `formVariants: true`. Generated files live in `resources/js/wayfinder/`.
 
-### SSR
+### SSR and Production Rendering Modes
 
-SSR is supported via `@inertiajs/vite` plugin. The `bootstrap/ssr/` directory exists. Both client and server bundles are produced by `npm run build:ssr`.
+The application supports two rendering configurations:
+
+- **Production Mode:** Page bodies are client-side rendered (CSR) with `INERTIA_SSR_ENABLED=false`. Production hosting does not run a persistent Node SSR process. Initial page head metadata (`<title>`, `<meta>`, canonical, JSON-LD) is rendered server-side by PHP in `resources/views/app.blade.php`.
+- **Development and CI Mode:** Vite SSR builds (`npm run build:ssr`) and automated SSR smoke checks (`node scripts/ssr-smoke-check.mjs`) are executed during CI and local testing to validate hydration safety, server bundle creation, and component SSR rendering compatibility.
 
 ---
 
@@ -426,19 +432,25 @@ Image processing uses Intervention Image (v4) via `ProcessImageUploadAction`:
 ## 15. Test Architecture
 
 - **Framework:** Pest v4 with PHPUnit v12
-- **Base class:** [../tests/TestCase.php](../tests/TestCase.php) extends Laravel's TestCase, adds `skipUnlessFortifyHas()`
-- **Pest config:** [../tests/Pest.php](../tests/Pest.php) — extends TestCase for Feature tests, but `RefreshDatabase` is **commented out** (suspected primary cause of database-related test failures)
-- **Test database:** SQLite `:memory:` configured in `phpunit.xml`
-- **Factories:** User, BlogPost, Event — no factories for quiz or registration models
-- **Current tests:** Auth flows (7 files), Dashboard (1 file), Settings (2 files), Unit example (1 file)
-- **Missing:** All business-feature tests (events, registration, quiz, blog, authorization)
-- **Note:** Quiz action classes (`StoreEventQuizAttemptAction`, `GradeEventQuizAttemptAction`, `EventQuizAttempt::refreshScores`) exist but have no automated test coverage.
+- **Base class:** `tests/TestCase.php` extends Laravel's TestCase, adds `skipUnlessFortifyHas()`
+- **Pest config:** `tests/Pest.php` — extends TestCase with `RefreshDatabase` active, executing against an isolated testing database.
+- **Factories:** User, BlogPost, Event (factories for quiz models are tracked in open tech debt).
+- **Current tests:** Auth flows, Dashboard, Settings, Public SEO head fallback, Public event privacy, Public home payload projections.
+- **Backlog:** Full CRUD feature test coverage (P0-10) is deferred to P1/P2.
 
 ---
 
 ## 16. Performance and Query Design
 
 This section defines practical performance rules proportionate to a community side project. Do not introduce caching layers, CDNs, or distributed infrastructure without a demonstrated requirement.
+
+### Public Payload Design
+
+- **Explicit Projections:** Controllers rendering public aggregate pages (e.g., `HomeController::index`) must pass explicit array projections or lightweight DTOs rather than serializing full Eloquent model instances.
+- **No Direct Model Leakage:** Avoid passing unprojected models to public views where a smaller public contract is sufficient.
+- **Authorization Boundary:** Exclude authorization-sensitive fields (such as `meeting_url` or internal relationship keys) before Inertia serialization.
+- **TypeScript Alignment:** Frontend prop types must explicitly align with the restricted backend payload contract.
+- **Storage Path Isolation:** Expose absolute public asset URLs while keeping internal storage disk paths hidden.
 
 ### Backend
 
@@ -465,6 +477,7 @@ This section defines practical performance rules proportionate to a community si
 This is a community side project. Architecture decisions must be proportionate to that scale.
 
 **Do not introduce:**
+
 - Microservices or service-based decomposition
 - Message brokers or event buses
 - Kubernetes or container orchestration
@@ -473,6 +486,7 @@ This is a community side project. Architecture decisions must be proportionate t
 - Speculative abstractions not backed by concrete use cases in the repository
 
 **When performance issues appear:**
+
 1. Identify the specific query or render using the Laravel debugbar or query logs.
 2. Add eager loading or an index to address the identified cause.
 3. Use `simplePaginate()` if cursor-based pagination is sufficient.
