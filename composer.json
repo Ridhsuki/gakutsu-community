@@ -1,13 +1,13 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/react-starter-kit",
+    "name": "gakutsulabs/gakutsu",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Open-source community learning platform for cybersecurity, networking, software development, and related IT topics.",
     "keywords": [
         "laravel",
         "framework"
     ],
-    "license": "MIT",
+    "license": "AGPL-3.0-only",
     "require": {
         "php": "^8.3",
         "inertiajs/inertia-laravel": "^3.0",
