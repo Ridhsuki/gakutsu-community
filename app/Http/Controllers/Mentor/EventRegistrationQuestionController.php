@@ -23,6 +23,8 @@ class EventRegistrationQuestionController extends Controller
         Event $event,
         GetEventRegistrationQuestionIndexAction $action,
     ): Response {
+        $this->authorize('manageRegistrationQuestions', $event);
+
         $search = $request->validated()['search'] ?? null;
 
         return Inertia::render('mentor/events/questions/index', [
