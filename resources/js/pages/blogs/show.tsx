@@ -1,5 +1,6 @@
 import { usePage } from '@inertiajs/react';
 import BlogPublicCard from '@/components/public/blog-public-card';
+import type { BlogCardItem } from '@/components/public/blog-public-card';
 import PublicBreadcrumbs from '@/components/public/public-breadcrumbs';
 import SeoHead from '@/components/public/seo-head';
 import RenderRichText from '@/components/rich-text/render-rich-text';
@@ -8,14 +9,12 @@ import PublicLayout from '@/layouts/public-layout';
 import { toInertiaHref } from '@/lib/structured-data';
 import type { SharedPageProps } from '@/types/shared';
 
-interface PostItem {
-    id: number;
+interface PostDetailItem {
     title: string;
     slug: string;
     content: string;
     cover_image_url: string | null;
     published_at: string | null;
-    updated_at?: string | null;
     author: {
         name: string;
     } | null;
@@ -25,8 +24,8 @@ export default function BlogShow({
     post,
     relatedPosts,
 }: {
-    post: PostItem;
-    relatedPosts: PostItem[];
+    post: PostDetailItem;
+    relatedPosts: BlogCardItem[];
 }) {
     const { props: pageProps } = usePage<SharedPageProps>();
     const sharedSeo = pageProps.seo;
@@ -116,14 +115,8 @@ export default function BlogShow({
                         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                             {relatedPosts.map((related) => (
                                 <BlogPublicCard
-                                    key={related.id}
-                                    post={{
-                                        ...related,
-                                        excerpt:
-                                            String(related.content ?? '')
-                                                .replace(/<[^>]*>/g, '')
-                                                .slice(0, 140) + '...',
-                                    }}
+                                    key={related.slug}
+                                    post={related}
                                 />
                             ))}
                         </div>

@@ -2,28 +2,17 @@ import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import PaginationBar from '@/components/data-table/pagination-bar';
 import BlogPublicCard from '@/components/public/blog-public-card';
+import type { BlogCardItem } from '@/components/public/blog-public-card';
 import SeoHead from '@/components/public/seo-head';
 import { Input } from '@/components/ui/input';
 import PublicLayout from '@/layouts/public-layout';
 import type { PaginatedResponse } from '@/types/pagination';
 
-interface BlogPostItem {
-    id: number;
-    title: string;
-    slug: string;
-    content: string;
-    cover_image_url: string | null;
-    published_at: string | null;
-    author: {
-        name: string;
-    } | null;
-}
-
 export default function BlogsIndex({
     posts,
     filters,
 }: {
-    posts: PaginatedResponse<BlogPostItem>;
+    posts: PaginatedResponse<BlogCardItem>;
     filters: { search?: string | null };
 }) {
     const [search, setSearch] = useState(filters.search ?? '');
@@ -65,16 +54,7 @@ export default function BlogsIndex({
 
                 <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                     {posts.data.map((post) => (
-                        <BlogPublicCard
-                            key={post.id}
-                            post={{
-                                ...post,
-                                excerpt:
-                                    String(post.content ?? '')
-                                        .replace(/<[^>]*>/g, '')
-                                        .slice(0, 140) + '...',
-                            }}
-                        />
+                        <BlogPublicCard key={post.slug} post={post} />
                     ))}
                 </div>
 
