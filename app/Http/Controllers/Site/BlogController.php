@@ -25,6 +25,7 @@ class BlogController extends Controller
             ->when($search !== '', fn ($query) => $query->search($search))
             ->latest('published_at')
             ->paginate(9)
+            ->through(fn (BlogPost $post) => $post->toPublicListingArray())
             ->withQueryString();
 
         return Inertia::render('blogs/index', [
@@ -52,7 +53,8 @@ class BlogController extends Controller
             ->whereKeyNot($blog->id)
             ->latest('published_at')
             ->limit(3)
-            ->get();
+            ->get()
+            ->map(fn (BlogPost $post) => $post->toPublicListingArray());
 
         $policyData = app(SeoPolicy::class)->resolve($request);
         $canonicalUrl = $policyData['canonicalUrl'];
@@ -87,7 +89,7 @@ class BlogController extends Controller
         }
 
         return Inertia::render('blogs/show', [
-            'post' => $blog,
+            'post' => $blog->toPublicDetailArray(),
             'relatedPosts' => $relatedPosts,
             'seo' => SeoMetadata::build($request, [
                 'title' => $blog->title,

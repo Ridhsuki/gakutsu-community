@@ -61,7 +61,7 @@ test('2. blog detail page returns complete post props required for BlogPosting g
             ->where('post.title', 'Understanding Cyber Security')
             ->where('post.author.name', 'Alice Mentor')
             ->where('post.published_at', $blog->published_at->toISOString())
-            ->where('post.updated_at', $blog->updated_at->toISOString())
+            ->missing('post.updated_at')
             ->where('post.cover_image_url', Storage::disk('public')->url('blog-covers/cyber.jpg'))
         );
 });
@@ -193,7 +193,7 @@ test('8. blog detail page handles timestamp variations for factual dateModified'
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('post.published_at', $blogEqual->published_at->toISOString())
-            ->where('post.updated_at', $blogEqual->updated_at->toISOString())
+            ->missing('post.updated_at')
             ->where('seo.jsonLd.@graph.0.datePublished', $blogEqual->published_at->setTimezone('UTC')->toIso8601ZuluString())
             ->where('seo.jsonLd.@graph.0.dateModified', $blogEqual->updated_at->setTimezone('UTC')->toIso8601ZuluString())
         );
@@ -210,7 +210,7 @@ test('8. blog detail page handles timestamp variations for factual dateModified'
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('post.published_at', $blogEarlier->published_at->toISOString())
-            ->where('post.updated_at', $blogEarlier->updated_at->toISOString())
+            ->missing('post.updated_at')
             ->where('seo.jsonLd.@graph.0.datePublished', $blogEarlier->published_at->setTimezone('UTC')->toIso8601ZuluString())
             ->missing('seo.jsonLd.@graph.0.dateModified')
         );

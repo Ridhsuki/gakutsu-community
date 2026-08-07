@@ -59,6 +59,53 @@ class BlogPost extends Model
         ];
     }
 
+    public function toPublicListingArray(): array
+    {
+        return [
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'excerpt' => $this->makeExcerpt(),
+            'cover_image_url' => $this->cover_image_url,
+            'published_at' => $this->published_at?->toISOString(),
+            'author' => $this->relationLoaded('author') && $this->author ? [
+                'name' => $this->author->name,
+            ] : null,
+        ];
+    }
+
+    public function toPublicDetailArray(): array
+    {
+        return [
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'content' => $this->content,
+            'cover_image_url' => $this->cover_image_url,
+            'published_at' => $this->published_at?->toISOString(),
+            'author' => $this->relationLoaded('author') && $this->author ? [
+                'name' => $this->author->name,
+            ] : null,
+        ];
+    }
+
+    private function makeExcerpt(int $maxLength = 140): string
+    {
+        $text = preg_replace('/<[^>]+>/u', ' ', (string) $this->content) ?? '';
+        $text = strip_tags($text);
+        $text = html_entity_decode(
+            $text,
+            ENT_QUOTES | ENT_HTML5,
+            'UTF-8',
+        );
+        $text = preg_replace('/\s+/u', ' ', $text) ?? '';
+        $text = trim($text);
+
+        $excerpt = mb_strlen($text, 'UTF-8') > $maxLength
+            ? rtrim(mb_substr($text, 0, $maxLength, 'UTF-8'))
+            : $text;
+
+        return $excerpt.'...';
+    }
+
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
