@@ -1,6 +1,8 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
+    "name": "gakutsu-community",
     "private": true,
+    "license": "AGPL-3.0-only",
     "type": "module",
     "scripts": {
         "build": "vite build",

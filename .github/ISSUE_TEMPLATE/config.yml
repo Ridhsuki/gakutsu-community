@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Community Support & Q&A
+    url: https://github.com/GakutsuLabs/gakutsu.net/discussions
+    about: Ask questions, get help, and discuss ideas with the community.
+  - name: Security Vulnerabilities
+    url: https://github.com/GakutsuLabs/gakutsu.net/security/advisories/new
+    about: Report security vulnerabilities privately. Do not use public issues for security reports.

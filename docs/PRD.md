@@ -161,7 +161,7 @@ Implementation status for each requirement is tracked in [docs/CURRENT_STATE.md]
 
 | ID     | Requirement                                                              |
 | ------ | ------------------------------------------------------------------------ |
-| NFR-1  | SSR for public pages (home, events, blogs); admin pages are client-side. |
+| NFR-1  | Production page bodies are client-side rendered (CSR). Initial SEO head metadata is rendered server-side by PHP Blade. Vite SSR bundles are built and smoke-tested in development and CI for hydration and build compatibility; production does not run a persistent Node SSR process. Admin pages are client-side only. |
 | NFR-2  | All pages are mobile-responsive.                                         |
 | NFR-3  | Dark mode is supported throughout the application.                       |
 | NFR-4  | All interactive elements are keyboard-accessible with visible focus states. |

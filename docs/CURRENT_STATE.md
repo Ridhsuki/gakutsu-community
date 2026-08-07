@@ -148,9 +148,9 @@ Authorization for registration questions and registration views is handled via `
 
 ### 4.4 Package Name in `composer.json`
 
-`composer.json` uses `"name": "laravel/react-starter-kit"`.
+`composer.json` uses `"name": "gakutsulabs/gakutsu"`.
 
-**Classification:** Open-source readiness metadata item.
+**Classification:** Resolved as part of open-source readiness.
 
 ---
 

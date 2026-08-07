@@ -2,7 +2,7 @@
 
 Gakutsu is a learning community platform focused on cybersecurity, networking, software development, and related IT topics. The community organizes learning events such as webinars, workshops, and technical discussions.
 
-> **Note:** This project was previously named **YokPelajarin**. The `composer.json` package name still reads `laravel/react-starter-kit` (starter-kit metadata, not yet updated). The old YokPelajarin branding is preserved here only as historical context.
+> **Note:** This project was previously named **YokPelajarin**. The old YokPelajarin branding is preserved here only as historical context.
 
 ## Development Status
 
@@ -14,7 +14,7 @@ The current active phase is **P1: Member Quiz Access and Centralized Scores**. S
 
 ### Production Rendering Architecture
 
-- The production page body is client-side rendered (CSR) with `INERTIA_SSR_ENABLED=false`. Production hosting does not run a persistent Node SSR process.
+- Production page bodies are client-side rendered (CSR) with `INERTIA_SSR_ENABLED=false`. Production hosting does not run a persistent Node SSR process.
 - Initial SEO head metadata (`<title>`, `<meta>`, canonical, JSON-LD) is rendered server-side via PHP Blade (`resources/views/app.blade.php`).
 - `.env.example` retains `INERTIA_SSR_ENABLED=true` for local development.
 - Development and CI environments build and validate the Vite SSR bundle (`npm run build:ssr` and `node scripts/ssr-smoke-check.mjs`) to ensure hydration compatibility and build integrity.
@@ -31,7 +31,7 @@ Verified from `composer.json` and `package.json`:
 | Rich Text        | Tiptap v3                                                                  |
 | Authentication   | Laravel Fortify v1 (registration, password reset, email verification, 2FA) |
 | Routing Bridge   | Laravel Wayfinder v0                                                       |
-| Image Processing | Intervention Image v4                                                      |
+| Image Processing | Intervention Image v4 (requires `ext-gd` by default)                      |
 | Testing          | Pest v4, PHPUnit v12                                                       |
 | Linting          | ESLint v9, Prettier v3, Laravel Pint v1                                    |
 | Build            | Vite v8, with SSR support via `@inertiajs/vite`                            |
@@ -47,6 +47,7 @@ Verified from `composer.json` and `package.json`:
 - Composer
 - Node.js (compatible with Vite 8)
 - SQLite or MySQL for local development
+- PHP `ext-gd` extension (required by the default image-processing configuration)
 
 ### Installation
 
@@ -56,7 +57,7 @@ cp .env.example .env
 php artisan key:generate
 php artisan migrate
 php artisan storage:link
-npm install
+npm ci
 npm run build
 ```
 
@@ -86,6 +87,8 @@ npm run dev          # Vite dev server
 ```bash
 php artisan db:seed
 ```
+
+> **Warning:** Bundled seed data is intended for local development and demo use only. It may include predictable demo credentials. Do not use seeded demo accounts as production credentials.
 
 ## Quality Commands
 
@@ -152,6 +155,24 @@ docs/                 # Project documentation
 - [Current State](docs/CURRENT_STATE.md)
 - [Architecture & Design](docs/DESIGN.md)
 - [Roadmap](docs/ROADMAP.md)
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, pull request guidelines, and code quality expectations.
+
+## Security
+
+To report a vulnerability, see [SECURITY.md](SECURITY.md). Please do not report security vulnerabilities through public GitHub Issues.
+
+## Community
+
+For questions, discussions, and support, visit [GitHub Discussions](https://github.com/GakutsuLabs/gakutsu.net/discussions).
+
+Please review our [Code of Conduct](CODE_OF_CONDUCT.md) before participating.
+
+## License
+
+This project is licensed under the [GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0-only).
 
 ## Agent Instructions
 
